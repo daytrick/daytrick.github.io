@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<head>
+    <title>Vigenere</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Vigenere Cipher</h2>
+    <div>
+        <h3>Plaintext</h3>
+        <input type="text" id="keyGiven" placeholder="Key">
+        <br>
+        <textarea id="plaintext" class="scrollableTextbox" placeholder="Plaintext"></textarea>
+        <br>
+        <button id="encrypt" onclick=writeCiphertext()>Encrypt!</button>
+    </div>
+    <br>
+    <div>
+        <h3>Ciphertext</h3>
+        <input type="text" id="keyCracked" placeholder="Key">
+        <br>
+        <input type="text" id="lowerBound" placeholder="Lower bound for key length">
+        <br>
+        <input type="text" id="upperBound" placeholder="Upper bound for key length">
+        <br>
+        <textarea id="ciphertext" class="scrollableTextbox" placeholder="Ciphertext"></textarea>
+        <br>
+        <button id="decrypt" onclick=writePlaintext()>Decrypt!</button>
+    </div>
+    <script src="vigenere.js"></script>
+</body>

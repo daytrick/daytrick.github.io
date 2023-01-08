@@ -1,0 +1,23 @@
+body {
+    box-sizing: border-box;
+    background-color: mediumaquamarine;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    overflow-x: hidden;
+    margin: 5%;
+}
+
+input {
+    font-family: inherit;
+}
+
+textarea {
+    box-sizing: border-box;
+    height: 100px;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    margin-right: 10px;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
+    resize: none;
+}
