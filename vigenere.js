@@ -1,3 +1,54 @@
+//////////////////// TITLES ////////////////////
+const ENCRYPT_LABEL = "Encrypts text using the provided key.";
+const DECRYPT_LABEL = "Decrypts text using a key, or analyses the message to find an acceptable key based on lower and upper bounds.\nThe key takes precedence.";
+
+function onload() {
+
+    let encryptButton = document.getElementById("encrypt");
+    encryptButton.title = ENCRYPT_LABEL;
+
+    let decryptButton = document.getElementById("decrypt");
+    decryptButton.title = DECRYPT_LABEL;
+}
+
+//////////////////// CSS ////////////////////
+function onChangeEncrypt() {
+    
+    let key = document.getElementById("keyGiven").value;
+    let plaintext = document.getElementById("plaintext").value;
+    let encryptButton = document.getElementById("encrypt");
+
+    if ((key.trim() != "") && (plaintext.trim() != "")) {
+        encryptButton.className = "ok";
+        console.log("OK class!")
+    }
+    else {
+        encryptButton.className = "notOK";
+        console.log("Undefined class!")
+    }
+
+}
+
+function onChangeDecrypt() {
+
+    let key = document.getElementById("keyCracked").value;
+    let lowerBound = document.getElementById("lowerBound").value;
+    let upperBound = document.getElementById("upperBound").value;
+    let ciphertext = document.getElementById("ciphertext").value;
+    let decryptButton = document.getElementById("decrypt");
+
+    if ((ciphertext.trim() != "") 
+        && ((key.trim() != "") 
+            || (/^\d*[1-9]\d*$/.test(lowerBound)
+                && /^\d*[1-9]\d*$/.test(upperBound)))) {
+        decryptButton.className = "ok";
+    }
+    else {
+        decryptButton.className = "notOK";
+    }
+}
+
+//////////////////// HELPERS ////////////////////
 /**
  * Checks whether a character is in the alphabet.
  * 
@@ -62,12 +113,19 @@ function crypt(key, ciphertext, direction) {
 function writeCiphertext() {
 
     key = document.getElementById("keyGiven").value;
-    plaintext = document.getElementById("plaintext").value;
 
-    ciphertext = crypt(key, plaintext, ENCRYPT);
+    if (key.trim() == "") {
+        alert("Please provide a key!");        
+        document.getElementById("keyGiven").focus();
+    }
+    else {
+        plaintext = document.getElementById("plaintext").value;
 
-    ciphertextBox = document.getElementById("ciphertext");
-    ciphertextBox.value = ciphertext;
+        ciphertext = crypt(key, plaintext, ENCRYPT);
+
+        ciphertextBox = document.getElementById("ciphertext");
+        ciphertextBox.value = ciphertext;
+    }
 
 }
 
@@ -77,7 +135,7 @@ function writePlaintext() {
     let ciphertext = document.getElementById("ciphertext").value;
     let plaintextBox = document.getElementById("plaintext");
 
-    if (strip(key) != "") {
+    if (key.trim() != "") {
         plaintextBox.value = crypt(key, ciphertext, DECRYPT);
     }
     else {
@@ -268,6 +326,14 @@ function analyse() {
     let ciphertext = document.getElementById("ciphertext").value;
     let lowerBound = document.getElementById("lowerBound").value;
     let upperBound = document.getElementById("upperBound").value;
+
+    // Check if need to use default bounds
+    if (!/^\d*[1-9]\d*$/.test(lowerBound)) {
+        lowerBound = 1;
+    }
+    if (!/^\d*[1-9]\d*$/.test(upperBound)) {
+        upperBound = 10;
+    }
 
     // Find key length
     let period = findPeriod(ciphertext, Number(lowerBound), Number(upperBound));

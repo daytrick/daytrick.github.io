@@ -8,12 +8,29 @@ body {
 
 input {
     font-family: inherit;
+    border-radius: 4px;
+}
+
+button {
+    border: 0px;
+    border-radius: 4px;
+    font-family: inherit;
+    background-color: slategrey;
+}
+
+button.ok {
+    font-weight: 700;
+}
+
+button:hover {
+    background-color: whitesmoke;
 }
 
 textarea {
     box-sizing: border-box;
     height: 100px;
     width: 100%;
+    border-radius: 4px;
     text-align: left;
     font-family: inherit;
     margin-right: 10px;
