@@ -6,6 +6,20 @@ body {
     margin: 5%;
 }
 
+div.wrapper {
+    display: flex;
+}
+
+div.left {
+    float: left;
+    margin: 1em;
+}
+
+div.right{
+    float: right;
+    margin: 1em;
+}
+
 input {
     font-family: inherit;
     border-radius: 4px;
