@@ -11,17 +11,21 @@
     <meta name="msapplication-TileColor" content="#00aba9">
     <meta name="theme-color" content="#ff0000">
 </head>
-<body>
+<body onload=onload()>
     <h1>Counting Words</h1>
     <div id="infoDiv">
         <p>Do you ever wonder how wordy you are?</p>
     </div>
     <div id="wrapperDiv" class="wrapper">
         <div id="inputDiv" class="left" style="width: 70%">
-            <textarea id="text" class="scrollableTextbox" placeholder="Your text here!"></textarea>
+            <textarea id="text" class="scrollableTextbox" placeholder="Your text here!" onchange=calcCounts()></textarea>
+            <p>Words: <count id="words"></count></p>
         </div>
         <div id="counterDiv" class="right" style="width: 30%">
             <h2>Counts</h2>
+            <div id="abbDiv" class="left"></div>
+            <div id="countDiv" class="right"></div>
         </div>
     </div>
+    <script src="counting_words.js"></script>
 </body>
