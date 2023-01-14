@@ -18,7 +18,11 @@ function onChangeEncrypt() {
     let plaintext = document.getElementById("plaintext").value;
     let encryptButton = document.getElementById("encrypt");
 
-    if ((key.trim() != "") && (plaintext.trim() != "")) {
+    if (!key.match(/[a-zA-Z]+/)) {
+        alert("The key can only be composed of letters.");
+        encryptButton.className = "notOK";
+    }
+    else if ((key.trim() != "") && (plaintext.trim() != "")) {
         encryptButton.className = "ok";
         console.log("OK class!")
     }
@@ -38,7 +42,7 @@ function onChangeDecrypt() {
     let decryptButton = document.getElementById("decrypt");
 
     if ((ciphertext.trim() != "") 
-        && ((key.trim() != "") 
+        && (((key.trim() != "") && key.match(/[a-zA-Z]/))
             || (/^\d*[1-9]\d*$/.test(lowerBound)
                 && /^\d*[1-9]\d*$/.test(upperBound)))) {
         decryptButton.className = "ok";
@@ -118,6 +122,10 @@ function writeCiphertext() {
         alert("Please provide a key!");        
         document.getElementById("keyGiven").focus();
     }
+    else if (!key.match(/[a-zA-Z]+/)) {
+        alert("The key can only be composed of letters.");
+        document.getElementById("keyGiven").focus();
+    }
     else {
         plaintext = document.getElementById("plaintext").value;
 
@@ -132,14 +140,30 @@ function writeCiphertext() {
 function writePlaintext() {
 
     let key = document.getElementById("keyCracked").value;
+    let lowerBound = document.getElementById("lowerBound").value;
+    let upperBound = document.getElementById("upperBound").value;
     let ciphertext = document.getElementById("ciphertext").value;
     let plaintextBox = document.getElementById("plaintext");
 
     if (key.trim() != "") {
-        plaintextBox.value = crypt(key, ciphertext, DECRYPT);
+
+        if (key.match(/[a-zA-Z]+/)) {
+            plaintextBox.value = crypt(key, ciphertext, DECRYPT);
+        }
+        else {
+            alert("The key can only be composed of letters.");
+        }
+        
+    }
+    else if (lowerBound.match(/^[1-9][0-9]*$/)
+          && upperBound.match(/^[1-9][0-9]*$/)
+          && (lowerBound <= upperBound))  {
+
+        plaintextBox.value = analyse();
+
     }
     else {
-        plaintextBox.value = analyse();
+        alert("Bounds must be positive numbers, and the lower bound cannot be larger than the upper bound.");
     }
 
 }
