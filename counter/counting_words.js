@@ -11,11 +11,6 @@ var units = {
         words: 700,
         desc: "The usual target word count for one of my computer science reports."
     },
-    IA: {
-        name: "Internal Assessment",
-        words: 2000,
-        desc: "The word limit for an IB IA."
-    },
     EE: {
         name: "Extended Essay",
         words: 2000,
@@ -23,27 +18,48 @@ var units = {
     }
 }
 
-//////////////////// DISPLAYING UNITS ////////////////////
+//////////////////// DISPLAY ////////////////////
 
 function onload() {
 
-    // Display all the starting units
-    let abbDiv = document.getElementById("abbDiv");
-    let countDiv = document.getElementById("countDiv");
+    displayStartingUnits();
+
+}
+
+function displayStartingUnits() {
 
     for (const abb in units) {
-
-        let unitP = document.createElement("p");
-        unitP.innerHTML = abb + ": ";
-        abbDiv.appendChild(unitP);
-
-        let count = document.createElement("p");
-        count.id = abb;
-        countDiv.appendChild(count);
-
+        displayUnit(abb);
     }
 
     console.log("Loaded initial units!");
+
+}
+
+function displayUnit(symbol) {
+
+    let abbDiv = document.getElementById("abbDiv");
+    let countDiv = document.getElementById("countDiv");
+
+    let unitP = document.createElement("p");
+    unitP.innerHTML = symbol + ": ";
+    unitP.title = units[symbol].desc;
+    abbDiv.appendChild(unitP);
+
+    let count = document.createElement("p");
+    count.id = symbol;
+    countDiv.appendChild(count);
+
+}
+
+function showCreateDiv() {
+
+    let createDiv = document.getElementById("createDiv");
+    createDiv.hidden = false;
+
+    let buttonDiv = document.getElementById("buttonDiv");
+    buttonDiv.hidden = true;
+
 }
 
 //////////////////// COUNTING ////////////////////
@@ -131,5 +147,70 @@ function* tokenize(text) {
     if (currentToken != "") {
         yield currentToken;
     }
+
+}
+
+//////////////////// NEW UNITS ////////////////////
+function addUnit() {
+
+    // Only add unit if name and symbol are unique
+    if (verifyAttributes()) {
+
+        let createDiv = document.getElementById("createDiv");
+        let buttonDiv = document.getElementById("buttonDiv");
+        let nameBox = document.getElementById("nameBox");
+        let symBox = document.getElementById("symBox");
+        let countBox = document.getElementById("countBox");
+        let descBox = document.getElementById("descBox");
+
+        // Add units
+        units[symBox.value] = {
+            name: nameBox.value,
+            words: countBox.value,
+            desc: descBox.value
+        }
+
+        // Update display
+        displayUnit(symBox.value);
+
+        // Clear contents of this div and hide it
+        nameBox.value = "";
+        symBox.value = "";
+        countBox.value = "";
+        descBox.value = "";
+        console.log("Inputs cleared!")
+
+        createDiv.hidden = true;
+        buttonDiv.hidden = false;
+
+    }
+
+}
+
+function verifyAttributes() {
+
+    // Symbol
+    let symbol = document.getElementById("symBox").value;
+    if (units[symbol] != undefined) {
+        alert("This symbol is already in use!");
+        return false;
+    }
+
+    // Name
+    let name = document.getElementById("nameBox").value;
+    let found = Object.keys(units).reduce((prev, current) => prev || (units[current].name.toLowerCase() == name.toLowerCase()), false);
+    if (found) {
+        alert("This name is already in use!");
+        return false;
+    }
+
+    // Count
+    let count = document.getElementById("countBox").value;
+    if (!(count > 0) || (count != (count / 1))) {
+        alert("Invalid number of words per unit!");
+        return false;
+    }
+
+    return true;
 
 }

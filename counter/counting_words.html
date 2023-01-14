@@ -18,13 +18,27 @@
     </div>
     <div id="wrapperDiv" class="wrapper">
         <div id="inputDiv" class="left" style="width: 70%">
-            <textarea id="text" class="scrollableTextbox" placeholder="Your text here!" onchange=calcCounts()></textarea>
+            <br>
+            <textarea id="text" class="scrollableTextbox" placeholder="Your text here!" onkeyup=calcCounts()></textarea>
             <p>Words: <count id="words"></count></p>
         </div>
         <div id="counterDiv" class="right" style="width: 30%">
             <h2>Counts</h2>
-            <div id="abbDiv" class="left"></div>
-            <div id="countDiv" class="right"></div>
+            <div>
+                <div id="abbDiv" class="left"></div>
+                <div id="countDiv" class="right"></div>
+            </div>
+            <br>
+            <div id="createDiv" class="bottom" hidden>
+                <input id="nameBox" type="text" placeholder="Unit name">
+                <input id="symBox" type="text" placeholder="Unit symbol">
+                <input id="countBox" type="number" min=1 step=1 placeholder="Words in unit">
+                <textarea id="descBox" placeholder="Description of your unit"></textarea>
+                <button id="addButton" onclick=addUnit()>Add unit!</button>
+            </div>
+            <div id="buttonDiv" class="bottom">
+                <button id="createButton" onclick=showCreateDiv()>Make your own unit!</button>
+            </div>
         </div>
     </div>
     <script src="counting_words.js"></script>

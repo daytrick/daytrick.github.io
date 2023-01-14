@@ -15,9 +15,14 @@ div.left {
     margin: 1em;
 }
 
-div.right{
+div.right {
     float: right;
     margin: 1em;
+}
+
+div.bottom {
+    float: inline-end;
+    clear: both;
 }
 
 input {
