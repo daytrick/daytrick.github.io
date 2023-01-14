@@ -3,6 +3,31 @@ body {
     background-color: mediumaquamarine;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     overflow-x: hidden;
+    margin: 0;
+}
+
+/* How to have a top navigation bar from: https://www.w3schools.com/howto/howto_js_topnav.asp */
+div.topnav {
+    overflow: hidden;
+    background-color: rgb(43, 152, 116);
+}
+
+div.topnav a {
+    float: left;
+    text-align: center;
+    padding: 1%;
+    font-size: 16px;
+    color: whitesmoke;
+    text-decoration: none;
+}
+
+div.topnav a:hover {
+    background-color: mediumvioletred;
+    color: whitesmoke;
+    text-decoration: none;
+}
+
+div.content {
     margin: 5%;
 }
 

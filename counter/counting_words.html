@@ -12,32 +12,37 @@
     <meta name="theme-color" content="#ff0000">
 </head>
 <body onload=onload()>
-    <h1>Counting Words</h1>
-    <div id="infoDiv">
-        <p>Do you ever wonder how wordy you are?</p>
+    <div class="topnav">
+        <a href="../index.html">Home</a>
     </div>
-    <div id="wrapperDiv" class="wrapper">
-        <div id="inputDiv" class="left" style="width: 70%">
-            <br>
-            <textarea id="text" class="scrollableTextbox" placeholder="Your text here!" onkeyup=calcCounts()></textarea>
-            <p>Words: <count id="words"></count></p>
+    <div class="content">
+        <h1>Counting Words</h1>
+        <div id="infoDiv">
+            <p>Do you ever wonder how wordy you are?</p>
         </div>
-        <div id="counterDiv" class="right" style="width: 30%">
-            <h2>Counts</h2>
-            <div>
-                <div id="abbDiv" class="left"></div>
-                <div id="countDiv" class="right"></div>
+        <div id="wrapperDiv" class="wrapper">
+            <div id="inputDiv" class="left" style="width: 70%">
+                <br>
+                <textarea id="text" class="scrollableTextbox" placeholder="Your text here!" onkeyup=calcCounts()></textarea>
+                <p>Words: <count id="words"></count></p>
             </div>
-            <br>
-            <div id="createDiv" class="bottom" hidden>
-                <input id="nameBox" type="text" placeholder="Unit name">
-                <input id="symBox" type="text" placeholder="Unit symbol">
-                <input id="countBox" type="number" min=1 step=1 placeholder="Words in unit">
-                <textarea id="descBox" placeholder="Description of your unit"></textarea>
-                <button id="addButton" onclick=addUnit()>Add unit!</button>
-            </div>
-            <div id="buttonDiv" class="bottom">
-                <button id="createButton" onclick=showCreateDiv()>Make your own unit!</button>
+            <div id="counterDiv" class="right" style="width: 30%">
+                <h2>Counts</h2>
+                <div>
+                    <div id="abbDiv" class="left"></div>
+                    <div id="countDiv" class="right"></div>
+                </div>
+                <br>
+                <div id="createDiv" class="bottom" hidden>
+                    <input id="nameBox" type="text" placeholder="Unit name">
+                    <input id="symBox" type="text" placeholder="Unit symbol">
+                    <input id="countBox" type="number" min=1 step=1 placeholder="Words in unit">
+                    <textarea id="descBox" placeholder="Description of your unit"></textarea>
+                    <button id="addButton" onclick=addUnit()>Add unit!</button>
+                </div>
+                <div id="buttonDiv" class="bottom">
+                    <button id="createButton" onclick=showCreateDiv()>Make your own unit!</button>
+                </div>
             </div>
         </div>
     </div>

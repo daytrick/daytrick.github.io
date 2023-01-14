@@ -12,27 +12,32 @@
     <meta name="theme-color" content="#ff0000">
 </head>
 <body onload=onload()>
-    <h2>Vigenere Cipher</h2>
-    <div>
-        <h3>Plaintext</h3>
-        <input type="text" id="keyGiven" placeholder="Key" onchange=onChangeEncrypt()>
-        <br>
-        <textarea id="plaintext" class="scrollableTextbox" placeholder="Plaintext" onchange=onChangeEncrypt()></textarea>
-        <br>
-        <button id="encrypt" class="notOK" onclick=writeCiphertext()>Encrypt!</button>
+    <div class="topnav">
+        <a href="../index.html">Home</a>
     </div>
-    <br>
-    <div>
-        <h3>Ciphertext</h3>
-        <input type="text" id="keyCracked" placeholder="Key" onchange=onChangeDecrypt()>
+    <div class="content">
+        <h2>Vigenere Cipher</h2>
+        <div>
+            <h3>Plaintext</h3>
+            <input type="text" id="keyGiven" placeholder="Key" onchange=onChangeEncrypt()>
+            <br>
+            <textarea id="plaintext" class="scrollableTextbox" placeholder="Plaintext" onchange=onChangeEncrypt()></textarea>
+            <br>
+            <button id="encrypt" class="notOK" onclick=writeCiphertext()>Encrypt!</button>
+        </div>
         <br>
-        <input type="text" id="lowerBound" placeholder="Lower bound for key length" onchange=onChangeDecrypt()>
-        <br>
-        <input type="text" id="upperBound" placeholder="Upper bound for key length" onchange=onChangeDecrypt()>
-        <br>
-        <textarea id="ciphertext" class="scrollableTextbox" placeholder="Ciphertext" onchange=onChangeDecrypt()></textarea>
-        <br>
-        <button id="decrypt" class="notOK" onclick=writePlaintext()>Decrypt!</button>
+        <div>
+            <h3>Ciphertext</h3>
+            <input type="text" id="keyCracked" placeholder="Key" onchange=onChangeDecrypt()>
+            <br>
+            <input type="text" id="lowerBound" placeholder="Lower bound for key length" onchange=onChangeDecrypt()>
+            <br>
+            <input type="text" id="upperBound" placeholder="Upper bound for key length" onchange=onChangeDecrypt()>
+            <br>
+            <textarea id="ciphertext" class="scrollableTextbox" placeholder="Ciphertext" onchange=onChangeDecrypt()></textarea>
+            <br>
+            <button id="decrypt" class="notOK" onclick=writePlaintext()>Decrypt!</button>
+        </div>
     </div>
     <script src="vigenere.js"></script>
 </body>
