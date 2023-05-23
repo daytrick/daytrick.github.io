@@ -26,18 +26,24 @@ const COMPUTER_COSTS = {
 
 //////////////////// LOADING ////////////////////
 
+/**
+ * Load dynamic elements after HTML is done loading.
+ */
 function load() {
     initBoard();
     loadBoard();
 }
 
+/**
+ * Initialize the board array to all Os.
+ */
 function initBoard() {
     boardGrid = [];
     
     for (let i = 0; i < MAX_COLS; i++) {
         let col = []
         for (let j = 0; j < MAX_ROWS; j++) {
-            col.push(null);
+            col.push("O");
         }
         boardGrid.push(col);
     }
@@ -84,6 +90,13 @@ function loadBoard() {
 
 }
 
+/**
+ * Draws a token into the provided hole.
+ * 
+ * @param {HTMLElement} svg     the svg to be redrawn
+ * @param {String} fill         the colour of the token
+ * @returns 
+ */
 function drawToken(svg, fill) {
     let circle = document.createElementNS(svg.namespaceURI, "circle");
     circle.setAttribute("cx", SVG_SIZE / 2);
@@ -97,6 +110,13 @@ function drawToken(svg, fill) {
 
 //////////////////// PLAYING ////////////////////
 
+/**
+ * Check if a hole actually exists on the board.
+ * 
+ * @param {Integer} col 
+ * @param {Integer} row 
+ * @returns 
+ */
 function isOnBoard(col, row) {
 
     return ((0 <= col) && (col < MAX_COLS) && (0 <= row) && (row < MAX_ROWS));
@@ -104,6 +124,13 @@ function isOnBoard(col, row) {
 }
 
 
+
+/**
+ * Allows the user to make a move, 
+ * then gets the computer to make a move.
+ * 
+ * @param {HTMLElement} td the table cell that was clicked on
+ */
 function userTurn(td) {
 
     if (turn == PLAYER) {
@@ -132,11 +159,21 @@ function userTurn(td) {
 
 }
 
+
+/**
+ * Gets the first empty space in a column
+ * (like where the token would go if gravity was a thing online).
+ * 
+ * @param {Integer} col 
+ * @returns 
+ */
 function getFirstEmptySpace(col) {
 
-    for (let i = MAX_ROWS - 1; i >= 0; i--) {
-        if (boardGrid[col][i] == null) {
-            return i;
+    if ((0 <= col) && (col < MAX_COLS)) {
+        for (let i = MAX_ROWS - 1; i >= 0; i--) {
+            if (boardGrid[col][i] == "O") {
+                return i;
+            }
         }
     }
 
@@ -144,6 +181,14 @@ function getFirstEmptySpace(col) {
 
 }
 
+
+
+/**
+ * Checks if the player just won.
+ * @param {Integer} c the column they just placed their token in
+ * @param {Integer} r the row their token ended up in
+ * @returns boolean
+ */
 function isWinningMove(c, r) {
 
     // Check all neighbouring holes...
@@ -158,7 +203,9 @@ function isWinningMove(c, r) {
             continue;
         }
     
-        if (checkLine(c, r, y, x, PLAYER) == 3) {
+        let connection = checkLine(c, r, y, x, PLAYER);
+        console.log("Connection: " + connection);
+        if (connection > 3) {
             return true;
         }
 
@@ -168,6 +215,15 @@ function isWinningMove(c, r) {
 
 }
 
+
+
+/**
+ * Put a token into the board.
+ * 
+ * @param {*} col   the column to place it in
+ * @param {*} row   the row it will end up in
+ * @param {*} user  who's making the move
+ */
 function putTokenIn(col, row, user) {
 
     // Logical model
@@ -259,22 +315,62 @@ function computerTurn() {
 
 }
 
+
+
+/**
+ * Check the connectivity of the current line,
+ * going through the hole indicated by (c, r) + n(y, x).
+ * 
+ * @param {Integer} c       hole's column
+ * @param {Integer} r       hole's row
+ * @param {Integer} y       column-shift 
+ * @param {Integer} x       row-shift
+ * @param {String} counter  who's counters make up the line
+ * @returns 
+ */
 function checkLine(c, r, y, x, counter) {
 
-    let connection = 0;
-    for (let i = 0; i < 3; i++) {
+    console.log("c, r: " + c + ", " + r);
+    console.log("y, x: " + y + ", " + x);
 
+    c = parseInt(c);
+    r = parseInt(r);
+    let connection = 0;
+    let holeC = c;
+    let holeR = r;
+    let furthestC = c;
+    let furthestR = r;
+
+    // Find furthest match in OG direction
+    c += parseInt(y);
+    r += parseInt(x);
+    while (isOnBoard(c, r) && ((boardGrid[c][r] == counter))) {
+
+        furthestC = c;
+        furthestR = r;
+    
+        connection++;
+        
         c += y;
         r += x;
+        
+    }
 
-        if (isOnBoard(c, r) && boardGrid[c][r] == counter) {
-            connection += 1;
+    // Find connection, extending across gap
+    connection = 0;
+    c = furthestC;
+    r = furthestR;
+    while (isOnBoard(c, r) && ((boardGrid[c][r] == counter) || ((c == holeC) && (r == holeR)))) {
+
+        if (boardGrid[c][r] == counter) {
+            connection++;
         }
-        else {
-            break;
-        }
+
+        c -= y;
+        r -= x;
 
     }
 
     return connection;
+    
 }
