@@ -9,6 +9,7 @@ const PLAYER = "P";
 const COMPUTER = "C";
 const OVER = "O"
 var turn = PLAYER;
+var firstTurn = true;
 const COLOURS = {
     [PLAYER]: "rgb(239, 69, 114)",
     [COMPUTER]: "rgb(255, 230, 0)"
@@ -124,9 +125,14 @@ function resetBoard() {
     let circles = document.getElementsByTagNameNS(SVG_NS, "circle");
     Array.from(circles).forEach((circle) => circle.setAttribute("fill", "mediumaquamarine"));
 
+    // Reset turns
     turn = PLAYER;
+    firstTurn = true;
+
+    // Hide button
     let button = document.getElementById("again");
     button.style.display = "none";
+
 }
 
 
@@ -236,6 +242,57 @@ function putTokenIn(col, row, user) {
 function computerTurn() {
 
     turn = COMPUTER;
+    let c = 0;
+
+    if (firstTurn) {
+        c = makeRandomMove();
+        firstTurn = false;
+    }
+    else {
+        c = makeBestMove();
+    }
+
+    let r = getFirstEmptySpace(c);
+
+
+    // Pause before making move so it seems like the computer is thinking
+    setTimeout(() => {
+        putTokenIn(c, r, COMPUTER);
+        if (turn == OVER) {
+            showEndgameMessage("You lose!");
+        }
+        else {
+            turn = PLAYER;
+        }
+    }, 500);
+
+}
+
+
+
+/**
+ * Pick a random column to put the token in.
+ * 
+ * @returns column number
+ */
+function makeRandomMove() {
+
+    return Math.floor(Math.random() * MAX_COLS);
+
+}
+
+
+
+/**
+ * Pick the best column to put the token in,
+ * according to the weights:
+ * - if can win, win
+ * - otherwise, try block the player from winning
+ * - otherwise, set self up to win
+ * 
+ * @returns column number
+ */
+function makeBestMove() {
 
     let scores = [];
     let won = false;
@@ -271,7 +328,7 @@ function computerTurn() {
                     let connection = checkLine(c, r, y, x, COMPUTER, false);
                     score += COMPUTER_COSTS[connection];
                     if (connection == 3) {
-                        won = true;
+                        turn = OVER;
                         break;
                     }
                 }
@@ -286,23 +343,10 @@ function computerTurn() {
     }
 
     // Find the most likely column
-    console.log(scores);
     let max = Math.max(...scores);
-    console.log(max);
     let c = scores.indexOf(max);
-    console.log(c);
-    let r = getFirstEmptySpace(c);
 
-    // Pause before making move so it seems like the computer is thinking
-    setTimeout(() => {
-        putTokenIn(c, r, COMPUTER);
-        if (won) {
-            showEndgameMessage("You lose!");
-        }
-        else {
-            turn = PLAYER;
-        }
-    }, 500);
+    return c;
 
 }
 
@@ -320,9 +364,6 @@ function computerTurn() {
  * @returns 
  */
 function checkLine(c, r, y, x, counter, post) {
-
-    console.log("c, r: " + c + ", " + r);
-    console.log("y, x: " + y + ", " + x);
 
     c = parseInt(c);
     r = parseInt(r);
@@ -354,7 +395,6 @@ function checkLine(c, r, y, x, counter, post) {
     while (isOnBoard(c, r) && ((boardGrid[c][r] == counter) || ((c == holeC) && (r == holeR)))) {
 
         if ((c != holeC) || (r != holeR) || post) {
-            console.log("Counting " + c + ", " + r);
             connection++;
         }
 
@@ -366,8 +406,6 @@ function checkLine(c, r, y, x, counter, post) {
     if (connection > 4) {
         connection = 4;
     }
-
-    console.log("Connection from func: " + connection);
 
     return connection;
     
@@ -396,7 +434,6 @@ function isWinningMove(c, r) {
         }
     
         let connection = checkLine(c, r, y, x, PLAYER, true);
-        console.log("Connection from isWinningMove: " + connection);
         if (connection > 3) {
             return true;
         }
