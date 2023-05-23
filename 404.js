@@ -7,6 +7,7 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 var boardGrid = []
 const PLAYER = "P";
 const COMPUTER = "C";
+const OVER = "O"
 var turn = PLAYER;
 const COLOURS = {
     [PLAYER]: "rgb(239, 69, 114)",
@@ -14,11 +15,13 @@ const COLOURS = {
 };
 const NEIGHBOUR_SHIFTS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
 const PLAYER_COSTS = {
+    4: 100000, // won't ever be used, here for symmetry's sake
     3: 1000,
     2: 50,
     1: 5
 };
 const COMPUTER_COSTS = {
+    4: 100000,
     3: 100000,
     2: 100,
     1: 10
@@ -146,7 +149,7 @@ function userTurn(td) {
 
         // Call computer's go
         if (isWinningMove(col, row)) {
-            alert("You won!");
+            showEndgameMessage("You won!");
         }
         else {
             computerTurn();
@@ -154,7 +157,7 @@ function userTurn(td) {
 
     }
     else {
-        alert("It's not your turn!");
+        showMessage("It's not your turn!");
     }
 
 }
@@ -175,40 +178,6 @@ function getFirstEmptySpace(col) {
                 return i;
             }
         }
-    }
-
-    return false;
-
-}
-
-
-
-/**
- * Checks if the player just won.
- * @param {Integer} c the column they just placed their token in
- * @param {Integer} r the row their token ended up in
- * @returns boolean
- */
-function isWinningMove(c, r) {
-
-    // Check all neighbouring holes...
-    for ([x, y] of NEIGHBOUR_SHIFTS) {
-
-        let col = c + y;
-        if ((0 > col) || (col >= MAX_COLS)) {
-            continue;
-        }
-        let row = r + x;
-        if ((0 > row) || (row >= MAX_ROWS)) {
-            continue;
-        }
-    
-        let connection = checkLine(c, r, y, x, PLAYER);
-        console.log("Connection: " + connection);
-        if (connection > 3) {
-            return true;
-        }
-
     }
 
     return false;
@@ -276,11 +245,11 @@ function computerTurn() {
                 }
                 
                 if (boardGrid[col][row] == PLAYER) {
-                    let connection = checkLine(c, r, y, x, PLAYER);
+                    let connection = checkLine(c, r, y, x, PLAYER, false);
                     score += PLAYER_COSTS[connection];
                 }
                 else if (boardGrid[col][row] == COMPUTER) {
-                    let connection = checkLine(c, r, y, x, COMPUTER);
+                    let connection = checkLine(c, r, y, x, COMPUTER, false);
                     score += COMPUTER_COSTS[connection];
                     if (connection == 3) {
                         won = true;
@@ -298,15 +267,18 @@ function computerTurn() {
     }
 
     // Find the most likely column
+    console.log(scores);
     let max = Math.max(...scores);
+    console.log(max);
     let c = scores.indexOf(max);
+    console.log(c);
     let r = getFirstEmptySpace(c);
 
     // Pause before making move so it seems like the computer is thinking
     setTimeout(() => {
         putTokenIn(c, r, COMPUTER);
         if (won) {
-            alert("You lose!");
+            showEndgameMessage("You lose!");
         }
         else {
             turn = PLAYER;
@@ -328,7 +300,7 @@ function computerTurn() {
  * @param {String} counter  who's counters make up the line
  * @returns 
  */
-function checkLine(c, r, y, x, counter) {
+function checkLine(c, r, y, x, counter, post) {
 
     console.log("c, r: " + c + ", " + r);
     console.log("y, x: " + y + ", " + x);
@@ -362,7 +334,8 @@ function checkLine(c, r, y, x, counter) {
     r = furthestR;
     while (isOnBoard(c, r) && ((boardGrid[c][r] == counter) || ((c == holeC) && (r == holeR)))) {
 
-        if (boardGrid[c][r] == counter) {
+        if ((c != holeC) || (r != holeR) || post) {
+            console.log("Counting " + c + ", " + r);
             connection++;
         }
 
@@ -371,6 +344,80 @@ function checkLine(c, r, y, x, counter) {
 
     }
 
+    if (connection > 4) {
+        connection = 4;
+    }
+
+    console.log("Connection from func: " + connection);
+
     return connection;
     
+}
+
+//////////////////// ENDGAME ////////////////////
+
+/**
+ * Checks if the player just won.
+ * @param {Integer} c the column they just placed their token in
+ * @param {Integer} r the row their token ended up in
+ * @returns boolean
+ */
+function isWinningMove(c, r) {
+
+    // Check all neighbouring holes...
+    for ([x, y] of NEIGHBOUR_SHIFTS) {
+
+        let col = c + y;
+        if ((0 > col) || (col >= MAX_COLS)) {
+            continue;
+        }
+        let row = r + x;
+        if ((0 > row) || (row >= MAX_ROWS)) {
+            continue;
+        }
+    
+        let connection = checkLine(c, r, y, x, PLAYER, true);
+        console.log("Connection from isWinningMove: " + connection);
+        if (connection > 3) {
+            return true;
+        }
+
+    }
+
+    return false;
+
+}
+
+
+
+/**
+ * Disables the board and shows a message to the user,
+ * depending on if they won/lost.
+ * 
+ * @param {String} message 
+ */
+function showEndgameMessage(message) {
+
+    turn = OVER;
+
+    showMessage(message);
+
+}
+
+
+
+/**
+ * Show a regular message.
+ * 
+ * @param {String} message
+ */
+function showMessage(message) {
+
+    let modal = document.getElementsByClassName("modal")[0];
+    let p = document.getElementById("endgameMessage");
+    p.innerHTML = message;
+    modal.style.display = "block";
+
+    setTimeout(() => modal.style.display = "none", 2000);
+
 }
