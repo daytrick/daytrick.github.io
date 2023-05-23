@@ -111,6 +111,25 @@ function drawToken(svg, fill) {
 }
 
 
+
+/**
+ * Reset the board to play again.
+ */
+function resetBoard() {
+
+    // Reset logical board
+    initBoard();
+
+    // Reset visual board
+    let circles = document.getElementsByTagNameNS(SVG_NS, "circle");
+    Array.from(circles).forEach((circle) => circle.setAttribute("fill", "mediumaquamarine"));
+
+    turn = PLAYER;
+    let button = document.getElementById("again");
+    button.style.display = "none";
+}
+
+
 //////////////////// PLAYING ////////////////////
 
 /**
@@ -401,6 +420,9 @@ function showEndgameMessage(message) {
     turn = OVER;
 
     showMessage(message);
+
+    let button = document.getElementById("again");
+    button.style.display = "block";
 
 }
 

@@ -30,3 +30,8 @@ table {
     text-align: center;
 
 }
+
+#again {
+    display: none;
+    margin: auto;
+}
