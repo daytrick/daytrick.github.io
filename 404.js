@@ -175,7 +175,7 @@ function userTurn(td) {
         }
 
     }
-    else {
+    else if (turn != OVER) {
         showMessage("It's not your turn!");
     }
 
