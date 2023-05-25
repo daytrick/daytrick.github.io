@@ -1,0 +1,49 @@
+body {
+    overflow-y: hidden;
+}
+
+content {
+    vertical-align: middle;
+}
+
+.gridwrapper {
+    display: inline-block;
+    position: relative;
+    width: 75vh;
+    overflow: hidden;
+    justify-content: center;
+}
+
+.gridwrapper::after {
+    padding-top: 100%;
+    display: block;
+    content: "";
+}
+
+/* 
+ * How to get grid layout from: https://stackoverflow.com/a/20457076
+ */
+.grid {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    gap: 1%;
+    /*margin: 5%;*/
+}
+
+.cell {
+    background-color: darkgray;
+    display: flex;
+    aspect-ratio: 1/1;
+    align-items: center;
+    padding: 1%;
+    font-size: 98%;
+}
+
+.cell:hover {
+    background-color: lightgray;
+}
