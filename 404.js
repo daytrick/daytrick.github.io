@@ -244,7 +244,7 @@ function computerTurn() {
     for (let c = 0; c < MAX_COLS; c++) {
 
         let r = getFirstEmptySpace(c);
-        if (r == false) {
+        if (r === false) {
             scores.push(-1);
         }
         else {
