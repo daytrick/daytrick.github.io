@@ -18,7 +18,7 @@ function load() {
  */
 function loadCells() {
 
-    grid = document.getElementsByClassName("grid")[0];
+    let grid = document.getElementsByClassName("grid")[0];
     world = [];
 
     for (var i = 0; i < WORLD_X; i++) {
@@ -103,6 +103,26 @@ function toggleReaping() {
     else {
         reapButton.classList.add("active");
         reap = true;
+    }
+
+}
+
+
+
+/**
+ * Clears the world of all lifeforms.
+ */
+function clearWorld() {
+
+    for (let x = 0; x < WORLD_X; x++) {
+        for (let y = 0; y < WORLD_Y; y++) {
+
+            let cell = document.getElementById(x + "_" + y);
+            cell.innerHTML = "";
+
+            world[x][y] = null;
+
+        }
     }
 
 }

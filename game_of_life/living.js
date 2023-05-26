@@ -130,6 +130,11 @@ function countNeighbours(x, y) {
 
 
 
+/**
+ * Copies world into a new 2D array.
+ * 
+ * @returns 2D array
+ */
 function copyWorld() {
 
     let newWorld = [];
