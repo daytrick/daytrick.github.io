@@ -13,6 +13,7 @@ function goLive() {
         runOneGeneration();
     }, 250);
 
+    GO_BUTTON.classList.add("active");
     GO_BUTTON.innerHTML = "Stop Time Itself"
     GO_BUTTON.onclick = () => {goIntoStasis(timerID)};
 
@@ -27,6 +28,7 @@ function goIntoStasis(timerID) {
 
     clearInterval(timerID);
 
+    GO_BUTTON.classList.remove("active");
     GO_BUTTON.innerHTML = "It's alive!!!"
     GO_BUTTON.onclick = goLive;
 

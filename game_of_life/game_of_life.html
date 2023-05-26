@@ -13,7 +13,7 @@
     <meta name="theme-color" content="#ff0000">
     <meta charset="UTF-8">
 </head>
-<body onload=loadCells()>
+<body onload=load()>
     <div class="topnav">
         <a href="../index.html">Home</a>
     </div>
@@ -24,10 +24,16 @@
                 <div class="grid"></div>
             </div>
             <div class="right">
-                <button id="go" onclick="goLive()">It's alive!!!</button>
+                <button class="stay" id="go" onclick="goLive()">It's alive!!!</button>
+                <div id="population">
+                    <h3>Population</h3>
+                    <label for="lifeforms">Currently placing:</label>
+                    <select name="lifeforms" id="lifeforms"></select>
+                    <button class="stay" id="reap" onclick=toggleReaping()>Reap</button>
+                    <button id="clear">Clear</button>
+                </div>
             </div>
         </div>
-        
     </div>
     <script src="./loading.js"></script>
     <script src="./living.js"></script>
