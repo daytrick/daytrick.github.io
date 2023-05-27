@@ -6,6 +6,10 @@ var world = [];
 var reap = false;
 
 
+
+/**
+ * Loads dynamic elements.
+ */
 function load() {
 
     loadCells();

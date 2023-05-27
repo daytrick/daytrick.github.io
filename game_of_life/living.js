@@ -3,6 +3,8 @@
  */
 
 const GO_BUTTON = document.getElementById("go");
+const TRACKER = document.getElementById("tracker");
+var generationNo = 0;
 
 /**
  * Run for infinitely many generations.
@@ -69,6 +71,8 @@ function runOneGeneration() {
     }
 
     world = newWorld;
+    generationNo++;
+    TRACKER.innerHTML = generationNo;
 
 }
 
