@@ -47,3 +47,8 @@ content {
 .cell:hover {
     background-color: lightgray;
 }
+
+clause {
+    display: block;
+    margin-left: 10px;
+}
