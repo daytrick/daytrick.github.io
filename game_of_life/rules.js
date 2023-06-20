@@ -7,6 +7,12 @@ const OR = "or";
 
 let clauseCounter = 0;
 
+
+/**
+ * Paint a new clause onto the appropriate rule's div.
+ * 
+ * @param {HTMLDivElement} parent the div
+ */
 function addClause(parent) {
     
     let rule = parent.getElementsByTagName("rule")[0];
@@ -42,6 +48,11 @@ function addClause(parent) {
 
 
 
+/**
+ * Delete the given clause.
+ * 
+ * @param {HTMLClauseElement} clause the clause
+ */
 function deleteClause(clause) {
 
     clause.remove();
@@ -63,6 +74,14 @@ function parseRules(rules) {
 }
 
 
+
+/**
+ * Parses a rule (birth/death):
+ * creates function that will evaluate whether a rule applies to a cell
+ * 
+ * @param {JSON} rule 
+ * @returns the function, which takes an x and a y
+ */
 function parseRule(rule) {
 
     return (x, y) => {
@@ -73,13 +92,13 @@ function parseRule(rule) {
         Object.entries(rule).forEach(([key, value]) => {
             switch (key) {
                 case ATOM:
-                    res = res && parseAtom(value)(x, y);
+                    res = parseAtom(value)(x, y);
                     break;
                 case AND:
-                    res = res || parseAnd(value);
+                    res = parseAnd(value);
                     break;
                 case OR:
-                    res = res || parseOr(value);
+                    res = parseOr(value);
                 default:
                     console.log("Error parsing a rule: " + key);
                     break;
@@ -94,6 +113,13 @@ function parseRule(rule) {
 
 
 
+/**
+ * Parses an OR:
+ * creates function that loops through all clauses and ORs them together.
+ * 
+ * @param {Array} or
+ * @returns a function that will check the OR statement for a cell, given an x and y
+ */
 function parseOr(or) {
 
     return (x, y) => {
@@ -128,6 +154,13 @@ function parseOr(or) {
 
 
 
+/**
+ * Parses an AND:
+ * creates function that loops through all clauses and ANDs them together.
+ * 
+ * @param {Array} and
+ * @returns a function that will check the AND statement for a cell, given an x and y
+ */
 function parseAnd(and) {
 
     return (x, y) => {
@@ -160,6 +193,16 @@ function parseAnd(and) {
     
 }
 
+
+
+/**
+ * Parses an ATOM:
+ * creates function to check if a cell meets the rule's requirements
+ * of a min/max/equal neighbour count.
+ * 
+ * @param {JSON} atom 
+ * @returns the function, which takes an x and a y
+ */
 function parseAtom(atom) {
 
     let func;
