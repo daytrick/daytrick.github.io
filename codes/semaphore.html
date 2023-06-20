@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<head>
+    <title>Semaphore</title>
+    <link rel="stylesheet" href="../style.css">
+    <!-- Favicons generated using: https://realfavicongenerator.net/ -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../icons/favicon-16x16.png">
+    <link rel="manifest" href="../icons/site.webmanifest">
+    <link rel="mask-icon" href="icons/safari-pinned-tab.svg" color="#57ad98">
+    <meta name="msapplication-TileColor" content="#00aba9">
+    <meta name="theme-color" content="#ff0000">
+</head>
+<body onload>
+    <div class="topnav">
+        <a href="../index.html">Home</a>
+    </div>
+    <div class="content">
+        <h2>Semaphore</h2>
+        <div class="left" width="50%">
+            <textarea id="plaintext" class="scrollableTextbox" placeholder="Plaintext" ></textarea>
+        </div>
+        <div class="right" width="50%">
+            <canvas id="ciphertext" width="500px" height="300px" style="border:1px solid #000000; border-radius: 10px;"></canvas>
+            <button id="save">Save</button>
+        </div>
+    </div>
+    <script src="semaphore.js"></script>
+</body>

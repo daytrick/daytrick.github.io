@@ -1,3 +1,10 @@
+const BIRTH = "birth";
+const DEATH = "death";
+const ATOM = "atom";
+const AND = "and";
+const OR = "or";
+
+
 let clauseCounter = 0;
 
 function addClause(parent) {
@@ -14,7 +21,8 @@ function addClause(parent) {
     num1.max = 8;
     let span2 = document.createElement("span");
     span2.innerHTML = " neighbouring ";
-    let neighbour1 = document.createElement("select");
+    let neighbour = document.createElement("select");
+    loadLifeforms(neighbour);
     let x = document.createElement("span");
     x.classList.add("close");
     x.innerHTML = "✖";
@@ -23,9 +31,8 @@ function addClause(parent) {
     clause.appendChild(span1);
     clause.appendChild(num1);
     clause.appendChild(span2);
-    clause.appendChild(neighbour1);
+    clause.appendChild(neighbour);
     clause.appendChild(x);
-    //clause.appendChild(br);
 
     let br = document.createElement("br");
 
@@ -38,5 +45,195 @@ function addClause(parent) {
 function deleteClause(clause) {
 
     clause.remove();
+
+}
+
+
+
+function parseRules(rules) {
+
+    let checkingFuncs = {};
+
+    // Iterate through lifeforms
+    Object.entries(rules).forEach(([key, value]) => {
+
+        checkingFuncs[key].birth = "blah"
+    });
+
+}
+
+
+function parseRule(rule) {
+
+    return (x, y) => {
+
+        let res = true;
+
+        // Will only loop once, since is passed a single key-value pair
+        Object.entries(rule).forEach(([key, value]) => {
+            switch (key) {
+                case ATOM:
+                    res = res && parseAtom(value)(x, y);
+                    break;
+                case AND:
+                    res = res || parseAnd(value);
+                    break;
+                case OR:
+                    res = res || parseOr(value);
+                default:
+                    console.log("Error parsing a rule: " + key);
+                    break;
+            }
+        });
+
+        return res;
+
+    };
+
+}
+
+
+
+function parseOr(or) {
+
+    return (x, y) => {
+
+        let res = false;
+
+        or.forEach((obj) => {
+
+            let [key, value] = Object.entries(obj)[0];
+
+            switch (key) {
+                case ATOM:
+                    res = res || parseAtom(value)(x, y);
+                    break;
+                case AND:
+                    res = res || parseAnd(value);
+                    break;
+                case OR:
+                    res = res || parseOr(value);
+                default:
+                    console.log("Error parsing an OR: " + key);
+                    break;
+            }
+
+        });
+
+        return res;
+
+    }
+    
+}
+
+
+
+function parseAnd(and) {
+
+    return (x, y) => {
+
+        let res = true;
+
+        and.forEach((obj) => {
+
+            let [key, value] = Object.entries(obj)[0];
+
+            switch (key) {
+                case ATOM:
+                    res = res && parseAtom(value)(x, y);
+                    break;
+                case AND:
+                    res = res && parseAnd(value);
+                    break;
+                case OR:
+                    res = res && parseOr(value);
+                default:
+                    console.log("Error parsing an AND: " + key);
+                    break;
+            }
+
+        });
+
+        return res;
+
+    }
+    
+}
+
+function parseAtom(atom) {
+
+    let func;
+    let neighbour = atom.neighbour;
+
+    if ("eq" in atom) {
+        func = (x, y) => {
+            return takeCensus(x, y, neighbour) == atom.eq;
+        }
+    }
+    else if ("min" in atom) {
+        func = (x, y) => {
+            return takeCensus(x, y, neighbour) >= atom.min;
+        }
+    }
+    else if ("max" in atom) {
+        func = (x, y) => {
+            return takeCensus(x, y, neighbour) <= atom.max;
+        }
+    }
+    else if ("between" in atom) {
+        func = (x, y) => {
+            let count = takeCensus(x, y, neighbour);
+            return (atom.between[0] <= count) && (count <= atom.between[1]);
+        }
+    }
+    else {
+        console.log("Invalid atom!");
+        func = (x, y) => {false}
+    }
+
+    return func;
+
+}
+
+
+
+/**
+ * Check how many of a certain neighbour a cell has.
+ * 
+ * Ripped off from countNeighbours().
+ * 
+ * @param {Number} x 
+ * @param {Number} y 
+ * @param {String} neighbour 
+ * @returns 
+ */
+function takeCensus(x, y, neighbour) {
+
+    let neighbours = 0;
+
+    for (let i = -1; i <= 1; i++) {
+
+        let nx = x + i;
+        if ((0 > nx) || (nx >= WORLD_X)) {
+            continue;
+        }
+        
+        for (let j = -1; j <= 1; j++) {
+
+            let ny = y + j;
+            if ((0 <= ny) 
+                && (ny < WORLD_Y)
+                && !((i == 0) && (j == 0))
+                && (world[nx][ny] == neighbour)) {
+
+                neighbours++;
+
+            }
+
+        }
+
+    }
+
+    return neighbours;
 
 }

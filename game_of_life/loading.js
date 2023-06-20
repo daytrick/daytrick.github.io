@@ -13,7 +13,7 @@ var reap = false;
 function load() {
 
     loadCells();
-    loadLifeforms();
+    loadLifeforms(document.getElementById("lifeforms"));
 
 }
 
@@ -52,9 +52,9 @@ function loadCells() {
 /**
  * Load lifeforms into the dropdown.
  */
-function loadLifeforms() {
+function loadLifeforms(select) {
 
-    let select = document.getElementById("lifeforms");
+    select.innerHTML = "";
 
     for (lifeform of lifeforms) {
         let option = document.createElement("option");

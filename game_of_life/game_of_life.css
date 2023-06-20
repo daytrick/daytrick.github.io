@@ -48,6 +48,13 @@ content {
     background-color: lightgray;
 }
 
+div.right {
+    overflow-y: auto;
+    height: 75vh;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
 clause {
     display: block;
     margin-left: 10px;
