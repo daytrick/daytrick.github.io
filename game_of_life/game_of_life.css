@@ -55,7 +55,47 @@ div.right {
     padding-right: 30px;
 }
 
-clause {
+div#birth, div#death {
     display: block;
     margin-left: 10px;
+}
+
+rule clause {
+    display: block;
+    margin-left: 10px;
+}
+
+blank clause {
+    display: inline-block;
+}
+
+clause:hover {
+    cursor: grab;
+}
+
+clause:active {
+    cursor: grabbing;
+}
+
+and {
+    display: block;
+    margin-left: 10px;
+}
+
+and:hover {
+    cursor: grab;
+}
+
+and:active {
+    cursor: grabbing;
+}
+
+blank {
+    display: inline-block;
+    min-width: 50px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
+    margin: 5px;
+    vertical-align: middle;
 }

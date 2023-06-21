@@ -7,6 +7,17 @@ const OR = "or";
 
 let clauseCounter = 0;
 
+/**
+ * Generate an ID for an ATOM/AND/OR.
+ * 
+ * Copied from Danny Apostolov's reply to: https://stackoverflow.com/a/20061123
+ * @returns ID
+ */
+function generateID() { 
+    return generateID.__current++; 
+}; 
+generateID.__current = 0;
+
 
 /**
  * Paint a new clause onto the appropriate rule's div.
@@ -18,6 +29,9 @@ function addClause(parent) {
     let rule = parent.getElementsByTagName("rule")[0];
 
     let clause = document.createElement("clause");
+    clause.id = generateID();
+    clause.draggable = true;
+    clause.ondragstart = (event) => {drag(event)};
 
     let span1 = document.createElement("span");
     span1.innerHTML = " there are ";
@@ -29,18 +43,13 @@ function addClause(parent) {
     span2.innerHTML = " neighbouring ";
     let neighbour = document.createElement("select");
     loadLifeforms(neighbour);
-    let x = document.createElement("span");
-    x.classList.add("close");
-    x.innerHTML = "✖";
-    x.onclick = () => {deleteClause(clause)}
+    let x = createX(clause);
 
     clause.appendChild(span1);
     clause.appendChild(num1);
     clause.appendChild(span2);
     clause.appendChild(neighbour);
     clause.appendChild(x);
-
-    let br = document.createElement("br");
 
     rule.appendChild(clause);
 
@@ -49,17 +58,106 @@ function addClause(parent) {
 
 
 /**
- * Delete the given clause.
+ * Delete the given HTMLElement.
  * 
- * @param {HTMLClauseElement} clause the clause
+ * @param {HTMLElement} elem the element
  */
-function deleteClause(clause) {
+function deleteElement(elem) {
 
-    clause.remove();
+    elem.remove();
 
 }
 
 
+
+function addAnd(parent) {
+
+    let rule = parent.getElementsByTagName("rule")[0];
+
+    let and = document.createElement("and");
+    and.id = generateID();
+    and.draggable = true;
+    and.ondragstart = (event) => {drag(event)};
+
+    let blank1 = createBlank();
+    let span = document.createElement("span");
+    span.innerHTML = " and ";
+    let blank2 = createBlank();
+    let x = createX(and);
+
+    and.appendChild(blank1);
+    and.appendChild(span);
+    and.appendChild(blank2);
+    and.appendChild(x);
+
+    rule.appendChild(and);
+
+}
+
+
+
+function createBlank() {
+
+    let blank = document.createElement("blank");
+    blank.ondrop = (event) => {drop(event)};
+    blank.ondragover = (event) => {allowDrop(event)};
+    
+    return blank;
+
+}
+
+
+
+function createX(parent) {
+
+    let x = document.createElement("span");
+    x.classList.add("close");
+    x.innerHTML = "✖";
+    x.onclick = () => {deleteElement(parent)}
+
+    return x;
+}
+
+
+
+//////////////////// DRAGGING ////////////////////
+/**
+ * Dragging code from: https://www.w3schools.com/html/html5_draganddrop.asp
+ */
+
+/** 
+ * Initialise a drag.
+ *  
+ * @param {Event} ev 
+ */
+function drag(ev) {
+    ev.dataTransfer.clearData();
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+/**
+ * Allow something to be dragged into an element.
+ * 
+ * @param {Event} ev 
+ */
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+/**
+ * Drop something into an element.
+ * 
+ * @param {Event} ev 
+ */
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    console.log(data);
+    ev.target.appendChild(document.getElementById(data));
+}
+
+
+//////////////////// PARSING ////////////////////
 
 function parseRules(rules) {
 
