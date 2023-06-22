@@ -99,3 +99,16 @@ blank {
     margin: 5px;
     vertical-align: middle;
 }
+
+blank span.deleteBlank {
+    color: rgba(255, 99, 71, 0);
+}
+
+blank:hover span.deleteBlank {
+    color: rgba(255, 99, 71, 1);
+}
+
+.deleteBlank {
+    padding-right: 5px;
+    float: right;
+}

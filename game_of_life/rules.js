@@ -1,11 +1,12 @@
+//////////////////// CONSTANTS ////////////////////
+
 const BIRTH = "birth";
 const DEATH = "death";
 const ATOM = "atom";
 const AND = "and";
 const OR = "or";
 
-
-let clauseCounter = 0;
+//////////////////// ELEMENT CREATION ////////////////////
 
 /**
  * Generate an ID for an ATOM/AND/OR.
@@ -43,7 +44,7 @@ function addClause(parent) {
     span2.innerHTML = " neighbouring ";
     let neighbour = document.createElement("select");
     loadLifeforms(neighbour);
-    let x = createX(clause);
+    let x = createX("close", () => {deleteElement(clause)});
 
     clause.appendChild(span1);
     clause.appendChild(num1);
@@ -64,6 +65,9 @@ function addClause(parent) {
  */
 function deleteElement(elem) {
 
+    if (elem.parentElement.tagName == "blank") {
+
+    }
     elem.remove();
 
 }
@@ -80,17 +84,51 @@ function addAnd(parent) {
     and.ondragstart = (event) => {drag(event)};
 
     let blank1 = createBlank();
-    let span = document.createElement("span");
-    span.innerHTML = " and ";
+    let span = createSpan(AND);
     let blank2 = createBlank();
-    let x = createX(and);
+    let plus = createPlus(and, AND);
+    let x = createX("close", () => {deleteElement(and)});
 
     and.appendChild(blank1);
     and.appendChild(span);
     and.appendChild(blank2);
+    and.appendChild(plus);
     and.appendChild(x);
 
     rule.appendChild(and);
+
+}
+
+
+
+function addBlank(parent, type, plus) {
+
+    let span = createSpan(type);
+    let blank = createBlank();
+    let x = createX("deleteBlank", () => {removeBlank(span, blank)});
+    blank.appendChild(x);
+
+    parent.insertBefore(span, plus);
+    parent.insertBefore(blank, plus);
+
+}
+
+
+
+function removeBlank(span, blank) {
+
+    span.remove();
+    blank.remove();
+
+}
+
+
+
+function createSpan(text) {
+
+    let span = document.createElement("span");
+    span.innerHTML = " " + text + " ";
+    return span;
 
 }
 
@@ -108,12 +146,26 @@ function createBlank() {
 
 
 
-function createX(parent) {
+function createPlus(parent, type) {
+
+    let plus = document.createElement("span");
+    plus.classList.add("plus");
+    plus.innerHTML = "+";
+    plus.onclick = () => {addBlank(parent, type, plus)};
+
+    return plus;
+    
+}
+
+
+
+
+function createX(className, onclickFunc) {
 
     let x = document.createElement("span");
-    x.classList.add("close");
+    x.classList.add(className);
     x.innerHTML = "✖";
-    x.onclick = () => {deleteElement(parent)}
+    x.onclick = onclickFunc;
 
     return x;
 }
@@ -150,10 +202,13 @@ function allowDrop(ev) {
  * @param {Event} ev 
  */
 function drop(ev) {
+
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
     console.log(data);
+    ev.target.innerHTML = "";
     ev.target.appendChild(document.getElementById(data));
+
 }
 
 

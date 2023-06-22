@@ -112,10 +112,15 @@ textarea {
 
 
 
-.close {
+.close, .plus {
+    padding-left: 5px;
     color: slategrey;
 }
 
 .close:hover {
     color: darkred;
+}
+
+.plus:hover {
+    color:forestgreen;
 }
