@@ -72,8 +72,8 @@ function addClause(parent) {
  */
 function deleteElement(elem) {
 
-    if (elem.parentElement.tagName == "blank") {
-        elem.parentElement.isBlank = false;
+    if (elem.parentElement.tagName.toLowerCase() == "blank") {
+        elem.parentElement.isBlank = true;
     }
     elem.remove();
 
