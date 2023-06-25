@@ -8,6 +8,13 @@ const OR = "or";
 
 //////////////////// ELEMENT CREATION ////////////////////
 
+document.getElementsByTagName("rule")
+
+for (rule of document.getElementsByTagName("rule")) {
+    rule.ondrop = (event) => drop(event, false);
+    rule.ondragover = (event) => {allowDrop(event); console.log('on rule')};
+}
+
 /**
  * Generate an ID for an ATOM/AND/OR.
  * 
@@ -66,7 +73,7 @@ function addClause(parent) {
 function deleteElement(elem) {
 
     if (elem.parentElement.tagName == "blank") {
-
+        elem.parentElement.isBlank = false;
     }
     elem.remove();
 
@@ -137,8 +144,9 @@ function createSpan(text) {
 function createBlank() {
 
     let blank = document.createElement("blank");
-    blank.ondrop = (event) => {drop(event)};
+    blank.ondrop = (event) => {drop(event, true)};
     blank.ondragover = (event) => {allowDrop(event)};
+    blank.isBlank = true;
     
     return blank;
 
@@ -174,7 +182,7 @@ function createX(className, onclickFunc) {
 
 //////////////////// DRAGGING ////////////////////
 /**
- * Dragging code from: https://www.w3schools.com/html/html5_draganddrop.asp
+ * Dragging code based off: https://www.w3schools.com/html/html5_draganddrop.asp
  */
 
 /** 
@@ -185,15 +193,18 @@ function createX(className, onclickFunc) {
 function drag(ev) {
     ev.dataTransfer.clearData();
     ev.dataTransfer.setData("text", ev.target.id);
+    ev.dataTransfer.dropEffect = "move";
 }
 
 /**
- * Allow something to be dragged into an element.
+ * Allow something to be dragged into a blank element.
  * 
  * @param {Event} ev 
  */
 function allowDrop(ev) {
-    ev.preventDefault();
+    if (ev.target.isBlank || ev.target.tagName.toLowerCase() == "rule") {
+        ev.preventDefault();
+    }
 }
 
 /**
@@ -201,13 +212,18 @@ function allowDrop(ev) {
  * 
  * @param {Event} ev 
  */
-function drop(ev) {
+function drop(ev, wipe) {
 
     ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    console.log(data);
-    ev.target.innerHTML = "";
+    let data = ev.dataTransfer.getData("text");
+    if (wipe) {
+        ev.target.innerHTML = "";
+    }
     ev.target.appendChild(document.getElementById(data));
+    console.log(ev.target.tagName);
+    if (ev.target.tagName.toLowerCase() == "blank") {
+        ev.target.isBlank = false;
+    }
 
 }
 

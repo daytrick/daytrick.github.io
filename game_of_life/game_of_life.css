@@ -60,6 +60,11 @@ div#birth, div#death {
     margin-left: 10px;
 }
 
+rule {
+    display: block;
+    padding-bottom: 30px;
+}
+
 rule clause {
     display: block;
     margin-left: 10px;
