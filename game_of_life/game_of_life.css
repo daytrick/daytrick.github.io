@@ -62,7 +62,7 @@ div#birth, div#death {
 
 rule {
     display: block;
-    padding-bottom: 30px;
+    padding-bottom: 20px;
 }
 
 rule clause {
@@ -103,6 +103,15 @@ blank {
     border-radius: 3px;
     margin: 5px;
     vertical-align: middle;
+}
+
+blank.filled {
+    box-sizing: border-box;
+    height: auto;
+    min-height: 30px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
 }
 
 blank span.deleteBlank {

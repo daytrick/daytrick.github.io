@@ -11,7 +11,7 @@ const OR = "or";
 document.getElementsByTagName("rule")
 
 for (rule of document.getElementsByTagName("rule")) {
-    rule.ondrop = (event) => drop(event, false);
+    rule.ondrop = (event) => drop(event);
     rule.ondragover = (event) => {allowDrop(event); console.log('on rule')};
 }
 
@@ -72,8 +72,18 @@ function addClause(parent) {
  */
 function deleteElement(elem) {
 
-    if (elem.parentElement.tagName.toLowerCase() == "blank") {
-        elem.parentElement.isBlank = true;
+    let parent = elem.parentElement;
+
+    if (parent.tagName.toLowerCase() == "blank") {
+
+        parent.isBlank = true;
+        parent.classList.remove("filled");
+
+        let deleteBlanks = parent.getElementsByClassName("deleteBlank");
+        if (deleteBlanks.length > 0) {
+            deleteBlanks[0].removeAttribute("hidden");
+        }
+
     }
     elem.remove();
 
@@ -144,7 +154,7 @@ function createSpan(text) {
 function createBlank() {
 
     let blank = document.createElement("blank");
-    blank.ondrop = (event) => {drop(event, true)};
+    blank.ondrop = (event) => drop(event);
     blank.ondragover = (event) => {allowDrop(event)};
     blank.isBlank = true;
     
@@ -212,30 +222,45 @@ function allowDrop(ev) {
  * 
  * @param {Event} ev 
  */
-function drop(ev, wipe) {
+function drop(ev) {
 
     ev.preventDefault();
 
     let data = ev.dataTransfer.getData("text");
     let draggable = document.getElementById(data);
+    let parent = draggable.parentElement;
     
-    // Allow blanks to be dragged into again
-    draggable.parentElement.isBlank = true;
-    if (wipe) {
-        ev.target.innerHTML = "";
+    // Allow newly-emptied blanks to be dragged into again
+    if (parent.tagName.toLowerCase == "blank") {
+
+        parent.isBlank = true;
+        parent.classList.remove("filled");
+
+        let deleteBlanks = parent.getElementsByClassName("deleteBlank");
+        if (deleteBlanks.length > 0) {
+            deleteBlanks[0].removeAttribute("hidden");
+        }
+
+    }
+
+    // Stop other things from being dragged into a newly-filled blank
+    // but keep allowing drags into the rule
+    if (ev.target.tagName.toLowerCase() == "blank") {
+
+        ev.target.isBlank = false;
+        ev.target.classList.add("filled");
+
+        let deleteBlanks = ev.target.getElementsByClassName("deleteBlank");
+        if (deleteBlanks.length > 0) {
+            deleteBlanks[0].hidden = true;
+        }
+
     }
 
     // Actually drag the draggable into its new position
     ev.target.appendChild(draggable);
 
-    // Stop other things from being dragged into the newly-filled blank
-    // but keep allowing drags into the rule
-    if (ev.target.tagName.toLowerCase() == "blank") {
-        ev.target.isBlank = false;
-    }
-
 }
-
 
 //////////////////// PARSING ////////////////////
 
