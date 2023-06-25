@@ -215,12 +215,21 @@ function allowDrop(ev) {
 function drop(ev, wipe) {
 
     ev.preventDefault();
+
     let data = ev.dataTransfer.getData("text");
+    let draggable = document.getElementById(data);
+    
+    // Allow blanks to be dragged into again
+    draggable.parentElement.isBlank = true;
     if (wipe) {
         ev.target.innerHTML = "";
     }
-    ev.target.appendChild(document.getElementById(data));
-    console.log(ev.target.tagName);
+
+    // Actually drag the draggable into its new position
+    ev.target.appendChild(draggable);
+
+    // Stop other things from being dragged into the newly-filled blank
+    // but keep allowing drags into the rule
     if (ev.target.tagName.toLowerCase() == "blank") {
         ev.target.isBlank = false;
     }
