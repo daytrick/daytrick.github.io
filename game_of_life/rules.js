@@ -6,6 +6,12 @@ const ATOM = "atom";
 const AND = "and";
 const OR = "or";
 
+const EQ = "eq";
+const MIN = "min";
+const MAX = "max";
+const BETWEEN = "between"
+const COMP_OPTS = {[EQ]: "exactly", [MIN]: "at least", [MAX]: "at most", [BETWEEN]: "between"};
+
 const EMOJI_REGEX = /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])$/;
 
 //////////////////// ELEMENT CREATION ////////////////////
@@ -44,23 +50,82 @@ function addAtom(parent) {
 
     let span1 = document.createElement("span");
     span1.innerHTML = " there are ";
-    let num1 = document.createElement("input");
-    num1.type = "number";
-    num1.min = 1;
-    num1.max = 8;
+
+    let comparisonElements = createComparison();
+    let select = comparisonElements[0];
+    let values = comparisonElements[1];
+
     let span2 = document.createElement("span");
     span2.innerHTML = " neighbouring ";
     let neighbour = document.createElement("select");
+    neighbour.classList.add("neighbour");
     loadLifeforms(neighbour);
     let x = createX("close", () => {deleteElement(atom)});
 
     atom.appendChild(span1);
-    atom.appendChild(num1);
+    atom.appendChild(select);
+    atom.appendChild(values);
     atom.appendChild(span2);
     atom.appendChild(neighbour);
     atom.appendChild(x);
 
     rule.appendChild(atom);
+
+}
+
+
+function createComparison() {
+
+    let select = document.createElement("select");
+    let values = document.createElement("span");
+    let index = 0;
+
+    for (const [key, value] of Object.entries(COMP_OPTS)) {
+        
+        // Create the option
+        let option = document.createElement("option");
+        option.value = key;
+        option.innerHTML = value;
+        select.appendChild(option);
+
+        // Create the input method
+        let inputSpan = document.createElement("span");
+        inputSpan.classList.add(key);
+        
+        if (key != EQ) {
+            inputSpan.hidden = true;
+        }
+        else {
+            index = select.getElementsByTagName("option").length - 1;
+        }
+
+        let num1 = document.createElement("input");
+        num1.type = "number";
+        num1.min = 1;
+        num1.max = 8;
+        inputSpan.appendChild(num1);
+
+        if (key == BETWEEN) {
+
+            let connective = createSpan(AND);
+            inputSpan.appendChild(connective);
+
+            let num2 = document.createElement("input");
+            num2.type = "number";
+            num2.min = 1;
+            num2.max = 8;
+            inputSpan.appendChild(num2);
+
+        }
+
+        values.appendChild(inputSpan);
+
+    }
+
+    select.selectedIndex = index;
+    select.onchange = () => changeValueSpan(select);
+
+    return [select, values];
 
 }
 
@@ -360,11 +425,36 @@ function changeLifeform(lifeform) {
     lifeforms.push(lifeform);
     changeLifeform.tempLifeform = lifeform;
 
-    // Update all the selects in the creator
+    // Update all the neighbour selects in the creator
     let creator = document.getElementById("creation");
-    let selects = creator.getElementsByTagName("select");
+    let selects = creator.getElementsByClassName("neighbour");
     for (const select of selects) {
         loadLifeforms(select);
+    }
+
+}
+
+
+
+/**
+ * Shows the correct number input boxes for the type of comparison
+ * chosen in the select.
+ * 
+ * @param {HTMLSelectElement} select 
+ */
+function changeValueSpan(select) {
+
+    let value = select.value;
+    let valueSpans = select.nextSibling;
+    let spans = valueSpans.children;
+
+    for (span of spans) {
+        if (span.classList.contains(value)) {
+            span.removeAttribute("hidden");
+        }
+        else {
+            span.hidden = true;
+        }
     }
 
 }
