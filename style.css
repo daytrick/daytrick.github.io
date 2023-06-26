@@ -119,8 +119,10 @@ textarea {
 
 .close:hover {
     color: darkred;
+    cursor: pointer;
 }
 
 .plus:hover {
     color:forestgreen;
+    cursor: pointer;
 }

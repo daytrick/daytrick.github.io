@@ -96,27 +96,46 @@ function deleteElement(elem) {
  * @param {HTMLDivElement} parent the div containing the rule
  */
 function addAnd(parent) {
+    addOperative(parent, AND);
+}
+
+/**
+ * Add an OR to a rule.
+ * 
+ * @param {HTMLDivElement} parent the div containing the rule
+ */
+function addOr(parent) {
+    addOperative(parent, OR);
+}
+
+/**
+ * Add a binary logical operator (AND/OR) to a rule.
+ * 
+ * @param {HTMLDivElement} parent the div containing the rule
+ * @param {String} operator the operator ("and"/"or")
+ */
+function addOperative(parent, operator) {
 
     let rule = parent.getElementsByTagName("rule")[0];
 
-    let and = document.createElement("and");
-    and.id = generateID();
-    and.draggable = true;
-    and.ondragstart = (event) => {drag(event)};
+    let operative = document.createElement(operator);
+    operative.id = generateID();
+    operative.draggable = true;
+    operative.ondragstart = (event) => {drag(event)};
 
     let blank1 = createBlank();
-    let span = createSpan(AND);
+    let span = createSpan(operator);
     let blank2 = createBlank();
-    let plus = createPlus(and, AND);
-    let x = createX("close", () => {deleteElement(and)});
+    let plus = createPlus(operative, operator);
+    let x = createX("close", () => {deleteElement(operative)});
 
-    and.appendChild(blank1);
-    and.appendChild(span);
-    and.appendChild(blank2);
-    and.appendChild(plus);
-    and.appendChild(x);
+    operative.appendChild(blank1);
+    operative.appendChild(span);
+    operative.appendChild(blank2);
+    operative.appendChild(plus);
+    operative.appendChild(x);
 
-    rule.appendChild(and);
+    rule.appendChild(operative);
 
 }
 

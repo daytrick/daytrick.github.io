@@ -61,12 +61,12 @@ div#birth, div#death {
 
 rule {
     display: block;
+    padding-left: 10px;
     padding-bottom: 20px;
 }
 
 rule clause {
     display: block;
-    margin-left: 10px;
 }
 
 blank clause {
@@ -81,16 +81,15 @@ clause:active {
     cursor: grabbing;
 }
 
-and {
+and, or {
     display: block;
-    margin-left: 10px;
 }
 
-and:hover {
+and:hover, or:hover {
     cursor: grab;
 }
 
-and:active {
+and:active, or:active {
     cursor: grabbing;
 }
 
@@ -98,9 +97,10 @@ blank {
     display: inline-block;
     min-width: 50px;
     height: 30px;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.25);
     border-radius: 3px;
     margin: 5px;
+    padding-right: 5px;
     vertical-align: middle;
 }
 
@@ -119,6 +119,7 @@ blank span.deleteBlank {
 
 blank:hover span.deleteBlank {
     color: rgba(255, 99, 71, 1);
+    cursor: pointer;
 }
 
 .deleteBlank {
