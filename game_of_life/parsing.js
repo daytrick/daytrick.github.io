@@ -1,6 +1,39 @@
+//////////////////// FROM HMTL ////////////////////
+
+
+function parseHTMLRule(rule) {
+
+    let megaClause = rule.children[0];
+    let obj = {};
+
+    switch (megaClause.tagName) {
+        case ATOM:
+            parseHTMLAtom(megaClause);
+            break;
+        case AND:
+            parseHTMLAnd(megaClause);
+            break;
+        case OR:
+            parseHTMLOr(megaClause);
+            break;
+        default:
+            alert("There's something wrong with your rules!");
+            break;
+    }
+
+}
+
+function parseHTMLAtom(atom) {
+
+    let atomJSON = {};
+
+    
+}
+
+
 //////////////////// FROM JSON ////////////////////
 
-function parseRules(rules) {
+function parseJSONRules(rules) {
 
     let checkingFuncs = {};
 
@@ -21,7 +54,7 @@ function parseRules(rules) {
  * @param {JSON} rule 
  * @returns the function, which takes an x and a y
  */
-function parseRule(rule) {
+function parseJSONRule(rule) {
 
     return (x, y) => {
 
@@ -31,13 +64,13 @@ function parseRule(rule) {
         Object.entries(rule).forEach(([key, value]) => {
             switch (key) {
                 case ATOM:
-                    res = parseAtom(value)(x, y);
+                    res = parseJSONAtom(value)(x, y);
                     break;
                 case AND:
-                    res = parseAnd(value);
+                    res = parseJSONAnd(value);
                     break;
                 case OR:
-                    res = parseOr(value);
+                    res = parseJSONOr(value);
                 default:
                     console.log("Error parsing a rule: " + key);
                     break;
@@ -59,7 +92,7 @@ function parseRule(rule) {
  * @param {Array} or
  * @returns a function that will check the OR statement for a cell, given an x and y
  */
-function parseOr(or) {
+function parseJSONOr(or) {
 
     return (x, y) => {
 
@@ -71,13 +104,13 @@ function parseOr(or) {
 
             switch (key) {
                 case ATOM:
-                    res = res || parseAtom(value)(x, y);
+                    res = res || parseJSONAtom(value)(x, y);
                     break;
                 case AND:
-                    res = res || parseAnd(value);
+                    res = res || parseJSONAnd(value);
                     break;
                 case OR:
-                    res = res || parseOr(value);
+                    res = res || parseJSONOr(value);
                 default:
                     console.log("Error parsing an OR: " + key);
                     break;
@@ -100,7 +133,7 @@ function parseOr(or) {
  * @param {Array} and
  * @returns a function that will check the AND statement for a cell, given an x and y
  */
-function parseAnd(and) {
+function parseJSONAnd(and) {
 
     return (x, y) => {
 
@@ -112,13 +145,13 @@ function parseAnd(and) {
 
             switch (key) {
                 case ATOM:
-                    res = res && parseAtom(value)(x, y);
+                    res = res && parseJSONAtom(value)(x, y);
                     break;
                 case AND:
-                    res = res && parseAnd(value);
+                    res = res && parseJSONAnd(value);
                     break;
                 case OR:
-                    res = res && parseOr(value);
+                    res = res && parseJSONOr(value);
                 default:
                     console.log("Error parsing an AND: " + key);
                     break;
@@ -142,7 +175,7 @@ function parseAnd(and) {
  * @param {JSON} atom 
  * @returns the function, which takes an x and a y
  */
-function parseAtom(atom) {
+function parseJSONAtom(atom) {
 
     let func;
     let neighbour = atom.neighbour;

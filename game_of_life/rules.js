@@ -6,6 +6,8 @@ const ATOM = "atom";
 const AND = "and";
 const OR = "or";
 
+const EMOJI_REGEX = /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])$/;
+
 //////////////////// ELEMENT CREATION ////////////////////
 
 // Adding ondrop & ondragover functions to the rules
@@ -27,18 +29,18 @@ generateID.__current = 0;
 
 
 /**
- * Paint a new clause onto the appropriate rule's div.
+ * Paint a new atom onto the appropriate rule's div.
  * 
  * @param {HTMLDivElement} parent the div
  */
-function addClause(parent) {
+function addAtom(parent) {
     
     let rule = parent.getElementsByTagName("rule")[0];
 
-    let clause = document.createElement("clause");
-    clause.id = generateID();
-    clause.draggable = true;
-    clause.ondragstart = (event) => {drag(event)};
+    let atom = document.createElement(ATOM);
+    atom.id = generateID();
+    atom.draggable = true;
+    atom.ondragstart = (event) => {drag(event)};
 
     let span1 = document.createElement("span");
     span1.innerHTML = " there are ";
@@ -50,15 +52,15 @@ function addClause(parent) {
     span2.innerHTML = " neighbouring ";
     let neighbour = document.createElement("select");
     loadLifeforms(neighbour);
-    let x = createX("close", () => {deleteElement(clause)});
+    let x = createX("close", () => {deleteElement(atom)});
 
-    clause.appendChild(span1);
-    clause.appendChild(num1);
-    clause.appendChild(span2);
-    clause.appendChild(neighbour);
-    clause.appendChild(x);
+    atom.appendChild(span1);
+    atom.appendChild(num1);
+    atom.appendChild(span2);
+    atom.appendChild(neighbour);
+    atom.appendChild(x);
 
-    rule.appendChild(clause);
+    rule.appendChild(atom);
 
 }
 
@@ -233,7 +235,7 @@ function createPlus(parent, type) {
 
 /**
  * Creates an X button (delete button) for either
- * a blank, clause, AND, or OR, depending on parameters.
+ * a blank, ATOM, AND, or OR, depending on parameters.
  * 
  * @param {String} className class of the X button
  * @param {*} onclickFunc what it does when clicked
@@ -341,6 +343,11 @@ function drop(ev) {
 
 //////////////////// UPDATING ////////////////////
 
+/**
+ * Update the select options for the rules in the lifeform creator.
+ * 
+ * @param {String} lifeform the lifeform (value of the input box)
+ */
 function changeLifeform(lifeform) {
 
     // Remove previous temp lifeform from lifeforms array (if applicable)
@@ -360,4 +367,60 @@ function changeLifeform(lifeform) {
         loadLifeforms(select);
     }
 
+}
+
+
+
+function saveLifeform() {
+
+    // Get lifeform
+    let lifeform = document.getElementById("lifeform").value;
+    let creator = document.getElementById("creation");
+    let rules = creator.getElementsByTagName("rule");
+    
+    // Only save it if it's vaguely complete
+    if (validateLifeform(lifeform) && validateRule(rules[0]) && validateRule(rules[1])) {
+
+        
+
+    }
+    
+}
+
+
+
+function validateLifeform(lifeform) {
+
+    // Check that lifeform is one character/emoji
+    if (!EMOJI_REGEX.test(lifeform)) {
+        return false;
+    }
+
+    return true;
+
+}
+
+
+
+/**
+ * Checks that a rule has only one mega-clause,
+ * and that the mega-clause is a CLAUSE/AND/OR.
+ * 
+ * @param {HTMLRuleElement} rule 
+ * @returns a boolean
+ */
+function validateRule(rule) {
+
+    // Check that there's only one child
+    if (rule.children.length != 1) {
+        return false;
+    }
+
+    // Check that child is a CLAUSE/AND/OR
+    let child = rule.children[0];
+    if (child.tagName != CLAUSE && child.tagName != AND && child.tagName != OR) {
+        return false;
+    }
+
+    return true;
 }
