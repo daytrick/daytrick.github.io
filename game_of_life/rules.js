@@ -12,7 +12,7 @@ document.getElementsByTagName("rule")
 
 for (rule of document.getElementsByTagName("rule")) {
     rule.ondrop = (event) => drop(event);
-    rule.ondragover = (event) => {allowDrop(event); console.log('on rule')};
+    rule.ondragover = (event) => {allowDrop(event)};
 }
 
 /**
@@ -207,14 +207,19 @@ function drag(ev) {
 }
 
 /**
- * Allow something to be dragged into a blank element.
+ * Allow something to be dragged into:
+ * - an empty BLANK
+ * - back into the rule
+ * unless the something is the same as what it's being dragged into.
  * 
  * @param {Event} ev 
  */
 function allowDrop(ev) {
-    if (ev.target.isBlank || ev.target.tagName.toLowerCase() == "rule") {
+
+    if ((ev.target.isBlank) || (ev.target.tagName.toLowerCase() == "rule")) {
         ev.preventDefault();
     }
+
 }
 
 /**
@@ -224,41 +229,50 @@ function allowDrop(ev) {
  */
 function drop(ev) {
 
-    ev.preventDefault();
-
     let data = ev.dataTransfer.getData("text");
     let draggable = document.getElementById(data);
     let parent = draggable.parentElement;
-    
-    // Allow newly-emptied blanks to be dragged into again
-    if (parent.tagName.toLowerCase == "blank") {
+    let target = ev.target;
+    let targetWrapper = ((target.tagName.toLowerCase() == "blank") ? target.parentElement : target);
 
-        parent.isBlank = true;
-        parent.classList.remove("filled");
+    // Don't allow direct nesting of the same element types
+    if (draggable.tagName != targetWrapper.tagName) {
+        
+        // Allow the drag
+        ev.preventDefault();
+        
+        // Allow newly-emptied blanks to be dragged into again
+        if (parent.tagName.toLowerCase() == "blank") {
 
-        let deleteBlanks = parent.getElementsByClassName("deleteBlank");
-        if (deleteBlanks.length > 0) {
-            deleteBlanks[0].removeAttribute("hidden");
+            parent.isBlank = true;
+            parent.classList.remove("filled");
+
+            let deleteBlanks = parent.getElementsByClassName("deleteBlank");
+            if (deleteBlanks.length > 0) {
+                deleteBlanks[0].removeAttribute("hidden");
+            }
+
         }
 
-    }
+        // Stop other things from being dragged into a newly-filled blank
+        // but keep allowing drags into the rule
+        if (ev.target.tagName.toLowerCase() == "blank") {
 
-    // Stop other things from being dragged into a newly-filled blank
-    // but keep allowing drags into the rule
-    if (ev.target.tagName.toLowerCase() == "blank") {
+            ev.target.isBlank = false;
+            ev.target.classList.add("filled");
 
-        ev.target.isBlank = false;
-        ev.target.classList.add("filled");
+            let deleteBlanks = ev.target.getElementsByClassName("deleteBlank");
+            if (deleteBlanks.length > 0) {
+                deleteBlanks[0].hidden = true;
+            }
 
-        let deleteBlanks = ev.target.getElementsByClassName("deleteBlank");
-        if (deleteBlanks.length > 0) {
-            deleteBlanks[0].hidden = true;
         }
 
-    }
+        // Actually drag the draggable into its new position
+        console.log("Appended!");
+        ev.target.appendChild(draggable);
 
-    // Actually drag the draggable into its new position
-    ev.target.appendChild(draggable);
+    }
 
 }
 

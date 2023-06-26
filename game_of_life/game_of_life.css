@@ -10,7 +10,6 @@ content {
     display: inline-block;
     position: relative;
     width: 75vh;
-    overflow: hidden;
     justify-content: center;
 }
 
