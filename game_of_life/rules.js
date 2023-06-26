@@ -336,3 +336,28 @@ function drop(ev) {
     }
 
 }
+
+
+
+//////////////////// UPDATING ////////////////////
+
+function changeLifeform(lifeform) {
+
+    // Remove previous temp lifeform from lifeforms array (if applicable)
+    if (changeLifeform.tempLifeform != null) {
+        let index = lifeforms.indexOf(changeLifeform.tempLifeform);
+        lifeforms.splice(index, 1);
+    }
+
+    // Add lifeform to lifeforms array
+    lifeforms.push(lifeform);
+    changeLifeform.tempLifeform = lifeform;
+
+    // Update all the selects in the creator
+    let creator = document.getElementById("creation");
+    let selects = creator.getElementsByTagName("select");
+    for (const select of selects) {
+        loadLifeforms(select);
+    }
+
+}
