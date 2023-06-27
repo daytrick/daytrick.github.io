@@ -235,28 +235,39 @@ function parseJSONRule(rule) {
 
     return (x, y) => {
 
-        let res = true;
-
-        // Will only loop once, since is passed a single key-value pair
-        Object.entries(rule).forEach(([key, value]) => {
-            switch (key) {
-                case ATOM:
-                    res = parseJSONAtom(value)(x, y);
-                    break;
-                case AND:
-                    res = parseJSONAnd(value);
-                    break;
-                case OR:
-                    res = parseJSONOr(value);
-                default:
-                    console.log("Error parsing a rule: " + key);
-                    break;
-            }
-        });
-
-        return res;
+        return parseJSONClause(rule)(x, y);
 
     };
+
+}
+
+
+
+/**
+ * Parses a clause (ATOM/AND/OR) by picking the right function generator.
+ * 
+ * @param {JSON} clause 
+ * @returns function that takes an x and a y to indicate the cell it should be called on
+ */
+function parseJSONClause(clause) {
+
+    return (x, y) => {
+
+        let [key, value] = Object.entries(clause)[0];
+        switch (key) {
+            case ATOM:
+                return parseJSONAtom(value)(x, y);
+            case AND:
+                return parseJSONAnd(value)(x, y);
+            case OR:
+                return parseJSONOr(value)(x, y);
+            // Unknown key, always return false
+            default:
+                console.log("Error parsing a clause with key: " + key);
+                return (x, y) => {false};
+        }
+
+    }
 
 }
 
@@ -272,27 +283,11 @@ function parseJSONRule(rule) {
 function parseJSONOr(or) {
 
     return (x, y) => {
-
+        
         let res = false;
 
-        or.forEach((obj) => {
-
-            let [key, value] = Object.entries(obj)[0];
-
-            switch (key) {
-                case ATOM:
-                    res = res || parseJSONAtom(value)(x, y);
-                    break;
-                case AND:
-                    res = res || parseJSONAnd(value);
-                    break;
-                case OR:
-                    res = res || parseJSONOr(value);
-                default:
-                    console.log("Error parsing an OR: " + key);
-                    break;
-            }
-
+        or.forEach((clause) => {
+            res = res || parseJSONClause(clause)(x, y);
         });
 
         return res;
@@ -316,24 +311,8 @@ function parseJSONAnd(and) {
 
         let res = true;
 
-        and.forEach((obj) => {
-
-            let [key, value] = Object.entries(obj)[0];
-
-            switch (key) {
-                case ATOM:
-                    res = res && parseJSONAtom(value)(x, y);
-                    break;
-                case AND:
-                    res = res && parseJSONAnd(value);
-                    break;
-                case OR:
-                    res = res && parseJSONOr(value);
-                default:
-                    console.log("Error parsing an AND: " + key);
-                    break;
-            }
-
+        and.forEach((clause) => {
+            res = res && parseJSONClause(clause)(x, y);
         });
 
         return res;
@@ -378,8 +357,8 @@ function parseJSONAtom(atom) {
             return (atom.between[0] <= count) && (count <= atom.between[1]);
         }
     }
+    // Invalid atom, always return false
     else {
-        console.log("Invalid atom!");
         func = (x, y) => {false}
     }
 

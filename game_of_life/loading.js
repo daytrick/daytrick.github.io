@@ -15,6 +15,9 @@ function load() {
     loadCells();
     loadLifeforms(document.getElementById("lifeforms"));
 
+    // Create functions for the basic rules
+    parseJSONRules(globalRules);
+
 }
 
 /**
