@@ -471,57 +471,17 @@ function changeValueSpan(select) {
 }
 
 
+//////////////////// SAVING ////////////////////
 
 function saveLifeform() {
 
-    // Get lifeform
-    let lifeform = document.getElementById("lifeform").value;
-    let creator = document.getElementById("creation");
-    let rules = creator.getElementsByTagName("rule");
-    
-    // Only save it if it's vaguely complete
-    if (validateLifeform(lifeform) && validateRule(rules[0]) && validateRule(rules[1])) {
+    // Parse the lifeform
+    if (parseHTMLRules()) {
 
+        // Then encode it as functions
+        parseJSONRules(globalRules);
         
-
     }
+
     
-}
-
-
-
-function validateLifeform(lifeform) {
-
-    // Check that lifeform is one character/emoji
-    if (!EMOJI_REGEX.test(lifeform)) {
-        return false;
-    }
-
-    return true;
-
-}
-
-
-
-/**
- * Checks that a rule has only one mega-clause,
- * and that the mega-clause is a CLAUSE/AND/OR.
- * 
- * @param {HTMLRuleElement} rule 
- * @returns a boolean
- */
-function validateRule(rule) {
-
-    // Check that there's only one child
-    if (rule.children.length != 1) {
-        return false;
-    }
-
-    // Check that child is a CLAUSE/AND/OR
-    let child = rule.children[0];
-    if (child.tagName != CLAUSE && child.tagName != AND && child.tagName != OR) {
-        return false;
-    }
-
-    return true;
 }

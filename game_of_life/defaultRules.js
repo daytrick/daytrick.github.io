@@ -17,3 +17,6 @@ var globalRules = {
     }
 
 };
+
+
+var globalCheckingFuncs = {};

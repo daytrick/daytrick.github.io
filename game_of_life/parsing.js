@@ -1,5 +1,10 @@
-//////////////////// FROM HMTL ////////////////////
+//////////////////// FROM HTML ////////////////////
 
+/**
+ * Parses the HTML rules in the creator and saves them into globalRules.
+ * 
+ * @returns whether the rules could be saved
+ */
 function parseHTMLRules() {
 
     try {
@@ -26,10 +31,13 @@ function parseHTMLRules() {
         // Add it to the current rules
         globalRules[lifeform] = rulesJSON;
 
+        return true;
+
     }
     catch (error) {
 
         alert(error);
+        return false;
 
     }
 
@@ -177,16 +185,38 @@ function parseHTMLAtom(atom) {
 
 }
 
+
+/**
+ * Check if the lifeform is an emoji.
+ * 
+ * @param {String} lifeform 
+ * @returns boolean
+ */
+function validateLifeform(lifeform) {
+
+    // Check that lifeform is one character/emoji
+    return !EMOJI_REGEX.test(lifeform);
+
+}
+
 //////////////////// FROM JSON ////////////////////
 
+/**
+ * Create checking functions for each of the rules in a JSON,
+ * and saves them in globalCheckingFuncs.
+ * 
+ * @param {JSON} rules the JSON
+ */
 function parseJSONRules(rules) {
 
-    let checkingFuncs = {};
+    globalCheckingFuncs = {};
 
     // Iterate through lifeforms
     Object.entries(rules).forEach(([key, value]) => {
 
-        checkingFuncs[key].birth = "blah"
+        globalCheckingFuncs[key].birth = parseJSONRule(value.birth);
+        globalCheckingFuncs[key].death = parseJSONRule(value.death);
+
     });
 
 }
