@@ -39,44 +39,6 @@ function goIntoStasis(timerID) {
 /**
  * Run one generation.
  */
-/*function runOneGeneration() {
-
-    let newWorld = copyWorld();
-
-    for (let x = 0; x < WORLD_X; x++) {
-
-        for (let y = 0; y < WORLD_Y; y++) {
-
-            let neighbours = countNeighbours(x, y);
-
-            if (world[x][y] == null) {
-
-                if (neighbours == 3) {
-                    newWorld[x][y] = lifeforms[0];
-                    updateCell(x, y, lifeforms[0]);
-                }
-
-            }
-            else {
-
-                if ((neighbours < 2) || (neighbours > 3)) {
-                    newWorld[x][y] = null;
-                    updateCell(x, y, null);
-                }
-
-            }
-
-        }
-
-    }
-
-    world = newWorld;
-    generationNo++;
-    TRACKER.innerHTML = generationNo;
-
-}*/
-
-
 function runOneGeneration() {
 
     let newWorld = copyWorld();
@@ -102,6 +64,15 @@ function runOneGeneration() {
 
 }
 
+
+
+/**
+ * Checks if an empty cell (pre-check) meets the birth requirements for any of the lifeforms.
+ * 
+ * @param {2DArray} newWorld 
+ * @param {Number} x 
+ * @param {Number} y 
+ */
 function checkBirthConditions(newWorld, x, y) {
 
     // Iterate through birth rules
@@ -119,6 +90,14 @@ function checkBirthConditions(newWorld, x, y) {
 }
 
 
+
+/**
+ * Checks if a cell with a lifeform meets the death requirements for that lifeform.
+ * 
+ * @param {2DArray} newWorld 
+ * @param {Number} x 
+ * @param {Number} y 
+ */
 function checkDeathConditions(newWorld, x, y) {
 
     // Get lifeform
@@ -131,6 +110,8 @@ function checkDeathConditions(newWorld, x, y) {
     }
 
 }
+
+
 
 /**
  * Updates a cell at (x, y) to hold the provided lifeform.

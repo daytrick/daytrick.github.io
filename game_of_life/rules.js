@@ -433,8 +433,13 @@ function changeLifeform(lifeform) {
     }
 
     // Add lifeform to lifeforms array
-    lifeforms.push(lifeform);
-    changeLifeform.tempLifeform = lifeform;
+    if (lifeforms.includes(lifeform)) {
+        changeLifeform.tempLifeform = null;
+    }
+    else {
+        lifeforms.push(lifeform);
+        changeLifeform.tempLifeform = lifeform;
+    }
 
     // Update all the neighbour selects in the creator
     let creator = document.getElementById("creation");
@@ -484,6 +489,14 @@ function saveLifeform() {
         // Update the lifeform-picker
         let lifeformPicker = document.getElementById("lifeforms");
         loadLifeforms(lifeformPicker);
+
+        // Clear the creator
+        let lifeform = document.getElementById("lifeform");
+        lifeform.value = "";
+        for (rule of document.getElementsByTagName("rule")) {
+            rule.innerHTML = "";
+        }
+        changeLifeform.tempLifeform = null;
 
     }
 
