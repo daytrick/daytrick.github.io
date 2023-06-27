@@ -2,8 +2,11 @@ var globalRules = {
 
     "🐮": {
         birth: {atom: {eq: 3, neighbour: "🐮"}},
-        death: {atom: {min: 4, neighbour: "🐮"}}
-    }/*,
+        death: {or: [
+            {atom: {max: 1, neighbour: "🐮"}},
+            {atom: {min: 4, neighbour: "🐮"}}
+        ]}
+    },
 
     "🐸": {
         birth: {or: [
@@ -14,7 +17,7 @@ var globalRules = {
             ]}
         ]},
         death: {atom: {min: 6, neighbour: "🐸"}}
-    }*/
+    }
 
 };
 
