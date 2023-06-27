@@ -1,4 +1,4 @@
-let defaultRules = {
+var globalRules = {
 
     "🐮": {
         birth: {atom: {eq: 3, neighbour: "🐮"}},

@@ -5,12 +5,15 @@ const DEATH = "death";
 const ATOM = "atom";
 const AND = "and";
 const OR = "or";
+const BLANK = "blank";
 
 const EQ = "eq";
 const MIN = "min";
 const MAX = "max";
-const BETWEEN = "between"
+const BETWEEN = "between";
 const COMP_OPTS = {[EQ]: "exactly", [MIN]: "at least", [MAX]: "at most", [BETWEEN]: "between"};
+const BOUND = "bound";
+const NEIGHBOUR = "neighbour";
 
 const EMOJI_REGEX = /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])$/;
 
@@ -35,7 +38,7 @@ generateID.__current = 0;
 
 
 /**
- * Paint a new atom onto the appropriate rule's div.
+ * Paint a new ATOM onto the appropriate rule's div.
  * 
  * @param {HTMLDivElement} parent the div
  */
@@ -58,7 +61,7 @@ function addAtom(parent) {
     let span2 = document.createElement("span");
     span2.innerHTML = " neighbouring ";
     let neighbour = document.createElement("select");
-    neighbour.classList.add("neighbour");
+    neighbour.classList.add(NEIGHBOUR);
     loadLifeforms(neighbour);
     let x = createX("close", () => {deleteElement(atom)});
 
@@ -74,6 +77,12 @@ function addAtom(parent) {
 }
 
 
+
+/**
+ * Creates the elements for choosing how many neighbours apply to an ATOM.
+ * 
+ * @returns [HTMLSelectElement, HTMLSpanElement]
+ */
 function createComparison() {
 
     let select = document.createElement("select");
@@ -100,6 +109,7 @@ function createComparison() {
         }
 
         let num1 = document.createElement("input");
+        num1.classList.add(BOUND);
         num1.type = "number";
         num1.min = 1;
         num1.max = 8;
@@ -111,6 +121,7 @@ function createComparison() {
             inputSpan.appendChild(connective);
 
             let num2 = document.createElement("input");
+            num2.classList.add(BOUND);
             num2.type = "number";
             num2.min = 1;
             num2.max = 8;
@@ -140,7 +151,7 @@ function deleteElement(elem) {
 
     let parent = elem.parentElement;
 
-    if (parent.tagName.toLowerCase() == "blank") {
+    if (parent.tagName.toLowerCase() == BLANK) {
 
         parent.isBlank = true;
         parent.classList.remove("filled");
@@ -267,7 +278,7 @@ function createSpan(text) {
  */
 function createBlank() {
 
-    let blank = document.createElement("blank");
+    let blank = document.createElement(BLANK);
     blank.ondrop = (event) => drop(event);
     blank.ondragover = (event) => {allowDrop(event)};
     blank.isBlank = true;
@@ -361,7 +372,7 @@ function drop(ev) {
     let draggable = document.getElementById(data);
     let parent = draggable.parentElement;
     let target = ev.target;
-    let targetWrapper = ((target.tagName.toLowerCase() == "blank") ? target.parentElement : target);
+    let targetWrapper = ((target.tagName.toLowerCase() == BLANK) ? target.parentElement : target);
 
     // Don't allow direct nesting of the same element types
     if (draggable.tagName != targetWrapper.tagName) {
@@ -370,7 +381,7 @@ function drop(ev) {
         ev.preventDefault();
         
         // Allow newly-emptied blanks to be dragged into again
-        if (parent.tagName.toLowerCase() == "blank") {
+        if (parent.tagName.toLowerCase() == BLANK) {
 
             parent.isBlank = true;
             parent.classList.remove("filled");
@@ -384,7 +395,7 @@ function drop(ev) {
 
         // Stop other things from being dragged into a newly-filled blank
         // but keep allowing drags into the rule
-        if (ev.target.tagName.toLowerCase() == "blank") {
+        if (ev.target.tagName.toLowerCase() == BLANK) {
 
             ev.target.isBlank = false;
             ev.target.classList.add("filled");
@@ -427,7 +438,7 @@ function changeLifeform(lifeform) {
 
     // Update all the neighbour selects in the creator
     let creator = document.getElementById("creation");
-    let selects = creator.getElementsByClassName("neighbour");
+    let selects = creator.getElementsByClassName(NEIGHBOUR);
     for (const select of selects) {
         loadLifeforms(select);
     }

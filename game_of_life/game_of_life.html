@@ -50,7 +50,7 @@
                     <p>Rules:</p>
                     <div id="birth">
                         <p>An empty cell becomes a <span class="lf"></span> if: </p>
-                        <rule></rule>
+                        <rule ruleType="birth"></rule>
                         <br>
                         <button class="stay" onclick="addAtom(this.parentElement)">Add clause</button>
                         <button class="stay" onclick="addAnd(this.parentElement)">Add and</button>
@@ -58,7 +58,7 @@
                     </div>
                     <div id="death">
                         <p>A <span class="lf"></span> dies if: </p>
-                        <rule></rule>
+                        <rule ruleType="death"></rule>
                         <br>
                         <button class="stay" onclick="addAtom(this.parentElement)">Add clause</button>
                         <button class="stay" onclick="addAnd(this.parentElement)">Add and</button>
@@ -74,6 +74,7 @@
     </div>
     <script src="./loading.js"></script>
     <script src="./living.js"></script>
+    <script src="./defaultRules.js"></script>
     <script src="./rules.js"></script>
     <script src="./parsing.js"></script>
 </body>

@@ -1,21 +1,79 @@
 //////////////////// FROM HMTL ////////////////////
 
+function parseHTMLRules() {
 
+    try {
+
+        let rulesJSON = {};
+
+        // Get the new lifeform
+        let lifeform = document.getElementById("lifeform").value;
+        if (!validateLifeform(lifeform)) {
+            throw new Error("Invalid lifeform symbol!");
+        }
+
+        // Parse the birth and death rules
+        let rules = document.getElementsByTagName("rule");
+        for (rule of rules) {
+            
+            // Get which life stage the rule is for
+            let ruleType = rule.getAttribute("ruleType");
+            let ruleContent = parseHTMLRule(rule);
+            rulesJSON[ruleType] = ruleContent;
+
+        }
+
+        // Add it to the current rules
+        globalRules[lifeform] = rulesJSON;
+
+    }
+    catch (error) {
+
+        alert(error);
+
+    }
+
+}
+
+/**
+ * Parse a rule from the filled-out creator, 
+ * and encode it in JSON format.
+ * 
+ * @param {HTMLRuleElement} rule 
+ * @returns the rule as a JSON
+ */
 function parseHTMLRule(rule) {
 
-    let megaClause = rule.children[0];
-    let obj = {};
+    let children = rule.children;
+    if (children.length == 1) {
+        let megaClause = rule.children[0];
+        let ruleContent = parseHTMLClause(megaClause);
+        return ruleContent;
+    }
+    else {
+        throw new Error("You have floating clauses!");
+    }
 
-    switch (megaClause.tagName) {
+}
+
+
+
+/**
+ * Parses a HTML clause and turns it into a JSON
+ * by choosing the appropriate parsing function.
+ * 
+ * @param {HTMLAtomElement | HTMLAndElement | HTMLOrElement} clause 
+ * @returns the JSON
+ */
+function parseHTMLClause(clause) {
+
+    switch (clause.tagName.toLowerCase()) {
         case ATOM:
-            parseHTMLAtom(megaClause);
-            break;
+            return parseHTMLAtom(clause);
         case AND:
-            parseHTMLAnd(megaClause);
-            break;
+            return parseHTMLBinaryOperator(clause, AND);
         case OR:
-            parseHTMLOr(megaClause);
-            break;
+            return parseHTMLBinaryOperator(clause, OR);
         default:
             alert("There's something wrong with your rules!");
             break;
@@ -23,13 +81,101 @@ function parseHTMLRule(rule) {
 
 }
 
+
+
+/**
+ * Parse an AND or an OR HTML element and turn it into a JSON.
+ * 
+ * @param {HTMLAndElement | HTMLOrElement} op the AND/OR element
+ * @param {String} type AND/OR
+ * @returns the AND/OR as a JSON
+ */
+function parseHTMLBinaryOperator(op, type) {
+
+    let clauseArray = [];
+
+    // Parse each clause
+    let blanks = op.getElementsByTagName(BLANK);
+    for (blank of blanks) {
+
+        if (!blank.isBlank) {
+
+            let clause = blank.children[0];
+            clauseArray.push(parseHTMLClause(clause));
+
+        }
+
+    }
+
+    // Simplify it if there's only one filled blank
+    if (clauseArray.length == 1) {
+        return clauseArray[0];
+    }
+    else {
+        return {[type]: clauseArray};
+    }
+
+}
+
+
+
+/**
+ * Parses an HTML atom and turns it into a JSON.
+ * 
+ * @param {HTMLAtomElement} atom 
+ * @returns a JSON
+ */
 function parseHTMLAtom(atom) {
 
     let atomJSON = {};
 
-    
-}
+    // Figure out type of equivalence
+    let select = atom.getElementsByTagName("select")[0];
 
+    if (select.value == BETWEEN) {
+
+        let inputSpan = atom.getElementsByClassName(BETWEEN)[0];
+        let bounds = inputSpan.getElementsByClassName(BOUND);
+        let bound1 = bounds[0].value;
+        let bound2 = bounds[1].value;
+
+        if ((0 < bound1) && (bound1 <= 9) && (0 < bound2) && (bound2 <= 9)) {
+            atomJSON[BETWEEN] = [bounds[0].value, bounds[1].value];
+        }
+        else {
+            throw new Error("Illegal bound values: " + bound1 + " and " + bound2);
+        }
+
+    }
+    else if (select.value == EQ || select.value == MIN || select.value == MAX) {
+        
+        let inputSpan = atom.getElementsByClassName(select.value)[0];
+        let bounds = inputSpan.getElementsByClassName(BOUND);
+        let bound = bounds[0].value;
+        if ((0 < bound) && (bound <= 9)) {
+            atomJSON[select.value] = bounds[0].value;
+        }
+        else {
+            throw new Error("Illegal bound value: " + bound);
+        }
+        
+    }
+    else {
+        throw new Error("Invalid neighbour requirements.");
+    }
+
+    // Figure out neighbour
+    let neighbour = atom.getElementsByClassName(NEIGHBOUR)[0].value;
+    if (neighbour != null && neighbour != undefined) {
+        atomJSON[NEIGHBOUR] = neighbour;
+    }
+    else {
+        throw new Error("Invalid neighbour symbol: " + neighbour);
+    }
+
+    return atomJSON;
+
+}
 
 //////////////////// FROM JSON ////////////////////
 

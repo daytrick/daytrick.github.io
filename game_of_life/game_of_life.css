@@ -65,19 +65,19 @@ rule {
     padding-bottom: 20px;
 }
 
-rule clause {
+rule atom {
     display: block;
 }
 
-blank clause {
+blank atom {
     display: inline-block;
 }
 
-clause:hover {
+atom:hover {
     cursor: grab;
 }
 
-clause:active {
+atom:active {
     cursor: grabbing;
 }
 
