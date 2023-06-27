@@ -1,7 +1,7 @@
 const WORLD_X = 20;
 const WORLD_Y = 20;
 const CLEAR = "🚫";
-var lifeforms = ["🐮"];
+var lifeforms = Object.keys(globalRules);
 var world = [];
 var reap = false;
 

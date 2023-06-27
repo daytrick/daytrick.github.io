@@ -181,7 +181,7 @@ function parseHTMLAtom(atom) {
         throw new Error("Invalid neighbour symbol: " + neighbour);
     }
 
-    return atomJSON;
+    return {atom: atomJSON};
 
 }
 
@@ -195,7 +195,7 @@ function parseHTMLAtom(atom) {
 function validateLifeform(lifeform) {
 
     // Check that lifeform is one character/emoji
-    return !EMOJI_REGEX.test(lifeform);
+    return EMOJI_REGEX.test(lifeform);
 
 }
 
@@ -214,6 +214,7 @@ function parseJSONRules(rules) {
     // Iterate through lifeforms
     Object.entries(rules).forEach(([key, value]) => {
 
+        globalCheckingFuncs[key] = {};
         globalCheckingFuncs[key].birth = parseJSONRule(value.birth);
         globalCheckingFuncs[key].death = parseJSONRule(value.death);
 

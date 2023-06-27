@@ -39,7 +39,7 @@ function goIntoStasis(timerID) {
 /**
  * Run one generation.
  */
-function runOneGeneration() {
+/*function runOneGeneration() {
 
     let newWorld = copyWorld();
 
@@ -73,6 +73,62 @@ function runOneGeneration() {
     world = newWorld;
     generationNo++;
     TRACKER.innerHTML = generationNo;
+
+}*/
+
+
+function runOneGeneration() {
+
+    let newWorld = copyWorld();
+
+    for (let x = 0; x < WORLD_X; x++) {
+
+        for (let y = 0; y < WORLD_Y; y++) {
+
+            if (world[x][y] == null) {
+                checkBirthConditions(newWorld, x, y);
+            }
+            else {
+                checkDeathConditions(newWorld, x, y);
+            }
+
+        }
+
+    }
+
+    world = newWorld;
+    generationNo++;
+    TRACKER.innerHTML = generationNo;
+
+}
+
+function checkBirthConditions(newWorld, x, y) {
+
+    // Iterate through birth rules
+    for (const [lifeform, rules] of Object.entries(globalCheckingFuncs)) {
+
+        // Once one birth rule met, stop checking
+        if (rules.birth(x, y)) {
+            newWorld[x][y] = lifeform;
+            updateCell(x, y, lifeform);
+            break;
+        }
+
+    }
+
+}
+
+
+function checkDeathConditions(newWorld, x, y) {
+
+    // Get lifeform
+    let lifeform = world[x][y];
+
+    // Check if it meets the dying conditions
+    if (globalCheckingFuncs[lifeform].death(x, y)) {
+        newWorld[x][y] = null;
+        updateCell(x, y, null);
+    }
 
 }
 

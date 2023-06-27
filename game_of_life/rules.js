@@ -480,7 +480,11 @@ function saveLifeform() {
 
         // Then encode it as functions
         parseJSONRules(globalRules);
-        
+
+        // Update the lifeform-picker
+        let lifeformPicker = document.getElementById("lifeforms");
+        loadLifeforms(lifeformPicker);
+
     }
 
     
