@@ -1,7 +1,7 @@
 const WORLD_X = 20;
 const WORLD_Y = 20;
 const CLEAR = "🚫";
-var lifeforms = ["🐮"];
+var lifeforms = Object.keys(globalRules);
 var world = [];
 var reap = false;
 
@@ -13,7 +13,7 @@ var reap = false;
 function load() {
 
     loadCells();
-    loadLifeforms();
+    loadLifeforms(document.getElementById("lifeforms"));
 
 }
 
@@ -52,9 +52,9 @@ function loadCells() {
 /**
  * Load lifeforms into the dropdown.
  */
-function loadLifeforms() {
+function loadLifeforms(select) {
 
-    let select = document.getElementById("lifeforms");
+    select.innerHTML = "";
 
     for (lifeform of lifeforms) {
         let option = document.createElement("option");

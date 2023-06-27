@@ -15,7 +15,7 @@ div.topnav {
 div.topnav a {
     float: left;
     text-align: center;
-    padding: 1%;
+    padding: 5px;
     font-size: 16px;
     color: whitesmoke;
     text-decoration: none;
@@ -28,7 +28,7 @@ div.topnav a:hover {
 }
 
 div.content {
-    margin: 5%;
+    margin: 30px;
 }
 
 div.wrapper {
@@ -60,6 +60,7 @@ button {
     border-radius: 4px;
     font-family: inherit;
     background-color: slategrey;
+    padding: 5px;
 }
 
 button.ok {
@@ -69,6 +70,32 @@ button.ok {
 button:hover {
     background-color: whitesmoke;
 }
+
+.button {
+    border: 0px;
+    border-radius: 4px;
+    font-family: inherit;
+    background-color: slategrey;
+}
+
+.button:hover {
+    background-color: whitesmoke;
+}
+
+/** Button that visually depresses from: https://dev.to/nicm42/how-to-make-a-button-looked-like-it-s-staying-pressed-down-58k */
+button.stay {
+  position: relative;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+button.stay:active, button.active {
+    top: 2px;
+    left: 1px;
+    box-shadow: none;
+    background-color: whitesmoke;
+}
+/** END */
 
 textarea {
     box-sizing: border-box;
@@ -81,4 +108,21 @@ textarea {
     overflow-y: scroll;
     overflow-wrap: break-word;
     resize: none;
+}
+
+
+
+.close, .plus {
+    padding-left: 5px;
+    color: slategrey;
+}
+
+.close:hover {
+    color: darkred;
+    cursor: pointer;
+}
+
+.plus:hover {
+    color:forestgreen;
+    cursor: pointer;
 }

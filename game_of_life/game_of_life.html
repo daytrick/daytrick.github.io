@@ -24,18 +24,54 @@
                 <div class="grid"></div>
             </div>
             <div class="right">
-                <p><strong>Generation: </strong><span id="tracker">0</span></p>
-                <button class="stay" id="go" onclick="goLive()">It's alive!!!</button>
+                <div id="generation">
+                    <p><strong>Generation: </strong><span id="tracker">0</span></p>
+                    <button class="stay" id="go" onclick="goLive()">It's alive!!!</button>
+                </div>
+                <br>
+                <br>
                 <div id="population">
-                    <h3>Population</h3>
+                    <p><strong>Population</strong></p>
                     <label for="lifeforms">Currently placing:</label>
                     <select name="lifeforms" id="lifeforms"></select>
                     <button class="stay" id="reap" onclick=toggleReaping()>Reap</button>
                     <button class="stay" id="clear" onclick=clearWorld()>Clear</button>
                 </div>
+                <br>
+                <br>
+                <div id="creation">
+                    <p><strong>Create A Lifeform</strong></p>
+                    <label for="lifeform">Lifeform: </label>
+                    <input type="text" id="lifeform" name="lifeform" placeholder="🐮" minlength="1" maxlength="2" onchange="changeLifeform(this.value)">
+                    <br>
+                    <p>Rules:</p>
+                    <div id="birth">
+                        <p>An empty cell becomes a <span class="lf"></span> if: </p>
+                        <rule ruleType="birth"></rule>
+                        <br>
+                        <button class="stay" onclick="addAtom(this.parentElement)">Add clause</button>
+                        <button class="stay" onclick="addAnd(this.parentElement)">Add and</button>
+                        <button class="stay" onclick="addOr(this.parentElement)">Add or</button>
+                    </div>
+                    <div id="death">
+                        <p>A <span class="lf"></span> dies if: </p>
+                        <rule ruleType="death"></rule>
+                        <br>
+                        <button class="stay" onclick="addAtom(this.parentElement)">Add clause</button>
+                        <button class="stay" onclick="addAnd(this.parentElement)">Add and</button>
+                        <button class="stay" onclick="addOr(this.parentElement)">Add or</button>
+                    </div>
+                    <br>
+                    <div>
+                        <button class="stay" onclick="saveLifeform()">Create lifeform</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <script src="./defaultRules.js"></script>
     <script src="./loading.js"></script>
     <script src="./living.js"></script>
+    <script src="./rules.js"></script>
+    <script src="./parsing.js"></script>
 </body>

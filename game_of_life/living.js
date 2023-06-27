@@ -47,23 +47,11 @@ function runOneGeneration() {
 
         for (let y = 0; y < WORLD_Y; y++) {
 
-            let neighbours = countNeighbours(x, y);
-
             if (world[x][y] == null) {
-
-                if (neighbours == 3) {
-                    newWorld[x][y] = lifeforms[0];
-                    updateCell(x, y, lifeforms[0]);
-                }
-
+                checkBirthConditions(newWorld, x, y);
             }
             else {
-
-                if ((neighbours < 2) || (neighbours > 3)) {
-                    newWorld[x][y] = null;
-                    updateCell(x, y, null);
-                }
-
+                checkDeathConditions(newWorld, x, y);
             }
 
         }
@@ -75,6 +63,55 @@ function runOneGeneration() {
     TRACKER.innerHTML = generationNo;
 
 }
+
+
+
+/**
+ * Checks if an empty cell (pre-check) meets the birth requirements for any of the lifeforms.
+ * 
+ * @param {2DArray} newWorld 
+ * @param {Number} x 
+ * @param {Number} y 
+ */
+function checkBirthConditions(newWorld, x, y) {
+
+    // Iterate through birth rules
+    for (const [lifeform, rules] of Object.entries(globalCheckingFuncs)) {
+
+        // Once one birth rule met, stop checking
+        if (rules.birth(x, y)) {
+            newWorld[x][y] = lifeform;
+            updateCell(x, y, lifeform);
+            break;
+        }
+
+    }
+
+}
+
+
+
+/**
+ * Checks if a cell with a lifeform meets the death requirements for that lifeform.
+ * 
+ * @param {2DArray} newWorld 
+ * @param {Number} x 
+ * @param {Number} y 
+ */
+function checkDeathConditions(newWorld, x, y) {
+
+    // Get lifeform
+    let lifeform = world[x][y];
+
+    // Check if it meets the dying conditions
+    if (globalCheckingFuncs[lifeform].death(x, y)) {
+        newWorld[x][y] = null;
+        updateCell(x, y, null);
+    }
+
+}
+
+
 
 /**
  * Updates a cell at (x, y) to hold the provided lifeform.

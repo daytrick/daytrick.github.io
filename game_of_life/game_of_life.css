@@ -10,7 +10,6 @@ content {
     display: inline-block;
     position: relative;
     width: 75vh;
-    overflow: hidden;
     justify-content: center;
 }
 
@@ -46,4 +45,84 @@ content {
 
 .cell:hover {
     background-color: lightgray;
+}
+
+div.right {
+    overflow-y: auto;
+    height: 75vh;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+div#birth, div#death {
+    display: block;
+    margin-left: 10px;
+}
+
+rule {
+    display: block;
+    padding-left: 10px;
+    padding-bottom: 20px;
+}
+
+rule atom {
+    display: block;
+}
+
+blank atom {
+    display: inline-block;
+}
+
+atom:hover {
+    cursor: grab;
+}
+
+atom:active {
+    cursor: grabbing;
+}
+
+and, or {
+    display: block;
+}
+
+and:hover, or:hover {
+    cursor: grab;
+}
+
+and:active, or:active {
+    cursor: grabbing;
+}
+
+blank {
+    display: inline-block;
+    min-width: 50px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 3px;
+    margin: 5px;
+    padding-right: 5px;
+    vertical-align: middle;
+}
+
+blank.filled {
+    box-sizing: border-box;
+    height: auto;
+    min-height: 30px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+}
+
+blank span.deleteBlank {
+    color: rgba(255, 99, 71, 0);
+}
+
+blank:hover span.deleteBlank {
+    color: rgba(255, 99, 71, 1);
+    cursor: pointer;
+}
+
+.deleteBlank {
+    padding-right: 5px;
+    float: right;
 }
