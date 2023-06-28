@@ -478,6 +478,9 @@ function changeValueSpan(select) {
 
 //////////////////// SAVING ////////////////////
 
+/**
+ * Save a newly created lifeform (apply the new rules).
+ */
 function saveLifeform() {
 
     // Parse the lifeform
@@ -499,6 +502,31 @@ function saveLifeform() {
         changeLifeform.tempLifeform = null;
 
     }
+
+}
+
+
+
+/**
+ * Download the current rules as a JSON.
+ * 
+ * How to do so from: https://stackoverflow.com/a/30800715 
+ */
+function downloadRules() {
+
+    let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(globalRules));
+    let downloadAnchorNode = document.createElement("a");
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "rules.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+
+}
+
+
+
+function uploadRules() {
 
     
 }
