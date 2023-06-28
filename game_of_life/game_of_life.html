@@ -38,7 +38,9 @@
                     <button class="stay" id="clear" onclick=clearWorld()>Clear</button>
                     <br>
                     <br>
-                    <button onclick=downloadRules()>Save current rules</button>
+                    <button class="stay" id="downloadButton" onclick=downloadRules()>Save current rules</button>
+                    <button class="stay" id="uploadButton"><label for="actualUploadButton">Upload rules</label></button>
+                    <input type="file" id="actualUploadButton" accept=".json" onchange="uploadRules()" hidden>
                 </div>
                 <br>
                 <br>

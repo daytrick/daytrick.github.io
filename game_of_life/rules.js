@@ -487,7 +487,7 @@ function saveLifeform() {
     if (parseHTMLRules()) {
 
         // Then encode it as functions
-        parseJSONRules(globalRules);
+        parseJSONRules(globalRules, true);
 
         // Update the lifeform-picker
         let lifeformPicker = document.getElementById("lifeforms");
@@ -526,7 +526,53 @@ function downloadRules() {
 
 
 
+/**
+ * Upload a saved rule JSON, read it, and apply the rules.
+ * 
+ * How to upload & read a JSON file from: https://gomakethings.com/how-to-upload-and-process-a-json-file-with-vanilla-js/
+ */
 function uploadRules() {
 
-    
+    // Get the file
+    let fileInput = document.getElementById("actualUploadButton");
+    let file;
+
+    // If there's no file, do nothing
+	if (fileInput.files.length != 1) {
+        alert("Pick one (1) file!");
+        return;
+    }
+    else {
+        file = fileInput.files[0];
+    }
+
+    // Check file type
+    if (file.type != "application/json") {
+        alert("This is the wrong file type!");
+        return;
+    }
+
+	// Read the file
+	let reader = new FileReader();
+    reader.onload = (event) => {
+
+        let str = event.target.result;
+        try {
+            let json = JSON.parse(str);
+            // Check that the rules make sense
+            if (parseJSONRules(json, false)) {
+                globalRules = json;
+            }
+            // Reload the page to use the new rules + lifeforms
+            load();
+            // Tell the user
+            alert("Rules uploaded successfully!");
+        }
+        catch (error) {
+            alert("Could not read file!");
+        }
+        
+    }
+    reader.readAsText(file);
+
 }
