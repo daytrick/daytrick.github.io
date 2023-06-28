@@ -5,7 +5,7 @@
  * 
  * @returns whether the rules could be saved
  */
-function parseHTMLRules() {
+function parseHTMLRules(showAlert) {
 
     try {
 
@@ -206,19 +206,36 @@ function validateLifeform(lifeform) {
  * and saves them in globalCheckingFuncs.
  * 
  * @param {JSON} rules the JSON
+ * @param {Boolean} showAlert whether an alert should be shown if an error occurs
+ * @return whether the rules could be parsed
  */
-function parseJSONRules(rules) {
+function parseJSONRules(rules, showAlert) {
 
-    globalCheckingFuncs = {};
+    try {
 
-    // Iterate through lifeforms
-    Object.entries(rules).forEach(([key, value]) => {
+        globalCheckingFuncs = {};
 
-        globalCheckingFuncs[key] = {};
-        globalCheckingFuncs[key].birth = parseJSONRule(value.birth);
-        globalCheckingFuncs[key].death = parseJSONRule(value.death);
+        // Iterate through lifeforms
+        Object.entries(rules).forEach(([key, value]) => {
 
-    });
+            globalCheckingFuncs[key] = {};
+            globalCheckingFuncs[key].birth = parseJSONRule(value.birth);
+            globalCheckingFuncs[key].death = parseJSONRule(value.death);
+
+        });
+
+        return true;
+
+    }
+    catch (error) {
+
+        if (showAlert) {
+            alert("Sorry, there was an error interpreting the rules.");
+        }
+        
+        return false;
+
+    }
 
 }
 

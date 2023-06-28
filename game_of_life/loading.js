@@ -1,7 +1,7 @@
 const WORLD_X = 20;
 const WORLD_Y = 20;
 const CLEAR = "🚫";
-var lifeforms = Object.keys(globalRules);
+var lifeforms = [];
 var world = [];
 var reap = false;
 
@@ -16,7 +16,7 @@ function load() {
     loadLifeforms(document.getElementById("lifeforms"));
 
     // Create functions for the basic rules
-    parseJSONRules(globalRules);
+    parseJSONRules(globalRules, true);
 
 }
 
@@ -26,6 +26,7 @@ function load() {
 function loadCells() {
 
     let grid = document.getElementsByClassName("grid")[0];
+    grid.innerHTML = "";
     world = [];
 
     for (var i = 0; i < WORLD_X; i++) {
@@ -59,6 +60,10 @@ function loadLifeforms(select) {
 
     select.innerHTML = "";
 
+    // Read lifeforms from the rules
+    lifeforms = Object.keys(globalRules);
+
+    // Show the newly-read lifeforms
     for (lifeform of lifeforms) {
         let option = document.createElement("option");
         option.value = lifeform;
