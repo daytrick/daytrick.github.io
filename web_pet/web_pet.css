@@ -1,0 +1,55 @@
+#container {
+    width: 750px;
+    margin: auto;
+    position: relative;
+    font-size: 0;
+}
+
+.imgContainer {
+    height: 500px;
+    width: 750px;
+    position: absolute;
+}
+
+#midground {
+    z-index: 10;
+}
+
+#foreground {
+    z-index: 20;
+}
+
+#cow {
+    position: absolute;
+    bottom: 10px;
+    left: 350px;
+}
+
+#food.base {
+    position: absolute;
+    top: 80px;
+    right: 10px;
+}
+
+#food.base:hover {
+    cursor: grab;
+}
+
+#food:active {
+    cursor: grabbing;
+}
+
+#food.held {
+    position: fixed;
+    cursor: grabbing;
+}
+
+#food.placed {
+    position: absolute;
+    bottom: 0;
+}
+
+#hand {
+    position: fixed;
+    cursor: none;
+}
