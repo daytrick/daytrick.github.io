@@ -26,7 +26,11 @@ const HAND = "hand";
 // Moo audio from: https://freesound.org/people/Bird_man/sounds/275154/
 const MOO_AUDIO = new Audio('sounds/moo.wav');
 
+let sunriseTime;
+let sunsetTime;
+
 // Divs
+let background = document.getElementById("background");
 let cow = document.getElementById("cow");
 let food = document.getElementById("food");
 let hand = document.getElementById("hand");
@@ -110,6 +114,131 @@ function loadProps(type, parent, limit, defaultSprite) {
     let defaultPose = document.getElementById(generateID(PROPS, type + defaultSprite));
     defaultPose.removeAttribute("hidden");
 
+}
+
+
+
+function loadBgs() {
+
+    let bgs = [SUNRISE, DAY, SUNSET, NIGHT];
+
+    for (const bg of bgs) {
+        let frame = createImage(PROPS, bg);
+        frame.hidden = (bg != DAY);
+        background.appendChild(frame);
+    }
+
+    getSunTimes();
+
+}
+
+
+
+function showAppropriateBg() {
+
+    let bg;
+    let now = Date();
+    if (now < addMinutes(sunriseTime, -15)) {
+        bg = NIGHT;
+    }
+    else if (now < addMinutes(sunriseTime, 15)) {
+        bg = SUNRISE;
+    }
+    else if (now < addMinutes(sunsetTime, -15)) {
+        bg = DAY;
+    }
+    else if (now < addMinutes(sunsetTime, 15)) {
+        bg = SUNSET;
+    }
+    else {
+        bg = NIGHT;
+    }
+    
+    showSprite(generateID(PROPS, bg));
+
+}
+
+
+
+function getSunTimes() {
+
+    // Get user's coordinates
+    // How to get them from: https://net-raft.com/Questions/740/how-to-get-latitude-and-longitude-from-ip-address-using-javascript-/740
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(makeSunTimesReq, useDefaultTimes);
+    }
+
+}
+
+
+
+/**
+ * Request the sunset/sunrise times for the user's location 
+ * from https://sunrisesunset.io/api/.
+ */
+function makeSunTimesReq(position) {
+
+    let lat = position.coords.latitude;
+    let long = position.coords.longitude;
+    let url = `https://api.sunrisesunset.io/json?lat=${lat}&lng=${long}`;
+
+    fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.status == "OK") {
+
+                sunriseTime = parseTime(data.results.sunrise);
+                sunsetTime = parseTime(data.results.sunset);
+                showAppropriateBg();
+
+            }
+        })
+        .catch((error) => useDefaultTimes())
+}
+
+
+
+function useDefaultTimes() {
+
+    sunriseTime = new Date();
+    sunriseTime.setHours(6, 0, 0);
+    sunsetTime = new Date();
+    sunsetTime.setHours(19, 0, 0);
+
+    showAppropriateBg();
+
+}
+
+
+
+function parseTime(timeString) {
+
+    // Parse the time string
+    let parts = timeString.split(/[\s:]/);
+    if (parts[3] == "PM") {
+        parts[0] += 12;
+    }
+
+    // Set the time
+    let event = new Date();
+    event.setHours(parts[0], parts[1], parts[2]);
+    
+    return event;
+
+}
+
+
+
+/**
+ * Add some minutes to a Date object. 
+ * Copied from: https://stackoverflow.com/a/1214753
+ * 
+ * @param {Date} date 
+ * @param {Number} mins 
+ * @returns 
+ */
+function addMinutes(date, mins) {
+    return new Date(date.getTime() + (mins*60000));
 }
 
 

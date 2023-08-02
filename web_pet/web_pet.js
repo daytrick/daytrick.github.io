@@ -24,6 +24,7 @@ let timeouts = [];
  * Load the sprites and idle the cow.
  */
 function onload() {
+    loadBgs();
     loadCowSprites();
     //loadProps(FOOD, food, 3, 1);
     loadProps(HAND, hand, 4, 2);
@@ -237,7 +238,6 @@ function graze() {
 
         timeouts.push(setTimeout(() => {
 
-            console.log("Graze counter: " + grazeCounter);
             showSprite(generateID(cowFacing, GRAZE + grazeCounter));
 
             if (grazeCounter != 7) {
