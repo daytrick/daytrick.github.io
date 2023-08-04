@@ -345,26 +345,33 @@ function moo() {
     showSprite(generateID(cowFacing, MOO));
 
     MOO_AUDIO.play()
+        .then(() => {
+
+            // Match how long the cow stays in the mooing pose to how long the moo audio is.
+            // Found appropriate event listener from: https://stackoverflow.com/a/11104033
+            MOO_AUDIO.addEventListener("ended", onMooEnd);
+
+        })
         .catch((err) => {
-            // do nothing
+
+            // Hold the moo pose even if the audio doesn't play, but estimate the duration
+            timeouts.push(setTimeout(() => {
+                onMooEnd();
+            }, 1000));
+
         });
 
 }
 
 
-
 /**
- * Match how long the cow stays in the mooing pose 
- * to how long the moo audio is.
- * 
- * Found appropriate event listener from: https://stackoverflow.com/a/11104033
+ * Event listener for when the moo audio ends.
  */
-MOO_AUDIO.addEventListener("ended", () => {
-
+function onMooEnd() {
     showSprite(generateID(cowFacing, WALK + "1"));
     idle();
-
-})
+    MOO_AUDIO.removeEventListener("ended", onMoo);
+}
 
 
 
