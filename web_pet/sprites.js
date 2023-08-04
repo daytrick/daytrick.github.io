@@ -26,7 +26,11 @@ const HAND = "hand";
 // Moo audio from: https://freesound.org/people/Bird_man/sounds/275154/
 const MOO_AUDIO = new Audio('sounds/moo.wav');
 
+let sunriseTime;
+let sunsetTime;
+
 // Divs
+let background = document.getElementById("background");
 let cow = document.getElementById("cow");
 let food = document.getElementById("food");
 let hand = document.getElementById("hand");
@@ -110,6 +114,156 @@ function loadProps(type, parent, limit, defaultSprite) {
     let defaultPose = document.getElementById(generateID(PROPS, type + defaultSprite));
     defaultPose.removeAttribute("hidden");
 
+}
+
+
+
+/**
+ * Loads the backgrounds, and shows the appropriate one for the current time.
+ */
+function loadBgs() {
+
+    let bgs = [SUNRISE, DAY, SUNSET, NIGHT];
+
+    for (const bg of bgs) {
+        let frame = createImage(PROPS, bg);
+        frame.hidden = (bg != DAY);
+        background.appendChild(frame);
+    }
+
+    getSunTimes();
+
+}
+
+
+
+function showAppropriateBg() {
+
+    let bg;
+    let now = (new Date()).getTime();
+    console.log(now);
+
+    if (now < addMinutes(sunriseTime, -15).getTime()) {
+        bg = NIGHT;
+    }
+    else if (now < addMinutes(sunriseTime, 15).getTime()) {
+        bg = SUNRISE;
+    }
+    else if (now < addMinutes(sunsetTime, -15).getTime()) {
+        bg = DAY;
+    }
+    else if (now < addMinutes(sunsetTime, 15).getTime()) {
+        bg = SUNSET;
+    }
+    else {
+        bg = NIGHT;
+    }
+    
+    showSprite(generateID(PROPS, bg));
+
+}
+
+
+
+/**
+ * Get the sunrise/sunset times,
+ * whether they're accurate or the default.
+ */
+function getSunTimes() {
+
+    // Get user's coordinates
+    // How to get them from: https://net-raft.com/Questions/740/how-to-get-latitude-and-longitude-from-ip-address-using-javascript-/740
+    if (navigator.geolocation) {
+
+        // If coordinates received, get accurate times
+        // Otherwise, use default times
+        navigator.geolocation.getCurrentPosition(makeSunTimesReq, useDefaultTimes);
+
+    }
+
+}
+
+
+
+/**
+ * Request the sunset/sunrise times for the user's location 
+ * from https://sunrisesunset.io/api/.
+ */
+function makeSunTimesReq(position) {
+
+    let lat = position.coords.latitude;
+    let long = position.coords.longitude;
+    let url = `https://api.sunrisesunset.io/json?lat=${lat}&lng=${long}`;
+
+    fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.status == "OK") {
+
+                sunriseTime = parseTime(data.results.sunrise);
+                sunsetTime = parseTime(data.results.sunset);
+                showAppropriateBg();
+
+            }
+        })
+        .catch((error) => useDefaultTimes())
+}
+
+
+
+/**
+ * Set sunrise/sunset times to a default.
+ * For use when they can't be gotten from the API. 
+ */
+function useDefaultTimes() {
+
+    sunriseTime = new Date();
+    sunriseTime.setHours(6, 0, 0);
+    sunsetTime = new Date();
+    sunsetTime.setHours(19, 0, 0);
+
+    showAppropriateBg();
+
+}
+
+
+
+/**
+ * Parse the time string and return it as a Date,
+ * with the date set for today. 
+ * 
+ * @param {String} timeString time in hh:mm:ss AM/PM format
+ * @returns a Date for today with the time
+ */
+function parseTime(timeString) {
+
+    // Parse the time string
+    let parts = timeString.split(/[\s:]/);
+    if (parts[3] == "PM") {
+        parts[0] = parseInt(parts[0]) + 12;
+    }
+
+    // Set the time
+    let event = new Date();
+    event.setHours(parts[0], parts[1], parts[2]);
+
+    return event;
+
+}
+
+
+
+/**
+ * Add some minutes to a Date object. 
+ * Copied from: https://stackoverflow.com/a/1214753
+ * 
+ * @param {Date} date 
+ * @param {Number} mins 
+ * @returns 
+ */
+function addMinutes(date, mins) {
+    console.log("New date: " + (new Date(date.getTime() + (mins*60000))));
+    return new Date(date.getTime() + (mins*60000));
 }
 
 

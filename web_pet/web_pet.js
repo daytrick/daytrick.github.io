@@ -24,6 +24,7 @@ let timeouts = [];
  * Load the sprites and idle the cow.
  */
 function onload() {
+    loadBgs();
     loadCowSprites();
     //loadProps(FOOD, food, 3, 1);
     loadProps(HAND, hand, 4, 2);
@@ -48,7 +49,7 @@ function idle() {
             idleAction(BLINK, 200);
         }
         else if ((n >= 500) && (n < 700)) {
-            idleAction(MOO, 500);
+            moo();
         }
         else if ((n >= 700) && (n < 900)) {
             graze();
@@ -237,7 +238,6 @@ function graze() {
 
         timeouts.push(setTimeout(() => {
 
-            console.log("Graze counter: " + grazeCounter);
             showSprite(generateID(cowFacing, GRAZE + grazeCounter));
 
             if (grazeCounter != 7) {
@@ -315,8 +315,6 @@ function stopPet() {
 /**
  * Make the cow do an idle animation.
  * 
- * How to play audio from: https://stackoverflow.com/a/18628124
- * 
  * @param {String} action   the idle action
  * @param {Number} time     how long to do it for
  */
@@ -334,6 +332,39 @@ function idleAction(action, time) {
     }, time));
     
 }
+
+
+
+/**
+ * Make the cow moo. 
+ * 
+ * How to play audio from: https://stackoverflow.com/a/18628124
+ */
+function moo() {
+
+    showSprite(generateID(cowFacing, MOO));
+
+    MOO_AUDIO.play()
+        .catch((err) => {
+            // do nothing
+        });
+
+}
+
+
+
+/**
+ * Match how long the cow stays in the mooing pose 
+ * to how long the moo audio is.
+ * 
+ * Found appropriate event listener from: https://stackoverflow.com/a/11104033
+ */
+MOO_AUDIO.addEventListener("ended", () => {
+
+    showSprite(generateID(cowFacing, WALK + "1"));
+    idle();
+
+})
 
 
 
