@@ -118,6 +118,9 @@ function loadProps(type, parent, limit, defaultSprite) {
 
 
 
+/**
+ * Loads the backgrounds, and shows the appropriate one for the current time.
+ */
 function loadBgs() {
 
     let bgs = [SUNRISE, DAY, SUNSET, NIGHT];
@@ -137,17 +140,19 @@ function loadBgs() {
 function showAppropriateBg() {
 
     let bg;
-    let now = Date();
-    if (now < addMinutes(sunriseTime, -15)) {
+    let now = (new Date()).getTime();
+    console.log(now);
+
+    if (now < addMinutes(sunriseTime, -15).getTime()) {
         bg = NIGHT;
     }
-    else if (now < addMinutes(sunriseTime, 15)) {
+    else if (now < addMinutes(sunriseTime, 15).getTime()) {
         bg = SUNRISE;
     }
-    else if (now < addMinutes(sunsetTime, -15)) {
+    else if (now < addMinutes(sunsetTime, -15).getTime()) {
         bg = DAY;
     }
-    else if (now < addMinutes(sunsetTime, 15)) {
+    else if (now < addMinutes(sunsetTime, 15).getTime()) {
         bg = SUNSET;
     }
     else {
@@ -160,12 +165,20 @@ function showAppropriateBg() {
 
 
 
+/**
+ * Get the sunrise/sunset times,
+ * whether they're accurate or the default.
+ */
 function getSunTimes() {
 
     // Get user's coordinates
     // How to get them from: https://net-raft.com/Questions/740/how-to-get-latitude-and-longitude-from-ip-address-using-javascript-/740
     if (navigator.geolocation) {
+
+        // If coordinates received, get accurate times
+        // Otherwise, use default times
         navigator.geolocation.getCurrentPosition(makeSunTimesReq, useDefaultTimes);
+
     }
 
 }
@@ -198,6 +211,10 @@ function makeSunTimesReq(position) {
 
 
 
+/**
+ * Set sunrise/sunset times to a default.
+ * For use when they can't be gotten from the API. 
+ */
 function useDefaultTimes() {
 
     sunriseTime = new Date();
@@ -211,18 +228,25 @@ function useDefaultTimes() {
 
 
 
+/**
+ * Parse the time string and return it as a Date,
+ * with the date set for today. 
+ * 
+ * @param {String} timeString time in hh:mm:ss AM/PM format
+ * @returns a Date for today with the time
+ */
 function parseTime(timeString) {
 
     // Parse the time string
     let parts = timeString.split(/[\s:]/);
     if (parts[3] == "PM") {
-        parts[0] += 12;
+        parts[0] = parseInt(parts[0]) + 12;
     }
 
     // Set the time
     let event = new Date();
     event.setHours(parts[0], parts[1], parts[2]);
-    
+
     return event;
 
 }
@@ -238,6 +262,7 @@ function parseTime(timeString) {
  * @returns 
  */
 function addMinutes(date, mins) {
+    console.log("New date: " + (new Date(date.getTime() + (mins*60000))));
     return new Date(date.getTime() + (mins*60000));
 }
 
