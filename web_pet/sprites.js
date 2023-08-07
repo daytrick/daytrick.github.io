@@ -19,6 +19,8 @@ const SUNRISE = "sunrise";
 const DAY = "day";
 const SUNSET = "sunset";
 const NIGHT = "night";
+const MIDNIGHT = "midnight";
+const TIME_NAMES = [SUNRISE, DAY, SUNSET, NIGHT];
 
 const FOOD = "food";
 const HAND = "hand";
@@ -28,6 +30,8 @@ const MOO_AUDIO = new Audio('sounds/moo.wav');
 
 let sunriseTime;
 let sunsetTime;
+let times = {};
+let bgTimeouts = [];
 
 // Divs
 let background = document.getElementById("background");
@@ -123,43 +127,13 @@ function loadProps(type, parent, limit, defaultSprite) {
  */
 function loadBgs() {
 
-    let bgs = [SUNRISE, DAY, SUNSET, NIGHT];
-
-    for (const bg of bgs) {
+    for (const bg of TIME_NAMES) {
         let frame = createImage(PROPS, bg);
         frame.hidden = (bg != DAY);
         background.appendChild(frame);
     }
 
     getSunTimes();
-
-}
-
-
-
-function showAppropriateBg() {
-
-    let bg;
-    let now = (new Date()).getTime();
-    console.log(now);
-
-    if (now < addMinutes(sunriseTime, -15).getTime()) {
-        bg = NIGHT;
-    }
-    else if (now < addMinutes(sunriseTime, 15).getTime()) {
-        bg = SUNRISE;
-    }
-    else if (now < addMinutes(sunsetTime, -15).getTime()) {
-        bg = DAY;
-    }
-    else if (now < addMinutes(sunsetTime, 15).getTime()) {
-        bg = SUNSET;
-    }
-    else {
-        bg = NIGHT;
-    }
-    
-    showSprite(generateID(PROPS, bg));
 
 }
 
@@ -202,6 +176,14 @@ function makeSunTimesReq(position) {
 
                 sunriseTime = parseTime(data.results.sunrise);
                 sunsetTime = parseTime(data.results.sunset);
+
+                times.sunrise = addMinutes(sunriseTime, -15);
+                times.day = addMinutes(sunriseTime, 15);
+                times.sunset = addMinutes(sunsetTime, -15);
+                times.night = addMinutes(sunsetTime, 15);
+                times.midnight = new Date();
+                times.midnight.setDate(times.midnight.getDate() + 1);
+                
                 showAppropriateBg();
 
             }
@@ -217,13 +199,101 @@ function makeSunTimesReq(position) {
  */
 function useDefaultTimes() {
 
-    sunriseTime = new Date();
+    /*sunriseTime = new Date();
     sunriseTime.setHours(6, 0, 0);
     sunsetTime = new Date();
-    sunsetTime.setHours(19, 0, 0);
+    sunsetTime.setHours(19, 0, 0);*/
+
+    times.sunrise = new Date();
+    times.sunrise.setHours(5, 45, 0);
+    times.day = new Date();
+    times.day.setHours(6, 15, 0);
+    times.sunset = new Date();
+    times.sunset.setHours(18, 45, 0);
+    times.night = new Date();
+    times.night.setHours(19, 15, 0);
+    times.midnight = new Date();
+    times.midnight.setHours(0, 0, 0);
+    times.midnight.setDate(times.midnight.getDate() + 1);
 
     showAppropriateBg();
 
+}
+
+
+
+/**
+ * Show the appropriate background for the time of day.
+ */
+function showAppropriateBg() {
+
+    let bg;
+    let now = (new Date()).getTime();
+    console.log(now);
+
+    if (now < times.sunrise.getTime()) {
+        bg = NIGHT;
+    }
+    else if (now < times.day.getTime()) {
+        bg = SUNRISE;
+    }
+    else if (now < times.sunset.getTime()) {
+        bg = DAY;
+    }
+    else if (now < times.night.getTime()) {
+        bg = SUNSET;
+    }
+    else {
+        bg = NIGHT;
+    }
+    
+    showSprite(generateID(PROPS, bg));
+
+    // Keep showing the appropriate bgs in the future
+    setBgTimers();
+
+}
+
+
+
+/**
+ * Set the timers for changing the background for each part of the day.
+ */
+function setBgTimers() {
+
+    let now = new Date();
+
+    // Prep the changes for the rest of today
+    for (let i = 0; i < TIME_NAMES.length; i++) {
+
+        // Calculate the timeout
+        let timeout = times[TIME_NAMES[i]].getTime() - now.getTime();
+
+        // Set an alarm to change the background if necessary
+        if (timeout > 0) {
+
+            setTimeout(() => {
+                
+                let newBg = document.getElementById(generateID(PROPS, TIME_NAMES[i]));
+                let oldBg = document.getElementById(generateID(PROPS, TIME_NAMES[(i - 1 < 0 ? 0 : i - 1)]));
+
+                newBg.removeAttribute("hidden");
+                oldBg.setAttribute("hidden", true);
+
+            }, timeout);
+
+        }
+
+    }
+    
+    // Set timeout to calculate changes for the next day at midnight
+    let timeout = times.midnight.getTime() - now.getTime();
+    setTimeout(() => {
+        
+        setBgTimers();
+
+    }, timeout);
+    
 }
 
 
