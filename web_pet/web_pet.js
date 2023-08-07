@@ -370,7 +370,7 @@ function moo() {
 function onMooEnd() {
     showSprite(generateID(cowFacing, WALK + "1"));
     idle();
-    MOO_AUDIO.removeEventListener("ended", onMoo);
+    MOO_AUDIO.removeEventListener("ended", onMooEnd);
 }
 
 
