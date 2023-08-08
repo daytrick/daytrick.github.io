@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 // Import method from: https://stackoverflow.com/a/69491450
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-app.js";
-import { getFirestore, AutoId } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js"
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js"
 import { collection, doc, getDoc, getDocs, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js"
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js"
 
