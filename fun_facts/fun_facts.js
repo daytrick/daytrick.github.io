@@ -33,7 +33,7 @@ const facts = db.collection("funfacts");
 function getRandomFact() {
 
     // Generate a random ID
-    let randID = new AutoId.newId();
+    let randID = facts.doc().id
     console.log(randID);
 
     // Get a random fact
