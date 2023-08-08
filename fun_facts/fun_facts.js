@@ -1,5 +1,9 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
+// Import the functions you need from the SDKs you need
+// Import method from: https://stackoverflow.com/a/69491450
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js"
+import { collection, doc, getDoc, getDocs, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js"
+import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js"
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -14,14 +18,14 @@ const config = {
 };
 
 // Initialize Firebase
-const app = firebase.initializeApp(config);
+const app = initializeApp(config);
 
 // Initialize Cloud Firestore and get a reference to the service
-const db = firebase.getFirestore(app);
+const db = getFirestore(app);
 
 // Get a document
-const docRef = firebase.doc(db, "funfacts");
-const docSnap = await firebase.getDoc(docRef);
+const docRef = doc(db, "funfacts");
+const docSnap = await getDoc(docRef);
 
 if (docSnap.exists()) {
   console.log("Document data:", docSnap.data());
