@@ -1,10 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { doc, getDoc } from "firebase/firestore";
-
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
+const config = {
     apiKey: "AIzaSyCviSKYylM0TFP2PI1jH4o_Z9uyzxlbftc",
     authDomain: "github-site---day.firebaseapp.com",
     projectId: "github-site---day",
@@ -15,14 +11,14 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = firebase.initializeApp(config);
 
 // Initialize Cloud Firestore and get a reference to the service
-const db = getFirestore(app);
+const db = firebase.getFirestore(app);
 
 // Get a document
-const docRef = doc(db, "funfacts");
-const docSnap = await getDoc(docRef);
+const docRef = firebase.doc(db, "funfacts");
+const docSnap = await firebase.getDoc(docRef);
 
 if (docSnap.exists()) {
   console.log("Document data:", docSnap.data());
