@@ -66,6 +66,9 @@ export function getRandomFact() {
 }
 
 
+getRandomFact();
+
+
 
 function showFact(querySnapshot) {
 
