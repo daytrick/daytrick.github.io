@@ -30,10 +30,10 @@ const facts = collection(db, "funfacts");
  * 
  * How to query a random doc from: https://stackoverflow.com/a/46801925
  */
-function getRandomFact() {
+export function getRandomFact() {
 
     // Generate a random ID
-    let randID = facts.doc().id
+    let randID = facts.doc().id;
     console.log(randID);
 
     // Get a random fact
