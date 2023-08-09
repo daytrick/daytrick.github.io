@@ -1,0 +1,11 @@
+.content {
+    padding: 10vh;
+}
+
+h1 {
+    text-align: center;
+}
+
+p {
+    overflow-y: auto;
+}

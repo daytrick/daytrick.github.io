@@ -45,7 +45,10 @@ function keepShowingFacts() {
     }, 60000);
 
 }
-window.onload = keepShowingFacts;
+window.onload = () => {
+    getRandomFact();
+    keepShowingFacts();
+};
 
 
 /**
