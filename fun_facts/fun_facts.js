@@ -30,38 +30,32 @@ const facts = collection(db, "funfacts");
  * 
  * How to query a random doc from: https://stackoverflow.com/a/46801925
  */
-function getRandomFact() {
+async function getRandomFact() {
 
     // Generate a random ID
-    let randID = doc(collection(db, "funfacts"));
+    let randID = doc(collection(db, "funfacts")).id;
     console.log(randID);
 
     // Get a random fact
+    // How to query from: https://firebase.google.com/docs/firestore/query-data/get-data
     // How to use where from: https://firebase.google.com/docs/firestore/query-data/queries?hl=en&authuser=0
     // How to order and limit from: https://firebase.google.com/docs/firestore/query-data/order-limit-data?authuser=0&hl=en
-    let query = facts.where("__name__", ">=", randID)
-                     .orderBy("__name__")
-                     .limit(1);
+    let q = query(facts, where("__name__", ">=", randID), limit(1));
+    //let query = facts.where("__name__", ">=", randID)
 
-    query.get().then((querySnapshot) => {
+    let querySnapshot = await getDocs(q);
 
-        // Get first fact
-        if (querySnapshot.empty) {
+    // Make sure there's a fact
+    if (querySnapshot.empty) {
+        q = query(facts, where("__name__", "<", randID), limit(1));
+        querySnapshot = await getDocs(q);
+    }
 
-            let backupQuery = facts.where("__name__", "<", randID)
-                                   .orderBy("__name__")
-                                   .limit(1);
-            
-            // Will succeed by now, as long as there's at least one doc in the collection
-            backupQuery.get().then((backupQuerySnapshot) => {
-                showFact(backupQuerySnapshot);
-            });
-            
-        }
-        else {
-            showFact(querySnapshot);
-        }
-    });
+    // Get the document out
+    querySnapshot.forEach((doc) => {
+        showFact(doc);
+    })
+    
 
 }
 // Make it callable in the console
@@ -71,9 +65,9 @@ window.getRandomFact = getRandomFact;
 
 
 
-function showFact(querySnapshot) {
+function showFact(doc) {
 
-    console.log(querySnapshot);
+    console.log(doc);
 
 }
 
