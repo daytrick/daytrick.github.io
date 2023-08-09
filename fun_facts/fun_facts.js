@@ -5,6 +5,8 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.1.0/firebase
 import { collection, doc, getDoc, getDocs, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js"
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js"
 
+//////////////////// FIREBASE CONSTS ////////////////////
+
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const config = {
@@ -24,6 +26,27 @@ const app = initializeApp(config);
 const db = getFirestore(app);
 const facts = collection(db, "funfacts");
 
+//////////////////// OTHER CONSTS ////////////////////
+
+const factID = document.getElementById("factID");
+const factText = document.getElementById("fact");
+
+
+
+/**
+ * Keep getting and showing facts forever.
+ */
+function keepShowingFacts() {
+
+    setTimeout(() => {
+        
+        getRandomFact();
+
+    }, 60000);
+
+}
+window.onload = keepShowingFacts;
+
 
 /**
  * Query for a random fact from the database.
@@ -41,7 +64,6 @@ async function getRandomFact() {
     // How to use where from: https://firebase.google.com/docs/firestore/query-data/queries?hl=en&authuser=0
     // How to order and limit from: https://firebase.google.com/docs/firestore/query-data/order-limit-data?authuser=0&hl=en
     let q = query(facts, where("__name__", ">=", randID), limit(1));
-    //let query = facts.where("__name__", ">=", randID)
 
     let querySnapshot = await getDocs(q);
 
@@ -64,20 +86,17 @@ window.getRandomFact = getRandomFact;
 
 
 
-
+/**
+ * Show a fact.
+ * @param {QueryDocumentSnapshot} doc the fact
+ */
 function showFact(doc) {
 
-    console.log(doc);
+    // Display the fact ID
+    factID.innerHTML = doc.id;
+
+    // Display the fact text
+    let fact = doc.data();
+    factText.innerHTML = fact.fact;
 
 }
-
-/*// Get a document
-const docRef = doc(db, "funfacts");
-const docSnap = await getDoc(docRef);
-
-if (docSnap.exists()) {
-  console.log("Document data:", docSnap.data());
-} else {
-  // docSnap.data() will be undefined in this case
-  console.log("No such document!");
-}*/
