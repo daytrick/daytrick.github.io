@@ -113,21 +113,19 @@ function showFact(doc) {
     // Display the sources
     sourcesDiv.innerHTML = "";
 
-    let h2 = document.createElement("h2");
-    h2.innerHTML = "Sources";
-    sourcesDiv.appendChild(h2);
+    if (fact.sources.length > 0) {
 
-    let list = document.createElement("ol");
-    for (const source of fact.sources) {
-        let item = document.createElement("li");
+        let h2 = document.createElement("h2");
+        h2.innerHTML = "Sources";
+        sourcesDiv.appendChild(h2);
 
-        let a = document.createElement("a");
-        a.href = source.link;
-        a.innerHTML = source.name;
-        item.appendChild(a);
+        let list = document.createElement("ol");
+        for (const source of fact.sources) {
+            let item = document.createElement("li");
+            item.innerHTML = `<a href="${source.link}">${source.name}.</a> Accessed ${source.accessed}.`;
+            list.appendChild(item);
+        }
 
-        item.innerHTML += "Accessed " + source.accessed + "."
-        list.appendChild(item);
     }
 
 }
