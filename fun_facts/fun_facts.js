@@ -29,7 +29,7 @@ const facts = collection(db, "funfacts");
 //////////////////// OTHER CONSTS ////////////////////
 
 const factID = document.getElementById("factID");
-const factText = document.getElementById("fact");
+const factDiv = document.getElementById("factDiv");
 
 
 
@@ -100,6 +100,11 @@ function showFact(doc) {
 
     // Display the fact text
     let fact = doc.data();
-    factText.innerHTML = fact.fact;
+    factDiv.innerHTML = "";
+    for (const para in fact) {
+        let p = document.createElement("p");
+        p.innerHTML = para;
+        factDiv.appendChild(p);
+    }
 
 }
