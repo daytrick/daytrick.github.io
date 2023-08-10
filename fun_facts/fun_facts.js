@@ -125,7 +125,7 @@ function showFact(doc) {
 
             // How to get a Date from a Firebase Timestamp from: https://stackoverflow.com/a/57103780
             let date = new Date(source.accessed.seconds * 1000);
-            item.innerHTML = `<a href="${source.link}">${source.name}.</a> Accessed ${source.accessed.toDateString()}.`;
+            item.innerHTML = `<a href="${source.link}">${source.name}.</a> Accessed ${date.toDateString()}.`;
 
             list.appendChild(item);
         }
