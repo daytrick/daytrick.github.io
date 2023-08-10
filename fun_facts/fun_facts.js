@@ -122,12 +122,16 @@ function showFact(doc) {
         let list = document.createElement("ol");
         for (const source of fact.sources) {
             let item = document.createElement("li");
-            item.innerHTML = `<a href="${source.link}">${source.name}.</a> Accessed ${source.accessed}.`;
+
+            // How to get a Date from a Firebase Timestamp from: https://stackoverflow.com/a/57103780
+            let date = new Date(source.accessed.seconds * 1000);
+            item.innerHTML = `<a href="${source.link}">${source.name}.</a> Accessed ${source.accessed.toDateString()}.`;
+
             list.appendChild(item);
         }
 
         sourcesDiv.appendChild(list);
-        
+
     }
 
 }
