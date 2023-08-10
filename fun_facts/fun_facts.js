@@ -41,6 +41,7 @@ function keepShowingFacts() {
     setTimeout(() => {
         
         getRandomFact();
+        keepShowingFacts();
 
     }, 60000);
 
