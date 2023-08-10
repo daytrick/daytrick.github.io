@@ -123,11 +123,18 @@ function showFact(doc) {
         for (const source of fact.sources) {
             let item = document.createElement("li");
 
-            // How to get a Date from a Firebase Timestamp from: https://stackoverflow.com/a/57103780
-            let date = new Date(source.accessed.seconds * 1000);
-            item.innerHTML = `<a href="${source.link}">${source.name}.</a> Accessed ${date.toDateString()}.`;
+            // Allow sources with no links
+            if (source.hasOwnProperty("link")) {
+                // How to get a Date from a Firebase Timestamp from: https://stackoverflow.com/a/57103780
+                let date = new Date(source.accessed.seconds * 1000);
+                item.innerHTML = `<a href="${source.link}">${source.name}.</a> Accessed ${date.toDateString()}.`;
+            }
+            else {
+                item.innerHTML = source.name;
+            }
 
             list.appendChild(item);
+
         }
 
         sourcesDiv.appendChild(list);
