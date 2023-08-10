@@ -126,6 +126,8 @@ function showFact(doc) {
             list.appendChild(item);
         }
 
+        sourcesDiv.appendChild(list);
+        
     }
 
 }
