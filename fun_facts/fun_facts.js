@@ -30,6 +30,7 @@ const facts = collection(db, "funfacts");
 
 const factID = document.getElementById("factID");
 const factDiv = document.getElementById("factDiv");
+const sourcesDiv = document.getElementById("sourcesDiv");
 
 
 
@@ -96,16 +97,37 @@ window.getRandomFact = getRandomFact;
  */
 function showFact(doc) {
 
+    let fact = doc.data();
+
     // Display the fact ID
     factID.innerHTML = doc.id;
 
     // Display the fact text
-    let fact = doc.data();
     factDiv.innerHTML = "";
-    for (const para in fact) {
+    for (const para of fact.fact) {
         let p = document.createElement("p");
         p.innerHTML = para;
         factDiv.appendChild(p);
+    }
+
+    // Display the sources
+    sourcesDiv.innerHTML = "";
+
+    let h2 = document.createElement("h2");
+    h2.innerHTML = "Sources";
+    sourcesDiv.appendChild(h2);
+
+    let list = document.createElement("ol");
+    for (const source of fact.sources) {
+        let item = document.createElement("li");
+
+        let a = document.createElement("a");
+        a.href = source.link;
+        a.innerHTML = source.name;
+        item.appendChild(a);
+
+        item.innerHTML += "Accessed " + source.accessed + "."
+        list.appendChild(item);
     }
 
 }
