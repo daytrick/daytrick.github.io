@@ -3,6 +3,14 @@
     <title>A Little Cow</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" type="text/css" href="web_pet.css">
+    <!-- Favicons generated using: https://realfavicongenerator.net/ -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../icons/favicon-16x16.png">
+    <link rel="manifest" href="../icons/site.webmanifest">
+    <link rel="mask-icon" href="icons/safari-pinned-tab.svg" color="#57ad98">
+    <meta name="msapplication-TileColor" content="#00aba9">
+    <meta name="theme-color" content="#ff0000">
 </head>
 <body onload="onload()">
     <div class="topnav">
@@ -17,6 +25,7 @@
                 <div id="cow"></div>
             </div>
             <div id="foreground" class="imgContainer">
+                <div id="streak"></div>
                 <div id="food" class="base"></div>
                 <div id="hand"></div>
             </div>
@@ -27,6 +36,7 @@
         </div>
     </div>
     <audio src="sounds/moo.wav"></audio>
+    <script src="streak.js"></script>
     <script src="sprites.js"></script>
     <script src="web_pet.js"></script>
 </body>

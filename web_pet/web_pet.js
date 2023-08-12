@@ -28,6 +28,7 @@ function onload() {
     loadCowSprites();
     //loadProps(FOOD, food, 3, 1);
     loadProps(HAND, hand, 4, 2);
+    checkStreak();
     idle();
 }
 
