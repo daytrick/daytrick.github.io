@@ -54,16 +54,16 @@ function displayStreak(lastVisit, streak) {
 
     let p = document.createElement("p");
 
-    if (!lastVisit) {
-        p.innerHTML = "Hello there!";
-    }
-    else if (streak == 0) {
+    if (streak == 0) {
         let today = new Date();
         let daysElapsed = getDiffInDays(lastVisit, today);
         p.innerHTML = `Days since last visit: ${daysElapsed}`;
     }
-    else {
+    else if (streak > 0) {
         p.innerHTML = `You've visited daily for: ${streak} days`;
+    }
+    else {
+        p.innerHTML = "Hello there!";
     }
 
     streakDiv.appendChild(p);
