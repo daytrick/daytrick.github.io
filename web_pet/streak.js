@@ -20,6 +20,7 @@ function checkStreak() {
 
             //Display streak
             let today = new Date();
+            visitedBefore = new Date(Date.parse(visitedBefore));
             if (getDiffInDays(visitedBefore, today) == 1) {
                 streak = parseInt(streak) + 1;
             }
@@ -35,7 +36,7 @@ function checkStreak() {
     }
 
     // Display the streak
-    displayStreak();
+    displayStreak(visitedBefore, streak);
 
     // Record the visit
     recordVisit(streak);
@@ -123,26 +124,17 @@ function getCookie(cname) {
 }
 
 
+
 /**
- * Compares two Date objects regarding just the date (year, month, date).
+ * Get the difference between two dates as a number of full days.
  * 
  * @param {Date} date1 
  * @param {Date} date2 
- * @returns if date1 < date2
+ * @returns number of full days
  */
-function compareFullDate(date1, date2) {
-
-    return date1.getFullYear() < date2.getFullYear()
-        && date1.getMonth() < date2.getMonth()
-        && date1.getDate() < date2.getDate();
-    
-}
-
-
-
 function getDiffInDays(date1, date2) {
 
     let diff = date2.getTime() - date1.getTime();
-    return diff / (1000 * 3600 * 24);
+    return Math.floor(diff / (1000 * 3600 * 24));
 
 }
