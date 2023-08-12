@@ -81,9 +81,10 @@ function recordVisit(newStreak) {
 
     let visitDate = new Date();
     let expDate = new Date();
-    expDate.setDate(visitDate.getDate() + 30)
+    expDate.setDate(visitDate.getDate() + 30);
     
-    document.cookie = "visit = " + visitDate.toString() + "; streak = " + newStreak + ";"+ expDate.toString() + ";path=/";
+    document.cookie = "visit = " + visitDate.toString() + ";" + expDate.toString() + ";path=/";
+    document.cookie = "streak = " + newStreak + ";" + expDate.toString() + ";path=/"
     console.log("Cookies: " + document.cookie);
 
 }
@@ -117,7 +118,7 @@ function getCookie(cname) {
       }
 
     }
-    return false;
+    return 0;
 
 }
 
