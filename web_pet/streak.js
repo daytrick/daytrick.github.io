@@ -6,19 +6,13 @@ const streakDiv = document.getElementById("streak");
 function checkStreak() {
 
     let visitedBefore = getCookie("visit");
-    console.log("Visited before: " + visitedBefore);
     let streak = parseInt(getCookie("streak"));
-    console.log("Streak: " + streak);
     
     // Get date of last visit
     if (visitedBefore != 0) {
 
-        console.log("Visited before!");
-
         // Get streak
         if (streak != 0) {
-
-            console.log("Got streak: " + streak);
 
             // Increment streak if new day
             let today = new Date();
@@ -56,7 +50,7 @@ function displayStreak(lastVisit, streak) {
         p.innerHTML = "Hello there!";
     }
     // Missed at least 1 day
-    if (streak == 0) {
+    else if (streak == 0) {
         let today = new Date();
         let daysElapsed = getDiffInDays(lastVisit, today);
         p.innerHTML = `Days since last visit: ${daysElapsed}`;
@@ -85,7 +79,6 @@ function recordVisit(newStreak) {
     
     document.cookie = "visit = " + visitDate.toString() + ";" + expDate.toString() + ";path=/";
     document.cookie = "streak = " + newStreak + ";" + expDate.toString() + ";path=/"
-    console.log("Cookies: " + document.cookie);
 
 }
 
