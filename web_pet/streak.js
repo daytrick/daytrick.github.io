@@ -6,30 +6,26 @@ const streakDiv = document.getElementById("streak");
 function checkStreak() {
 
     let visitedBefore = getCookie("visit");
-    let streak = getCookie("streak");
+    console.log("Visited before: " + visitedBefore);
+    let streak = parseInt(getCookie("streak"));
+    console.log("Streak: " + streak);
     
     // Get date of last visit
-    if (visitedBefore) {
+    if (visitedBefore != 0) {
 
         console.log("Visited before!");
 
         // Get streak
-        if (streak) {
+        if (streak != 0) {
 
             console.log("Got streak: " + streak);
 
-            //Display streak
+            // Increment streak if new day
             let today = new Date();
             visitedBefore = new Date(Date.parse(visitedBefore));
             if (getDiffInDays(visitedBefore, today) == 1) {
-                streak = parseInt(streak) + 1;
+                streak++;
             }
-
-        }
-        else {
-
-            // First meeting with cow
-            streak = 0;
 
         }
 
