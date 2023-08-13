@@ -15,6 +15,7 @@ p {
 }
 
 /********* MOBILE DISPLAY *********/
+/* Dimensions from: https://css-tricks.com/snippets/css/media-queries-for-standard-devices/ */
 
 @media only screen 
   and (min-device-width: 320px) 
