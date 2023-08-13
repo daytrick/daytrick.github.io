@@ -11,12 +11,14 @@ function checkStreak() {
     // Get date of last visit
     if (visitedBefore != 0) {
 
+        // Parse it as a Date
+        visitedBefore = new Date(Date.parse(visitedBefore));
+
         // Get streak
         if (streak != 0) {
 
             // Increment streak if new day
             let today = new Date();
-            visitedBefore = new Date(Date.parse(visitedBefore));
             if (getDiffInDays(visitedBefore, today) == 1) {
                 streak++;
             }
