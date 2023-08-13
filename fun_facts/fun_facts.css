@@ -1,11 +1,182 @@
+/********* COMPUTER (DEFAULT) DISPLAY *********/
+
 .content {
     padding: 10vh;
 }
 
 h1 {
     text-align: center;
+    overflow-wrap: break-word;
 }
 
 p {
+    overflow-wrap: break-word;
     overflow-y: auto;
+}
+
+/********* MOBILE DISPLAY *********/
+/* Dimensions from: https://css-tricks.com/snippets/css/media-queries-for-standard-devices/ */
+
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+    .content {
+        padding: 1vh;
+    }
+
+}
+
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+    .content {
+        padding: 1vh;
+    }
+
+}
+
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2) { 
+
+    .content {
+        padding: 1vh;
+    }
+
+}
+
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3) { 
+
+    .content {
+        padding: 1vh;
+    }
+
+}
+
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3) { 
+
+    .content {
+        padding: 1vh;
+    }
+
+}
+
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 2) {
+
+    .content {
+        padding: 1vh;
+    }
+
+}
+
+@media screen 
+  and (device-width: 320px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) {
+
+    .content {
+        padding: 1vh;
+    }
+
+}
+
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 4) {
+
+    .content {
+        padding: 1vh;
+    }
+
+}
+
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) {
+
+    .content {
+        padding: 1vh;
+    }
+
+}
+
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) {
+
+    .content {
+        padding: 1vh;
+    }
+
+}
+
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 4) {
+
+    .content {
+        padding: 1vh;
+    }
+
+}
+
+@media screen 
+  and (device-width: 384px) 
+  and (device-height: 592px) 
+  and (-webkit-device-pixel-ratio: 2) {
+
+    .content {
+        padding: 1vh;
+    }
+
+}
+
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 592px) 
+  and (-webkit-device-pixel-ratio: 3) {
+
+    .content {
+        padding: 1vh;
+    }
+
+}
+
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 592px) 
+  and (-webkit-device-pixel-ratio: 4) {
+
+    .content {
+        padding: 1vh;
+    }
+
+}
+
+@media screen 
+  and (device-width: 480px) 
+  and (device-height: 800px) {
+
+    .content {
+        padding: 1vh;
+    }
+
 }
