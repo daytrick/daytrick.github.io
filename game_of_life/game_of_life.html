@@ -20,7 +20,7 @@
         <a href="../index.html">Home</a>
     </div>
     <div class="content">
-        <h2>Conway's Game of Life</h2>
+        <h2>Conway's Game of Life <span id="info">ⓘ</span></h2>
         <div class="wrapper">
             <div class="left gridwrapper">
                 <div class="grid"></div>
@@ -49,7 +49,7 @@
                 <div id="creation">
                     <p><strong>Create A Lifeform</strong></p>
                     <label for="lifeform">Lifeform: </label>
-                    <input type="text" id="lifeform" name="lifeform" placeholder="🐮" minlength="1" maxlength="2" onchange="changeLifeform(this.value)">
+                    <input type="text" id="lifeform" name="lifeform" placeholder="🙂" minlength="1" maxlength="2" onchange="changeLifeform(this.value)">
                     <br>
                     <p>Rules:</p>
                     <div id="birth">
@@ -76,6 +76,27 @@
             </div>
         </div>
     </div>
+    <!-- Modal code from: https://www.w3schools.com/howto/howto_css_modals.asp -->
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>How To Play</h3>
+            <p>The Game of Life isn't really a game that you can win or lose.</p>
+            <p>Its aim is just to simulate a world where the rules of birth and death are rigidly defined, which act on cells that you've placed by clicking.</p>
+            <p>The basic rules are:
+                <ul>
+                    <li>a cell is born from an empty cell if it has exactly three neighbours</li>
+                    <li>a cell dies due to loneliness if it has less than two neighbours</li>
+                    <li>a cell dies due to overcrowding if it has more than three neighbours</li>
+                    <li>otherwise, it keeps living.</li>
+                </ul>
+            </p>
+            <p>Of course, you can make up your own rules.</p>
+            <p>For more information, check out its <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Wikipedia page</a>.</p>
+        </div>
+    </div>
+    <script src="./modal.js"></script>
     <script src="./defaultRules.js"></script>
     <script src="./loading.js"></script>
     <script src="./living.js"></script>
