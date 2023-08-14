@@ -12,7 +12,13 @@ var reap = false;
  */
 function load() {
 
+    // Generate the cells
     loadCells();
+
+    // Read lifeforms from the rules
+    lifeforms = Object.keys(globalRules);
+
+    // Load the lifeforms
     loadLifeforms(document.getElementById("lifeforms"));
 
     // Create functions for the basic rules
@@ -54,17 +60,16 @@ function loadCells() {
 
 
 /**
- * Load lifeforms into the dropdown.
+ * Load lifeforms into a select.
+ * 
+ * 
  */
 function loadLifeforms(select) {
 
     select.innerHTML = "";
 
-    // Read lifeforms from the rules
-    lifeforms = Object.keys(globalRules);
-
-    // Show the newly-read lifeforms
-    for (lifeform of lifeforms) {
+    // Show the lifeforms
+    for (const lifeform of lifeforms) {
         let option = document.createElement("option");
         option.value = lifeform;
         option.innerHTML = lifeform;
