@@ -134,15 +134,14 @@ textarea {
 }
 
 ::selection {
-    background-color: mediumvioletred;
-    color: white;
+    background-color: plum;
 }
 
 
 
 /********* LINKS *********/
 a {
-    color: mediumvioletred;
+    color: orchid;
 }
 
 a:visited {
