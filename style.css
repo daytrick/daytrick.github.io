@@ -177,7 +177,7 @@ textarea {
 }
 
 ::selection {
-    background-color: rgb(221, 160, 221);
+    background-color: plum;
 }
 
 
@@ -188,5 +188,5 @@ a {
 }
 
 a:visited {
-    color: rgb(43, 152, 116);
+    color: plum;
 }
