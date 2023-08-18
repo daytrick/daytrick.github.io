@@ -20,13 +20,46 @@
     <div class="content">
         <h1>sup this is my page</h1>
         <h2>cool stuff</h2>
-        <ul>
-            <li><a href="./fun_facts/fun_facts.html">Fun Facts</a></li>
-            <li><a href="web_pet/web_pet.html">A Little Cow</a></li>
-            <li><a href="./game_of_life/game_of_life.html">Game of Life</a></li>
-            <li><a href="./codes/vigenere.html">Vigenere cipher</a></li>
-            <li><a href="./counter/counting_words.html">counting words</a></li>
-        </ul>
-        <p>(shh yeah i know it's not much, i'm working on it)</p>
+        <div id="pages">
+            <div class="flexbox_container">
+
+                <a id="fun_facts" href="fun_facts/fun_facts.html">
+                    <div style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/b/bb/Cacatua_sulphurea_-Hong_Kong_-in_tree-8.jpg');" class="flexbox_item" onmouseenter="showDesc(this)" onmouseleave="hideDesc(this)">
+                        <div class="flexbox_title">Fun Facts</div>
+                        <div class="flexbox_desc" hidden>Check out some of my favourite facts.</div>
+                    </div>
+                </a>
+
+                <a id="web_pet" href="web_pet/web_pet.html">
+                    <div style="background-image: url('web_pet/preview.jpg');" class="flexbox_item" onmouseenter="showDesc(this)" onmouseleave="hideDesc(this)">
+                        <div class="flexbox_title">A Little Cow</div>
+                        <div class="flexbox_desc" hidden>Visit a little pixel cow.</div>
+                    </div>
+                </a>
+
+                <a id="fame_of_life" href="game_of_life/game_of_life.html">
+                    <div style="background-image: url('game_of_life/preview.jpg');" class="flexbox_item" onmouseenter="showDesc(this)" onmouseleave="hideDesc(this)">
+                        <div class="flexbox_title">Game of Life</div>
+                        <div class="flexbox_desc" hidden>Play the Game of Life. You can use Conway's original rules, or make up your own.</div>
+                    </div>
+                </a>
+
+                <a id="vigenere" href="codes/vigenere.html">
+                    <div style="background-image: url('codes/preview.jpg');" class="flexbox_item" onmouseenter="showDesc(this)" onmouseleave="hideDesc(this)">
+                        <div class="flexbox_title">Vigenere Cipher</div>
+                        <div class="flexbox_desc" hidden>Encrypt your stuff.<br><br>You can also try crack someone else's stuff, but it might be unintelligible unless you have reams of text to analyse.</div>
+                    </div>
+                </a>
+
+                <a id="counting_words" href="counter/counting_words.html">
+                    <div style="background-image: url('https://p0.pxfuel.com/preview/452/219/608/air-balloon-sky-clouds-reflection.jpg');" class="flexbox_item" onmouseenter="showDesc(this)" onmouseleave="hideDesc(this)">
+                        <div class="flexbox_title">Counting Words</div>
+                        <div class="flexbox_desc" hidden>Get the length of your text using unconventional measures.</div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
     </div>
+    <script src="index.js"></script>
 </body>
