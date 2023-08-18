@@ -6,6 +6,8 @@ body {
     margin: 0;
 }
 
+
+/********* NAVIGATION BAR *********/
 /* How to have a top navigation bar from: https://www.w3schools.com/howto/howto_js_topnav.asp */
 div.topnav {
     overflow: hidden;
@@ -26,6 +28,8 @@ div.topnav a:hover {
     color: whitesmoke;
     text-decoration: none;
 }
+
+/********* SPLIT DIVS *********/
 
 div.content {
     margin: 30px;
@@ -49,6 +53,8 @@ div.bottom {
     float: inline-end;
     clear: both;
 }
+
+/********* INTERACTION *********/
 
 input {
     font-family: inherit;
@@ -125,4 +131,20 @@ textarea {
 .plus:hover {
     color:forestgreen;
     cursor: pointer;
+}
+
+::selection {
+    background-color: mediumvioletred;
+    color: white;
+}
+
+
+
+/********* LINKS *********/
+a {
+    color: mediumvioletred;
+}
+
+a:visited {
+    color: plum;
 }
