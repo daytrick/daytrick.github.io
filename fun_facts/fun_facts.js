@@ -32,24 +32,30 @@ const factID = document.getElementById("factID");
 const factDiv = document.getElementById("factDiv");
 const sourcesDiv = document.getElementById("sourcesDiv");
 
+// WPM from: https://speechify.com/blog/average-reading-speed-pages
+const wpm = 200;
+const spw = 60 / wpm;
 
+//////////////////// FUNCTIONS ////////////////////
 
 /**
  * Keep getting and showing facts forever.
  */
-function keepShowingFacts() {
+function keepShowingFacts(initTimeout) {
+
+    let timeout = initTimeout;
 
     setTimeout(() => {
         
-        getRandomFact();
+        timeout = getRandomFact();
         keepShowingFacts();
 
-    }, 60000);
+    }, timeout);
 
 }
 window.onload = () => {
-    getRandomFact();
-    keepShowingFacts();
+    let initTimeout = getRandomFact();
+    keepShowingFacts(initTimeout);
 };
 
 
@@ -79,10 +85,11 @@ async function getRandomFact() {
     }
 
     // Get the document out
+    let timeout;
     querySnapshot.forEach((doc) => {
-        showFact(doc);
-    })
-    
+        timeout = showFact(doc);
+    });
+    return timeout;
 
 }
 // Make it callable in the console
@@ -140,5 +147,22 @@ function showFact(doc) {
         sourcesDiv.appendChild(list);
 
     }
+
+    // Return length of fact (so can determine reading time)
+    return calcDisplayTime(fact.length);
+
+}
+
+
+
+/**
+ * Calculate how long a fact should be displayed for, based on its length.
+ * 
+ * @param {Number} wordCount 
+ * @returns 
+ */
+function calcDisplayTime(wordCount) {
+
+    return wordCount * spw;
 
 }
