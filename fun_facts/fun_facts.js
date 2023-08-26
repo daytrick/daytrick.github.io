@@ -33,30 +33,31 @@ const factDiv = document.getElementById("factDiv");
 const sourcesDiv = document.getElementById("sourcesDiv");
 
 // WPM from: https://speechify.com/blog/average-reading-speed-pages
-const wpm = 200;
-const spw = 60 / wpm;
+const WPM = 200;
+const SPW = 60 / WPM;
+const S_TO_MS = 1000;
+const LENGTH_TAX = 1.1;
 
 //////////////////// FUNCTIONS ////////////////////
 
 /**
  * Keep getting and showing facts forever.
  */
-function keepShowingFacts(initTimeout) {
+function keepShowingFacts() {
 
-    let timeout = initTimeout;
+    getRandomFact().then(
+        (data) => {
+            console.log(data);
+            let timeout = data;
 
-    setTimeout(() => {
-        
-        timeout = getRandomFact();
-        keepShowingFacts();
-
-    }, timeout);
+            setTimeout(() => {
+                keepShowingFacts();
+            }, timeout);
+        }
+    );
 
 }
-window.onload = () => {
-    let initTimeout = getRandomFact();
-    keepShowingFacts(initTimeout);
-};
+window.onload = keepShowingFacts;
 
 
 /**
@@ -163,6 +164,6 @@ function showFact(doc) {
  */
 function calcDisplayTime(wordCount) {
 
-    return wordCount * spw * 1000;
+    return wordCount * SPW * S_TO_MS * LENGTH_TAX;
 
 }
