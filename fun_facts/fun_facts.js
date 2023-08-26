@@ -159,10 +159,10 @@ function showFact(doc) {
  * Calculate how long a fact should be displayed for, based on its length.
  * 
  * @param {Number} wordCount 
- * @returns 
+ * @returns number of milliseconds
  */
 function calcDisplayTime(wordCount) {
 
-    return wordCount * spw;
+    return wordCount * spw * 1000;
 
 }
