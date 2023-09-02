@@ -4,7 +4,7 @@ function onload() {
 
 
 
-onkeydown = function(event) {
+onkeyup = function(event) {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -12,7 +12,7 @@ onkeydown = function(event) {
     lowest = 50;
     rightmost = 50;
 
-    if (event.key === "Enter") {
+    //if (event.key === "Enter") {
         plaintext = document.getElementById("plaintext").value;
 
         try {
@@ -24,6 +24,6 @@ onkeydown = function(event) {
             throw e;
         }
         
-    }
+    //}
     
 }

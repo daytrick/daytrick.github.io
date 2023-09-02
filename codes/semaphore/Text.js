@@ -39,12 +39,12 @@ class Text {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // Start drawing
-        let margin = 50;
-        let startPoint = new Point(0, 0);
+        let margin = 10;
+        let startPoint = new Point(margin, margin);
         for (const word of this.words) {
             
             // Calculate offset
-            let offset = new Point(0 - word.topLeft.x + margin, 0 - word.topLeft.y + margin);
+            let offset = new Point(0 - word.topLeft.x, 0 - word.topLeft.y);
             startPoint = Point.add(startPoint, offset);
             
             // Check if need to start new column
@@ -57,7 +57,7 @@ class Text {
             word.draw(startPoint);
 
             // Move start point down a bit
-            startPoint.y += word.bottomRight.y;
+            startPoint.y += word.bottomRight.y + margin;
             
         }
 
