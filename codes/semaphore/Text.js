@@ -50,13 +50,14 @@ class Text {
             // Check if need to start new column
             if (word.bottomRight.y + startPoint.y > canvasHeight) {
                 startPoint = new Point(startPoint.x + margin, margin);
+                console.log("Starting new column!");
             }
             
             // Draw the word
             word.draw(startPoint);
 
             // Move start point down a bit
-            startPoint.y += 50;
+            startPoint.y += word.bottomRight.y;
             
         }
 
