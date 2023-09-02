@@ -102,6 +102,8 @@ class Word {
         console.log(`Drawing word: ${this.word}`);
         console.log(`Start point: ${startPoint}`);
 
+        let nextPoint = startPoint;
+
         for (let i = 0; i < this.letters.length; i++) {
 
             let letter = this.letters[i];
@@ -109,25 +111,23 @@ class Word {
 
             // Draw a join if necessary
             if (i > 0) {
-                this.#drawJoin(startPoint);
+                this.#drawJoin(nextPoint);
             }
 
             // Actually draw the letter
             ctx.beginPath();
-            ctx.moveTo(startPoint.x, startPoint.y);
-            console.log(startPoint);
+            ctx.moveTo(nextPoint.x, nextPoint.y);
+            console.log(nextPoint);
 
-            let nextPoint = Point.add(startPoint, letter.stroke1.end);
+            nextPoint = Point.add(nextPoint, Point.subtract(letter.stroke1.end, letter.stroke1.start));
             ctx.lineTo(nextPoint.x, nextPoint.y);
             console.log(nextPoint);
 
-            nextPoint = Point.add(startPoint, letter.stroke2.end);
+            nextPoint = Point.add(nextPoint, Point.subtract(letter.stroke2.end, letter.stroke2.start));
             ctx.lineTo(nextPoint.x, nextPoint.y);
             console.log(nextPoint);
 
             ctx.stroke();
-
-            startPoint = nextPoint;
 
         }
 

@@ -30,8 +30,11 @@ class Letter {
         this.reanchored = reanchor;
 
         let point1 = startPoint.copy();
+        console.log(point1);
         let point2 = new Point(point1.x + stroke1[0], point1.y + stroke1[1]);
+        console.log(point2);
         let point3 = new Point(point2.x + stroke2[0], point2.y + stroke2[1]);
+        console.log(point3);
 
         this.stroke1 = new Stroke(point1, point2);
         this.stroke2 = new Stroke(point2, point3);
