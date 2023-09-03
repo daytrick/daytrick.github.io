@@ -43,6 +43,7 @@ class Text {
         // Start drawing
         let margin = 10;
         let startPoint = new Point(margin, margin);
+        let columnWidth = 0;
         for (const word of this.words) {
             
             // Calculate offset
@@ -51,8 +52,12 @@ class Text {
             
             // Check if need to start new column
             if (word.bounds.bottom + startPoint.y > canvasHeight) {
-                startPoint = new Point(startPoint.x + margin, margin);
+                startPoint = new Point(startPoint.x + columnWidth + margin, margin);
+                columnWidth = 0;
             }
+
+            // Update column width
+            columnWidth = (columnWidth < word.width ? word.width : columnWidth);
             
             // Draw the word
             word.draw(startPoint);
