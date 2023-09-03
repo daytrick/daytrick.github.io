@@ -48,7 +48,6 @@ class Text {
             // Calculate offset
             let offset = new Point(0 - word.bounds.left, 0 - word.bounds.top);
             startPoint = Point.add(startPoint, offset);
-            //startPoint = new Point(0, 0); /**@me remove later */
             
             // Check if need to start new column
             if (word.bounds.bottom + startPoint.y > canvasHeight) {
@@ -59,6 +58,7 @@ class Text {
             word.draw(startPoint);
 
             // Reset start point
+            startPoint.x += word.bounds.left;
             startPoint.y += word.height + margin;
             console.log(`New start point: ${startPoint}`);
             
