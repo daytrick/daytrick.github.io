@@ -13,17 +13,26 @@ class Word {
         let nextPoint = new Point(0, 0);
 
         // Create and join all the letters in the word
-        word = word.toLowerCase();
-        this.letters = [];
+        try {
 
-        let tba = word.split("");
-        console.log(tba);
-        let firstLetter = new Letter(tba[0], new Point(0, 0));
-        tba.shift();
-        this.#addLetters(firstLetter, tba);
+            word = word.toLowerCase();
+            this.letters = [];
 
-        // Work out the bounds
-        this.#calcBounds();
+            let tba = word.split("");
+            console.log(tba);
+            let firstLetter = new Letter(tba[0], new Point(0, 0));
+            tba.shift();
+            this.#addLetters(firstLetter, tba);
+
+            // Work out the dimensions
+            this.#calcDimensions();
+
+        }
+        catch (e) {
+
+            throw new EmptyWordError();
+
+        }
 
     }
 
@@ -114,10 +123,17 @@ class Word {
     }
 
 
-    #calcBounds() {
+    #calcDimensions() {
+
+        console.log("letters: " + this.letters.map((l) => l.letter));
+
+        console.log(this.letters);
 
         let xs = this.letters.flatMap((l) => [l.stroke1.start.x, l.stroke1.end.x, l.stroke2.end.x]);
-        let ys = this.letters.flatMap((l) => [l.stroke1.start.x, l.stroke1.end.x, l.stroke2.end.x]);
+        let ys = this.letters.flatMap((l) => [l.stroke1.start.y, l.stroke1.end.y, l.stroke2.end.y]);
+
+        console.log(`xs: ${xs}`);
+        console.log(`ys: ${ys}`);
 
         this.bounds = {
             top: Math.min(...ys),
@@ -125,6 +141,13 @@ class Word {
             bottom: Math.max(...ys),
             right: Math.max(...xs)
         };
+
+        this.height = this.bounds.bottom - this.bounds.top;
+        this.width = this.bounds.right - this.bounds.left;
+
+        console.log(`bounds: ${this.bounds}`);
+        console.log(`height: ${this.height}`);
+        console.log(`width: ${this.width}`);
 
     }
     
@@ -178,6 +201,18 @@ class Word {
         ctx.arc(point.x, point.y, 3, 0, 2 * Math.PI);
         ctx.fill();
 
+    }
+
+}
+
+
+
+class EmptyWordError extends Error {
+
+    constructor() {
+        super();
+        this.message = "Empty word";
+        this.name = "EmptyWordError";
     }
 
 }

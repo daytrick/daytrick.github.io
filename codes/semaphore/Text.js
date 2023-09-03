@@ -19,7 +19,11 @@ class Text {
                 this.words.push(word);
             }
             catch (e) {
-                throw e;
+
+                if (!(e instanceof EmptyWordError)) {
+                    throw e;
+                }
+                
             }
 
         }
@@ -54,8 +58,9 @@ class Text {
             // Draw the word
             word.draw(startPoint);
 
-            // Move start point down a bit
-            startPoint.y += word.bounds.bottom + margin;
+            // Reset start point
+            startPoint.y += word.height + margin;
+            console.log(`New start point: ${startPoint}`);
             
         }
 
