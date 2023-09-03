@@ -30,11 +30,8 @@ class Letter {
         this.reanchored = reanchor;
 
         let point1 = startPoint.copy();
-        console.log(point1);
         let point2 = new Point(point1.x + stroke1[0], point1.y + stroke1[1]);
-        console.log(point2);
         let point3 = new Point(point2.x + stroke2[0], point2.y + stroke2[1]);
-        console.log(point3);
 
         this.stroke1 = new Stroke(point1, point2);
         this.stroke2 = new Stroke(point2, point3);
@@ -42,7 +39,7 @@ class Letter {
 
     }
 
-    get strokes() {
+    strokes() {
         return [this.stroke1, this.stroke2];
     }
 
@@ -53,9 +50,6 @@ class Letter {
 
         let xs = [this.stroke1.start.x, this.stroke1.end.x, this.stroke2.end.x];
         let ys = [this.stroke1.start.y, this.stroke1.end.y, this.stroke2.end.y];
-
-        console.log(`xs: ${xs}`);
-        console.log(`ys: ${ys}`);
 
         return {
             top: Math.min(...ys),
@@ -68,7 +62,7 @@ class Letter {
 
 
     reanchor() {
-        this.#setPoints(this.letter, true, this.stroke1.startPoint);
+        this.#setPoints(this.letter, true, this.stroke1.start);
     }
 
 
@@ -85,9 +79,9 @@ class Letter {
         }
     
         for (const stroke1 of letter1.strokes()) {
-            for (const stroke2 of letter2.strokes) {
+            for (const stroke2 of letter2.strokes()) {
     
-                if (checkStrokeIntersection(stroke1, stroke2)) {
+                if (this.#checkStrokeIntersection(stroke1, stroke2)) {
                     return true;
                 }
     

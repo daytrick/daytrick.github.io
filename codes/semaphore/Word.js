@@ -17,11 +17,13 @@ class Word {
         // Create and join all the letters in the word
         word = word.toLowerCase();
         this.letters = [];
+        let prevLetter = null;
         for (const c of word) {
 
             if (/[a-z]/.test(c)) {
 
                 let letter = new Letter(c, nextPoint);
+                letter.prev = prevLetter;
 
                 if (this.#addLetter(letter)) {
 
@@ -29,12 +31,11 @@ class Word {
                     nextPoint = letter.endpoint;
 
                     let bounds = letter.bounds();
-                    console.log(`bounds: ${JSON.stringify(bounds)}`);
-                    //this.topLeft.y = Math.min([this.topLeft.y, bounds.top]);
                     this.topLeft.y = (bounds.top < this.topLeft.y ? bounds.top : this.topLeft.y);
                     this.topLeft.x = (bounds.left < this.topLeft.x ? bounds.left : this.topLeft.x);
                     this.bottomRight.y = (bounds.bottom > this.topLeft.y ? bounds.bottom : this.topLeft.y);
                     this.bottomRight.x = (bounds.right > this.topLeft.x ? bounds.right : this.topLeft.x);
+                    prevLetter = letter;
 
                 }
                 else {
@@ -44,9 +45,6 @@ class Word {
             }
 
         };
-
-        console.log(`Top left: ${this.topLeft}`);
-        console.log(`Bottom right: ${this.bottomRight}`);
 
     }
 
@@ -58,10 +56,20 @@ class Word {
      */
     #addLetter(letter) {
 
-        // Base case
+        console.log(letter.letter);
+        console.log(letter.prev);
+
+        // Base cases
         if (letter === null) {
             // Failure! If need to reorient letter 0, there is no non-intersecting layout
+            console.log("Failure base case");
             return false;
+        }
+        if (letter.prev === null) {
+            // Success! Can't overlap with nothing
+            this.letters.push(letter);
+            console.log("Success base case");
+            return true;
         }
 
         // Find non-intersecting arrangement
@@ -74,8 +82,11 @@ class Word {
         }
         else if (!letter.reanchored) {
 
-            // Failure (so far)! Reanchor the letter and try agains
+            // Failure (so far)! Reanchor the letter and try again
+            console.log(`Reanchoring: ${letter.letter}`);
             letter.reanchor();
+            console.log(letter.letter);
+            console.log(letter.prev);
             if (!Letter.checkIntersection(letter.prev, letter)) {
                 // Success! Update the letters array
                 this.letters.push(letter);
@@ -85,9 +96,11 @@ class Word {
         }
 
         // Failure (so far)! Reanchor the prev letter and check the intersection
+        console.log(`Reanchoring prev: ${letter.prev.letter}`);
         letter.prev.reanchor();
         this.letters.pop();
-        this.addLetter(letter.prev);
+        console.log(`letters: ${this.letters.map((l) => {l.letter})}`);
+        this.#addLetter(letter.prev);
 
     }
     
@@ -117,15 +130,12 @@ class Word {
             // Actually draw the letter
             ctx.beginPath();
             ctx.moveTo(nextPoint.x, nextPoint.y);
-            console.log(nextPoint);
 
             nextPoint = Point.add(nextPoint, Point.subtract(letter.stroke1.end, letter.stroke1.start));
             ctx.lineTo(nextPoint.x, nextPoint.y);
-            console.log(nextPoint);
 
             nextPoint = Point.add(nextPoint, Point.subtract(letter.stroke2.end, letter.stroke2.start));
             ctx.lineTo(nextPoint.x, nextPoint.y);
-            console.log(nextPoint);
 
             ctx.stroke();
 

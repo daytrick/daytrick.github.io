@@ -9,7 +9,6 @@ class Text {
         // Split plaintext into words
         plaintext = plaintext.toLowerCase();
         let plainwords = plaintext.split(/[\s\t\r?!/\,\\\-]/);
-        console.log(`plainwords: ${plainwords}`);
 
         // Generate the words
         this.words = [];
@@ -18,7 +17,6 @@ class Text {
             try {
                 let word = new Word(pw);
                 this.words.push(word);
-                console.log(`Text: ${plaintext}`);
             }
             catch (e) {
                 throw e;
@@ -50,7 +48,6 @@ class Text {
             // Check if need to start new column
             if (word.bottomRight.y + startPoint.y > canvasHeight) {
                 startPoint = new Point(startPoint.x + margin, margin);
-                console.log("Starting new column!");
             }
             
             // Draw the word
@@ -60,8 +57,6 @@ class Text {
             startPoint.y += word.bottomRight.y + margin;
             
         }
-
-        console.log("Finished drawing!");
 
     }
 
