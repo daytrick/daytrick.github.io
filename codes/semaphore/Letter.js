@@ -15,11 +15,16 @@ class Letter {
 
     /**
      * 
-     * @param {Letter} letter 
+     * @param {String} letter 
      * @param {Boolean} reanchor 
      * @param {Point} startPoint 
      */
     #setPoints(letter, reanchor, startPoint) {
+
+        if (mappings[letter] == undefined) {
+            console.log("Undefined key");
+            throw new Error(`${letter} does not have a code mapping.`);
+        }
 
         let stroke1 = lines[mappings[letter][0]];
         let stroke2 = lines[mappings[letter][1]];

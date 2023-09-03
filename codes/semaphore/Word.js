@@ -11,96 +11,120 @@ class Word {
 
         // Initialise starting point + bounds
         let nextPoint = new Point(0, 0);
-        this.topLeft = new Point(500, 300);
-        this.bottomRight = new Point(0, 0);
 
         // Create and join all the letters in the word
         word = word.toLowerCase();
         this.letters = [];
-        let prevLetter = null;
-        for (const c of word) {
 
-            if (/[a-z]/.test(c)) {
+        let tba = word.split("");
+        console.log(tba);
+        let firstLetter = new Letter(tba[0], new Point(0, 0));
+        tba.shift();
+        this.#addLetters(firstLetter, tba);
 
-                let letter = new Letter(c, nextPoint);
-                letter.prev = prevLetter;
-
-                if (this.#addLetter(letter)) {
-
-                    // Update next point + bounds
-                    nextPoint = letter.endpoint;
-
-                    let bounds = letter.bounds();
-                    this.topLeft.y = (bounds.top < this.topLeft.y ? bounds.top : this.topLeft.y);
-                    this.topLeft.x = (bounds.left < this.topLeft.x ? bounds.left : this.topLeft.x);
-                    this.bottomRight.y = (bounds.bottom > this.topLeft.y ? bounds.bottom : this.topLeft.y);
-                    this.bottomRight.x = (bounds.right > this.topLeft.x ? bounds.right : this.topLeft.x);
-                    prevLetter = letter;
-
-                }
-                else {
-                    throw new Error(`Cannot find a non-intersecting layout for "${word}". Please find a synonym.`);
-                }
-
-            }
-
-        };
+        // Work out the bounds
+        this.#calcBounds();
 
     }
 
+
     /**
-     * Add a letter to the word.
      * 
-     * @param {Letter} letter 
-     * @returns success/failure
+     * @param {Letter} currLetter
+     * @param {String[]} tba 
      */
-    #addLetter(letter) {
+    #addLetters(currLetter, tba) {
 
-        console.log(letter.letter);
-        console.log(letter.prev);
+        console.log(`Adding letter: ${currLetter.letter}`);
+        console.log(tba);
 
-        // Base cases
-        if (letter === null) {
-            // Failure! If need to reorient letter 0, there is no non-intersecting layout
-            console.log("Failure base case");
-            return false;
-        }
-        if (letter.prev === null) {
-            // Success! Can't overlap with nothing
-            this.letters.push(letter);
+        // Base case
+        // 1. Success! Added all the letters
+        if (currLetter == null || currLetter == undefined) {
             console.log("Success base case");
             return true;
         }
 
-        // Find non-intersecting arrangement
-        if (!Letter.checkIntersection(letter.prev, letter)) {
+        // Recursive cases
+        // 2. Success! Can't overlap with nothing
+        if (this.letters.length == 0) {
 
-            // Success! Update the letters array
-            this.letters.push(letter);
-            return true;
+            this.letters.push(currLetter);
+            if (tba.length > 0) {
+                let nextLetter = new Letter(tba[0], currLetter.endpoint);
+                tba.shift();
+                return this.#addLetters(nextLetter, tba);
+            }
+            else {
+                return true;
+            }
+
 
         }
-        else if (!letter.reanchored) {
 
-            // Failure (so far)! Reanchor the letter and try again
-            console.log(`Reanchoring: ${letter.letter}`);
-            letter.reanchor();
-            console.log(letter.letter);
-            console.log(letter.prev);
-            if (!Letter.checkIntersection(letter.prev, letter)) {
-                // Success! Update the letters array
-                this.letters.push(letter);
+        // *. Prep for more complicated recursive cases
+        let prevLetter = this.letters[this.letters.length - 1];
+
+        // 3. Success! Found non-intersecting arrangement
+        if (!Letter.checkIntersection(prevLetter, currLetter)) {
+
+            // Success! Update the letters array
+            this.letters.push(currLetter);
+            if (tba.length > 0) {
+                let nextLetter = new Letter(tba[0], currLetter.endpoint);
+                tba.shift();
+                return this.#addLetters(nextLetter, tba);
+            }
+            else {
                 return true;
             }
 
         }
 
-        // Failure (so far)! Reanchor the prev letter and check the intersection
-        console.log(`Reanchoring prev: ${letter.prev.letter}`);
-        letter.prev.reanchor();
+        // 4. Reanchor the letter and try again
+        if (!currLetter.reanchored) {
+
+            console.log(`Reanchoring: ${currLetter.letter}`);
+            currLetter.reanchor();
+            console.log(currLetter.letter);
+            console.log(prevLetter.letter);
+
+            if (!Letter.checkIntersection(prevLetter, currLetter)) {
+                // Success! Update the letters array
+                this.letters.push(currLetter);
+                if (tba.length > 0) {
+                    let nextLetter = new Letter(tba[0], currLetter.endpoint);
+                    tba.shift();
+                    return this.#addLetters(nextLetter, tba);
+                }
+                else {
+                    return true;
+                }
+            }
+
+        }
+
+        // 5. Reanchor the prev letter and check the intersection
+        console.log(`Reanchoring prev: ${prevLetter.letter}`);
         this.letters.pop();
-        console.log(`letters: ${this.letters.map((l) => {l.letter})}`);
-        this.#addLetter(letter.prev);
+        prevLetter.reanchor();
+        tba.unshift(currLetter.letter);
+        return this.#addLetters(prevLetter, tba);
+
+    }
+
+
+    #calcBounds() {
+
+        let xs = this.letters.flatMap((l) => [l.stroke1.start.x, l.stroke1.end.x, l.stroke2.end.x]);
+        let ys = this.letters.flatMap((l) => [l.stroke1.start.x, l.stroke1.end.x, l.stroke2.end.x]);
+
+        this.bounds = {
+            top: Math.min(...ys),
+            left: Math.min(...xs),
+            bottom: Math.max(...ys),
+            right: Math.max(...xs)
+        };
 
     }
     

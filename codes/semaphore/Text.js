@@ -42,11 +42,12 @@ class Text {
         for (const word of this.words) {
             
             // Calculate offset
-            let offset = new Point(0 - word.topLeft.x, 0 - word.topLeft.y);
+            let offset = new Point(0 - word.bounds.left, 0 - word.bounds.top);
             startPoint = Point.add(startPoint, offset);
+            //startPoint = new Point(0, 0); /**@me remove later */
             
             // Check if need to start new column
-            if (word.bottomRight.y + startPoint.y > canvasHeight) {
+            if (word.bounds.bottom + startPoint.y > canvasHeight) {
                 startPoint = new Point(startPoint.x + margin, margin);
             }
             
@@ -54,7 +55,7 @@ class Text {
             word.draw(startPoint);
 
             // Move start point down a bit
-            startPoint.y += word.bottomRight.y + margin;
+            startPoint.y += word.bounds.bottom + margin;
             
         }
 
