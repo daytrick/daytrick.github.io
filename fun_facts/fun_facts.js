@@ -50,7 +50,7 @@ const PAUSE_SYM = "⏸";
 const SKIP_SYM = "⏭";
 
 var timeout;
-var prevDoc;
+var prevDoc = 0;
 var currDoc;
 
 //////////////////// FUNCTIONS ////////////////////
@@ -88,7 +88,7 @@ function pause() {
     // Actually pause
     clearTimeout(timeout);
     // Change the button display
-    playButton.innerHTML = PAUSE_SYM;
+    playButton.innerHTML = PLAY_SYM;
     // Change the button behaviour
     playButton.onclick = play;
 
@@ -102,7 +102,7 @@ function play() {
     // Get a new fact
     keepShowingFacts();
     // Change the button display
-    playButton.innerHTML = PLAY_SYM;
+    playButton.innerHTML = PAUSE_SYM;
     // Change the button behaviour
     playButton.onclick = pause;
 
@@ -119,7 +119,7 @@ function goBack() {
     clearTimeout(timeout);
 
     // Check that there's been a previous fact
-    if (prevDoc != undefined) {
+    if (prevDoc == 0) {
 
         // Query for the previous fact
         getFact(prevDoc).then(
@@ -207,10 +207,11 @@ function showFact(doc) {
     let fact = doc.data();
 
     // Update the prev fact ID
-    prevDoc = factID.innerHTML;
+    prevDoc = currDoc;
 
     // Display the fact ID
-    factID.innerHTML = doc.id;
+    currDoc = doc.id;
+    factID.innerHTML = currDoc;
 
     // Display the fact text
     factDiv.innerHTML = "";
