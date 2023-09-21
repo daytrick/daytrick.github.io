@@ -2,7 +2,12 @@
 
 /* CONTENT */
 
-.content {
+body {
+    display: inline-block;
+}
+
+.factContent {
+    display: inline-block;
     z-index: 0;
     padding: 10vh;
     width: 100%;
@@ -22,7 +27,8 @@ p {
 /* CONTROLS */
 .controls {
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 10; /* Sit on top */
+    top: 1.2em;
     right: 0;
     padding: 10px;
 }

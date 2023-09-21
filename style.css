@@ -1,4 +1,4 @@
-body {
+html, body {
     box-sizing: border-box;
     background-color: rgb(102, 205, 170);
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -12,6 +12,9 @@ body {
 div.topnav {
     overflow: hidden;
     background-color: rgb(43, 152, 116);
+    z-index: 10;
+    position: fixed;
+    width: 100vw;
 }
 
 div.topnav a {
