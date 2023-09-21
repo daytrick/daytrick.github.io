@@ -118,18 +118,23 @@ function goBack() {
     // Clear the timeout
     clearTimeout(timeout);
 
-    // Query for the previous fact
-    getFact(prevDoc).then(
-        (data) => {
-            console.log(data);
-            let time = data;
+    // Check that there's been a previous fact
+    if (prevDoc != undefined) {
 
-            timeout = setTimeout(() => {
-                keepShowingFacts();
-            }, time);
+        // Query for the previous fact
+        getFact(prevDoc).then(
+            (data) => {
+                console.log(data);
+                let time = data;
+    
+                timeout = setTimeout(() => {
+                    keepShowingFacts();
+                }, time);
+    
+            }
+        );
 
-        }
-    );
+    }
 
 }
 
@@ -151,9 +156,7 @@ async function getRandomFact() {
     console.log(randID);
 
     // Query for a fact with the closest ID
-    getFact.then((data) => {
-        return data;
-    });
+    return getFact(randID);
 
 }
 // Make it callable in the console
@@ -161,6 +164,13 @@ async function getRandomFact() {
 window.getRandomFact = getRandomFact;
 
 
+
+/**
+ * Get the fact with the closest ID larger than the provided document ID, and show it.
+ * 
+ * @param {String} id a Firebase document ID (20 chars)
+ * @returns time it should be displayed for
+ */
 async function getFact(id) {
 
     // Get the fact
@@ -195,6 +205,9 @@ async function getFact(id) {
 function showFact(doc) {
 
     let fact = doc.data();
+
+    // Update the prev fact ID
+    prevDoc = factID.innerHTML;
 
     // Display the fact ID
     factID.innerHTML = doc.id;
