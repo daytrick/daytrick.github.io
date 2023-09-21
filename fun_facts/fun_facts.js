@@ -49,7 +49,6 @@ const PLAY_SYM = "⏵";
 const PAUSE_SYM = "⏸";
 const SKIP_SYM = "⏭";
 
-var startTime;
 var timeout;
 var prevDoc;
 var currDoc;
@@ -81,6 +80,9 @@ window.onload = keepShowingFacts;
 
 // // // // PLAYBACK // // // //
 
+/**
+ * Pause the fact slideshow.
+ */
 function pause() {
 
     // Actually pause
@@ -92,6 +94,9 @@ function pause() {
 
 }
 
+/**
+ * Resume the fact slideshow.
+ */
 function play() {
 
     // Get a new fact
@@ -105,7 +110,31 @@ function play() {
 
 playButton.onclick = pause;
 
+/**
+ * Display the previous fact again.
+ */
+function goBack() {
 
+    // Clear the timeout
+    clearTimeout(timeout);
+
+    // Query for the previous fact
+    getFact(prevDoc).then(
+        (data) => {
+            console.log(data);
+            let time = data;
+
+            timeout = setTimeout(() => {
+                keepShowingFacts();
+            }, time);
+
+        }
+    );
+
+}
+
+backButton.onclick = goBack;
+skipButton.onclick = keepShowingFacts;
 
 // // // // QUERYING + DISPLAY // // // //
 
@@ -121,17 +150,30 @@ async function getRandomFact() {
     let randID = doc(collection(db, "funfacts")).id;
     console.log(randID);
 
-    // Get a random fact
+    // Query for a fact with the closest ID
+    getFact.then((data) => {
+        return data;
+    });
+
+}
+// Make it callable in the console
+// How to do so from: https://stackoverflow.com/a/50216696
+window.getRandomFact = getRandomFact;
+
+
+async function getFact(id) {
+
+    // Get the fact
     // How to query from: https://firebase.google.com/docs/firestore/query-data/get-data
     // How to use where from: https://firebase.google.com/docs/firestore/query-data/queries?hl=en&authuser=0
     // How to order and limit from: https://firebase.google.com/docs/firestore/query-data/order-limit-data?authuser=0&hl=en
-    let q = query(facts, where("__name__", ">=", randID), limit(1));
+    let q = query(facts, where("__name__", ">=", id), limit(1));
 
     let querySnapshot = await getDocs(q);
 
     // Make sure there's a fact
     if (querySnapshot.empty) {
-        q = query(facts, where("__name__", "<", randID), limit(1));
+        q = query(facts, where("__name__", "<", id), limit(1));
         querySnapshot = await getDocs(q);
     }
 
@@ -143,9 +185,6 @@ async function getRandomFact() {
     return timeout;
 
 }
-// Make it callable in the console
-// How to do so from: https://stackoverflow.com/a/50216696
-window.getRandomFact = getRandomFact;
 
 
 
