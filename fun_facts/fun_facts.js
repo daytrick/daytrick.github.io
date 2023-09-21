@@ -164,6 +164,7 @@ async function getRandomFact() {
 window.getRandomFact = getRandomFact;
 
 
+
 /**
  * Get the fact with the closest ID larger than the provided document ID, and show it.
  * 
