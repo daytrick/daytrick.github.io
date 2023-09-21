@@ -26,7 +26,7 @@ const app = initializeApp(config);
 const db = getFirestore(app);
 const facts = collection(db, "funfacts");
 
-//////////////////// OTHER CONSTS ////////////////////
+//////////////////// FACT DISPLAY CONSTS ////////////////////
 
 const factID = document.getElementById("factID");
 const factDiv = document.getElementById("factDiv");
@@ -38,6 +38,22 @@ const SPW = 60 / WPM;
 const S_TO_MS = 1000;
 const LENGTH_TAX = 1.1;
 
+//////////////////// PLAYBACK CONSTS ////////////////////
+
+const backButton = document.getElementById("back");
+const playButton = document.getElementById("play");
+const skipButton = document.getElementById("skip");
+
+const BACK_SYM = "⏮";
+const PLAY_SYM = "⏵";
+const PAUSE_SYM = "⏸";
+const SKIP_SYM = "⏭";
+
+var startTime;
+var timeout;
+var prevDoc;
+var currDoc;
+
 //////////////////// FUNCTIONS ////////////////////
 
 /**
@@ -45,19 +61,53 @@ const LENGTH_TAX = 1.1;
  */
 function keepShowingFacts() {
 
+    clearTimeout(timeout);
+
     getRandomFact().then(
         (data) => {
             console.log(data);
-            let timeout = data;
+            let time = data;
 
-            setTimeout(() => {
+            timeout = setTimeout(() => {
                 keepShowingFacts();
-            }, timeout);
+            }, time);
+
         }
     );
 
 }
 window.onload = keepShowingFacts;
+
+
+// // // // PLAYBACK // // // //
+
+function pause() {
+
+    // Actually pause
+    clearTimeout(timeout);
+    // Change the button display
+    playButton.innerHTML = PAUSE_SYM;
+    // Change the button behaviour
+    playButton.onclick = play;
+
+}
+
+function play() {
+
+    // Get a new fact
+    keepShowingFacts();
+    // Change the button display
+    playButton.innerHTML = PLAY_SYM;
+    // Change the button behaviour
+    playButton.onclick = pause;
+
+}
+
+playButton.onclick = pause;
+
+
+
+// // // // QUERYING + DISPLAY // // // //
 
 
 /**
