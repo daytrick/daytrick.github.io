@@ -1,6 +1,6 @@
 /********* COMPUTER (DEFAULT) DISPLAY *********/
 
-/* CONTENT */
+/* factContent */
 
 .factContent {
     display: inline-block;
@@ -48,7 +48,7 @@ p {
   and (max-device-width: 480px)
   and (-webkit-min-device-pixel-ratio: 2) {
 
-    .content {
+    .factContent {
         padding: 1vh;
     }
 
@@ -59,7 +59,7 @@ p {
   and (max-device-width: 568px)
   and (-webkit-min-device-pixel-ratio: 2) {
 
-    .content {
+    .factContent {
         padding: 1vh;
     }
 
@@ -70,7 +70,7 @@ p {
   and (max-device-width: 667px) 
   and (-webkit-min-device-pixel-ratio: 2) { 
 
-    .content {
+    .factContent {
         padding: 1vh;
     }
 
@@ -81,7 +81,7 @@ p {
   and (max-device-width: 736px) 
   and (-webkit-min-device-pixel-ratio: 3) { 
 
-    .content {
+    .factContent {
         padding: 1vh;
     }
 
@@ -92,7 +92,7 @@ p {
   and (max-device-width: 812px) 
   and (-webkit-min-device-pixel-ratio: 3) { 
 
-    .content {
+    .factContent {
         padding: 1vh;
     }
 
@@ -103,7 +103,7 @@ p {
   and (device-height: 640px) 
   and (-webkit-device-pixel-ratio: 2) {
 
-    .content {
+    .factContent {
         padding: 1vh;
     }
 
@@ -114,7 +114,7 @@ p {
   and (device-height: 640px) 
   and (-webkit-device-pixel-ratio: 3) {
 
-    .content {
+    .factContent {
         padding: 1vh;
     }
 
@@ -125,7 +125,7 @@ p {
   and (device-height: 640px) 
   and (-webkit-device-pixel-ratio: 4) {
 
-    .content {
+    .factContent {
         padding: 1vh;
     }
 
@@ -136,7 +136,7 @@ p {
   and (device-height: 640px) 
   and (-webkit-device-pixel-ratio: 3) {
 
-    .content {
+    .factContent {
         padding: 1vh;
     }
 
@@ -147,7 +147,7 @@ p {
   and (device-height: 640px) 
   and (-webkit-device-pixel-ratio: 3) {
 
-    .content {
+    .factContent {
         padding: 1vh;
     }
 
@@ -158,7 +158,7 @@ p {
   and (device-height: 640px) 
   and (-webkit-device-pixel-ratio: 4) {
 
-    .content {
+    .factContent {
         padding: 1vh;
     }
 
@@ -169,7 +169,7 @@ p {
   and (device-height: 592px) 
   and (-webkit-device-pixel-ratio: 2) {
 
-    .content {
+    .factContent {
         padding: 1vh;
     }
 
@@ -180,7 +180,7 @@ p {
   and (device-height: 592px) 
   and (-webkit-device-pixel-ratio: 3) {
 
-    .content {
+    .factContent {
         padding: 1vh;
     }
 
@@ -191,7 +191,7 @@ p {
   and (device-height: 592px) 
   and (-webkit-device-pixel-ratio: 4) {
 
-    .content {
+    .factContent {
         padding: 1vh;
     }
 
@@ -201,7 +201,7 @@ p {
   and (device-width: 480px) 
   and (device-height: 800px) {
 
-    .content {
+    .factContent {
         padding: 1vh;
     }
 
