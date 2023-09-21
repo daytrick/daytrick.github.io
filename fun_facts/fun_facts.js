@@ -26,7 +26,7 @@ const app = initializeApp(config);
 const db = getFirestore(app);
 const facts = collection(db, "funfacts");
 
-//////////////////// OTHER CONSTS ////////////////////
+//////////////////// FACT DISPLAY CONSTS ////////////////////
 
 const factID = document.getElementById("factID");
 const factDiv = document.getElementById("factDiv");
@@ -38,6 +38,21 @@ const SPW = 60 / WPM;
 const S_TO_MS = 1000;
 const LENGTH_TAX = 1.1;
 
+//////////////////// PLAYBACK CONSTS ////////////////////
+
+const backButton = document.getElementById("back");
+const playButton = document.getElementById("play");
+const skipButton = document.getElementById("skip");
+
+const BACK_SYM = "⏮";
+const PLAY_SYM = "⏵";
+const PAUSE_SYM = "⏸";
+const SKIP_SYM = "⏭";
+
+var timeout;
+var prevDoc;
+var currDoc;
+
 //////////////////// FUNCTIONS ////////////////////
 
 /**
@@ -45,19 +60,83 @@ const LENGTH_TAX = 1.1;
  */
 function keepShowingFacts() {
 
+    clearTimeout(timeout);
+
     getRandomFact().then(
         (data) => {
             console.log(data);
-            let timeout = data;
+            let time = data;
 
-            setTimeout(() => {
+            timeout = setTimeout(() => {
                 keepShowingFacts();
-            }, timeout);
+            }, time);
+
         }
     );
 
 }
 window.onload = keepShowingFacts;
+
+
+// // // // PLAYBACK // // // //
+
+/**
+ * Pause the fact slideshow.
+ */
+function pause() {
+
+    // Actually pause
+    clearTimeout(timeout);
+    // Change the button display
+    playButton.innerHTML = PAUSE_SYM;
+    // Change the button behaviour
+    playButton.onclick = play;
+
+}
+
+/**
+ * Resume the fact slideshow.
+ */
+function play() {
+
+    // Get a new fact
+    keepShowingFacts();
+    // Change the button display
+    playButton.innerHTML = PLAY_SYM;
+    // Change the button behaviour
+    playButton.onclick = pause;
+
+}
+
+playButton.onclick = pause;
+
+/**
+ * Display the previous fact again.
+ */
+function goBack() {
+
+    // Clear the timeout
+    clearTimeout(timeout);
+
+    // Query for the previous fact
+    getFact(prevDoc).then(
+        (data) => {
+            console.log(data);
+            let time = data;
+
+            timeout = setTimeout(() => {
+                keepShowingFacts();
+            }, time);
+
+        }
+    );
+
+}
+
+backButton.onclick = goBack;
+skipButton.onclick = keepShowingFacts;
+
+// // // // QUERYING + DISPLAY // // // //
 
 
 /**
@@ -71,17 +150,30 @@ async function getRandomFact() {
     let randID = doc(collection(db, "funfacts")).id;
     console.log(randID);
 
-    // Get a random fact
+    // Query for a fact with the closest ID
+    getFact.then((data) => {
+        return data;
+    });
+
+}
+// Make it callable in the console
+// How to do so from: https://stackoverflow.com/a/50216696
+window.getRandomFact = getRandomFact;
+
+
+async function getFact(id) {
+
+    // Get the fact
     // How to query from: https://firebase.google.com/docs/firestore/query-data/get-data
     // How to use where from: https://firebase.google.com/docs/firestore/query-data/queries?hl=en&authuser=0
     // How to order and limit from: https://firebase.google.com/docs/firestore/query-data/order-limit-data?authuser=0&hl=en
-    let q = query(facts, where("__name__", ">=", randID), limit(1));
+    let q = query(facts, where("__name__", ">=", id), limit(1));
 
     let querySnapshot = await getDocs(q);
 
     // Make sure there's a fact
     if (querySnapshot.empty) {
-        q = query(facts, where("__name__", "<", randID), limit(1));
+        q = query(facts, where("__name__", "<", id), limit(1));
         querySnapshot = await getDocs(q);
     }
 
@@ -93,9 +185,6 @@ async function getRandomFact() {
     return timeout;
 
 }
-// Make it callable in the console
-// How to do so from: https://stackoverflow.com/a/50216696
-window.getRandomFact = getRandomFact;
 
 
 
