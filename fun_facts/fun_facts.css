@@ -2,12 +2,9 @@
 
 /* CONTENT */
 
-body {
-    display: inline-block;
-}
-
 .factContent {
     display: inline-block;
+    box-sizing: border-box;
     z-index: 0;
     padding: 10vh;
     width: 100%;
@@ -31,11 +28,11 @@ p {
     top: 1.2em;
     right: 0;
     padding: 10px;
+    color: rgba(128, 128, 128, 0.5);
 }
 
 .controls span {
     font-size: 24px;
-    color: grey;
 }
 
 .controls span:hover {
