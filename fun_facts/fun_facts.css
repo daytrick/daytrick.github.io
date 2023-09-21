@@ -1,7 +1,12 @@
 /********* COMPUTER (DEFAULT) DISPLAY *********/
 
+/* CONTENT */
+
 .content {
+    z-index: 0;
     padding: 10vh;
+    width: 100%;
+    top: 0;
 }
 
 h1 {
@@ -12,6 +17,24 @@ h1 {
 p {
     overflow-wrap: break-word;
     overflow-y: auto;
+}
+
+/* CONTROLS */
+.controls {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    right: 0;
+    padding: 10px;
+}
+
+.controls span {
+    font-size: 24px;
+    color: grey;
+}
+
+.controls span:hover {
+    color: white;
+    cursor: pointer;
 }
 
 /********* MOBILE DISPLAY *********/
