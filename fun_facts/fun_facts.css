@@ -11,6 +11,13 @@
     top: 0;
 }
 
+/* Don't show scroll bar for long facts
+   How to hide it from: https://stackoverflow.com/a/30680994 */
+::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
 h1 {
     text-align: center;
     overflow-wrap: break-word;
