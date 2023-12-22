@@ -38,7 +38,7 @@ const SPW = 60 / WPM;
 const S_TO_MS = 1000;
 const LENGTH_TAX = 1.1;
 
-//////////////////// PLAYBACK CONSTS ////////////////////
+//////////////////// PLAYBACK VARIABLES ////////////////////
 
 const backButton = document.getElementById("back");
 const playButton = document.getElementById("play");
@@ -50,8 +50,11 @@ const PAUSE_SYM = "⏸";
 const SKIP_SYM = "⏭";
 
 var timeout;
-var prevDoc = 0;
 var currDoc;
+const histMax = 5; // only allow 5 go-backs
+var history = Array(histMax);
+var histHead = 0;
+var histLen = 0;
 
 //////////////////// FUNCTIONS ////////////////////
 
@@ -119,10 +122,10 @@ function goBack() {
     clearTimeout(timeout);
 
     // Check that there's been a previous fact
-    if (prevDoc == 0) {
+    if (histLen > 0) {
 
         // Query for the previous fact
-        getFact(prevDoc).then(
+        getFact(popHist()).then(
             (data) => {
                 console.log(data);
                 let time = data;
@@ -190,7 +193,13 @@ async function getFact(id) {
     // Get the document out
     let timeout;
     querySnapshot.forEach((doc) => {
+
+        // Update the history
+        pushHist(currDoc);
+
+        // Actually show the fact
         timeout = showFact(doc);
+
     });
     return timeout;
 
@@ -205,9 +214,6 @@ async function getFact(id) {
 function showFact(doc) {
 
     let fact = doc.data();
-
-    // Update the prev fact ID
-    prevDoc = currDoc;
 
     // Display the fact ID
     currDoc = doc.id;
@@ -256,6 +262,50 @@ function showFact(doc) {
     return calcDisplayTime(fact.length);
 
 }
+
+
+
+/**
+ * Record a visited document in history.
+ * 
+ * @param {String} docID ID of the doc to push onto the history
+ */
+function pushHist(docID) {
+
+    // Check if need to overwrite a doc
+    if (histLen == histMax) {
+        histHead = (histHead + 1) % histMax;
+    }
+
+    // Then move the tail
+    let i = (histHead + histLen) % 5;
+    history[i] = docID;
+    histLen == Math.min(histLen + 1, 5);
+
+}
+
+
+
+/**
+ * Get the ID of the previous doc.
+ * 
+ * @returns the previous doc ID, or false if there is none
+ */
+function popHist() {
+
+    // Check that there's sth to pop
+    if (histLen == 0) {
+        return false;
+    }
+    // Otherwise, return doc at tail
+    else {
+        histLen--;
+        let i = (histHead + histLen) % histMax;
+        return history[i];
+    }
+
+}
+
 
 
 
