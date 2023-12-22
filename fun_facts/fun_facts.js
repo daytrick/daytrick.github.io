@@ -278,7 +278,7 @@ function pushHist(docID) {
     }
 
     // Then move the tail
-    i = (histHead + histLen) % 5;
+    let i = (histHead + histLen) % 5;
     history[i] = docID;
     histLen == Math.min(histLen + 1, 5);
 
@@ -300,7 +300,7 @@ function popHist() {
     // Otherwise, return doc at tail
     else {
         histLen--;
-        i = (histHead + histLen) % histMax;
+        let i = (histHead + histLen) % histMax;
         return history[i];
     }
 
