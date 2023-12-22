@@ -125,7 +125,7 @@ function goBack() {
     if (histLen > 0) {
 
         // Query for the previous fact
-        getFact(popHist()).then(
+        getFact(popHist(), true).then(
             (data) => {
                 console.log(data);
                 let time = data;
@@ -159,7 +159,7 @@ async function getRandomFact() {
     console.log(randID);
 
     // Query for a fact with the closest ID
-    return getFact(randID);
+    return getFact(randID, false);
 
 }
 // Make it callable in the console
@@ -174,7 +174,7 @@ window.getRandomFact = getRandomFact;
  * @param {String} id a Firebase document ID (20 chars)
  * @returns time it should be displayed for
  */
-async function getFact(id) {
+async function getFact(id, justPopped) {
 
     // Get the fact
     // How to query from: https://firebase.google.com/docs/firestore/query-data/get-data
@@ -195,7 +195,9 @@ async function getFact(id) {
     querySnapshot.forEach((doc) => {
 
         // Update the history
-        pushHist(currDoc);
+        if (!justPopped){
+            pushHist(currDoc);
+        }
 
         // Actually show the fact
         timeout = showFact(doc);
@@ -280,7 +282,7 @@ function pushHist(docID) {
     // Then move the tail
     let i = (histHead + histLen) % 5;
     history[i] = docID;
-    histLen == Math.min(histLen + 1, 5);
+    histLen = Math.min(histLen + 1, 5);
 
 }
 
