@@ -10,7 +10,7 @@ class Word {
         this.word = word;
 
         // Initialise starting point + bounds
-        let nextPoint = new Point(0, 0);
+        let startPoint = new Point(0, 0);
 
         // Create and join all the letters in the word
         try {
@@ -20,7 +20,7 @@ class Word {
 
             let tba = word.split("");
             console.log(tba);
-            let firstLetter = new Letter(tba[0], new Point(0, 0));
+            let firstLetter = new Letter(tba[0], startPoint);
             tba.shift();
             this.#addLetters(firstLetter, tba);
 
@@ -61,6 +61,8 @@ class Word {
             this.letters.push(currLetter);
             if (tba.length > 0) {
                 let nextLetter = new Letter(tba[0], currLetter.endpoint);
+                console.log("Adding next letter from case 2:");
+                console.log(nextLetter);
                 tba.shift();
                 return this.#addLetters(nextLetter, tba);
             }
@@ -78,6 +80,8 @@ class Word {
         if (!Letter.checkIntersection(prevLetter, currLetter)) {
 
             // Success! Update the letters array
+            console.log("Pushing letter from case 3:");
+            console.log(currLetter);
             this.letters.push(currLetter);
             if (tba.length > 0) {
                 let nextLetter = new Letter(tba[0], currLetter.endpoint);
@@ -89,9 +93,8 @@ class Word {
             }
 
         }
-
         // 4. Reanchor the letter and try again
-        if (!currLetter.reanchored) {
+        else if (!currLetter.reanchored) {
 
             console.log(`Reanchoring: ${currLetter.letter}`);
             currLetter.reanchor();
@@ -114,11 +117,21 @@ class Word {
         }
 
         // 5. Reanchor the prev letter and check the intersection
-        console.log(`Reanchoring prev: ${prevLetter.letter}`);
-        this.letters.pop();
-        prevLetter.reanchor();
-        tba.unshift(currLetter.letter);
-        return this.#addLetters(prevLetter, tba);
+        console.log("Prev letter: " + prevLetter);
+        console.log(prevLetter != null);
+        console.log(prevLetter.reanchored);
+        if (prevLetter != null && !prevLetter.reanchored) {
+            console.log(`Reanchoring prev: ${prevLetter.letter}`);
+            this.letters.pop();
+            prevLetter.reanchor();
+            tba.unshift(currLetter.letter);
+            console.log("TBA: " + tba);
+            return this.#addLetters(prevLetter, tba);
+        }
+
+
+        // 6. Fail
+        return false;
 
     }
 
@@ -163,6 +176,7 @@ class Word {
         console.log(`Start point: ${startPoint}`);
 
         let nextPoint = startPoint;
+        console.log(nextPoint);
 
         for (let i = 0; i < this.letters.length; i++) {
 
@@ -180,9 +194,11 @@ class Word {
 
             nextPoint = Point.add(nextPoint, Point.subtract(letter.stroke1.end, letter.stroke1.start));
             ctx.lineTo(nextPoint.x, nextPoint.y);
+            console.log(letter.letter + "2: " + nextPoint);
 
             nextPoint = Point.add(nextPoint, Point.subtract(letter.stroke2.end, letter.stroke2.start));
             ctx.lineTo(nextPoint.x, nextPoint.y);
+            console.log(letter.letter + "3: " + nextPoint);
 
             ctx.stroke();
 
