@@ -138,15 +138,8 @@ class Word {
 
     #calcDimensions() {
 
-        console.log("letters: " + this.letters.map((l) => l.letter));
-
-        console.log(this.letters);
-
         let xs = this.letters.flatMap((l) => [l.stroke1.start.x, l.stroke1.end.x, l.stroke2.end.x]);
         let ys = this.letters.flatMap((l) => [l.stroke1.start.y, l.stroke1.end.y, l.stroke2.end.y]);
-
-        console.log(`xs: ${xs}`);
-        console.log(`ys: ${ys}`);
 
         this.bounds = {
             top: Math.min(...ys),
@@ -158,10 +151,6 @@ class Word {
         this.height = this.bounds.bottom - this.bounds.top;
         this.width = this.bounds.right - this.bounds.left;
 
-        console.log(`bounds: ${this.bounds}`);
-        console.log(`height: ${this.height}`);
-        console.log(`width: ${this.width}`);
-
     }
     
 
@@ -172,16 +161,12 @@ class Word {
      */
     draw(startPoint) {
 
-        console.log(`Drawing word: ${this.word}`);
-        console.log(`Start point: ${startPoint}`);
-
         let nextPoint = startPoint;
         console.log(nextPoint);
 
         for (let i = 0; i < this.letters.length; i++) {
 
             let letter = this.letters[i];
-            console.log(`letter: ${this.word[i]}`);
 
             // Draw a join if necessary
             if (i > 0) {

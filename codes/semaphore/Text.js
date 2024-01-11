@@ -65,7 +65,6 @@ class Text {
             // Reset start point
             startPoint.x += word.bounds.left;
             startPoint.y += word.height + margin;
-            console.log(`New start point: ${startPoint}`);
             
         }
 

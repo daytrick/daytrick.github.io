@@ -24,7 +24,7 @@ class Letter {
 
         if (mappings[letter] == undefined) {
             console.log("Undefined key");
-            throw new Error(`${letter} does not have a code mapping.`);
+            throw new UnencodableError(letter);
         }
 
         let stroke1 = lines[mappings[letter][0]];
@@ -86,6 +86,7 @@ class Letter {
             return false;
         }
     
+        let intersect = false;
         for (const stroke1 of letter1.strokes()) {
             for (const stroke2 of letter2.strokes()) {
     
@@ -97,7 +98,7 @@ class Letter {
             }
         }
     
-        return false;
+        return intersect;
     
     }
 
