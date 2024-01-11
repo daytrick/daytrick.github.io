@@ -30,8 +30,8 @@ class Letter {
         let stroke1 = lines[mappings[letter][0]];
         let stroke2 = lines[mappings[letter][1]];
         if (reanchor) {
-            stroke1 = lines[mappings[letter][1]];
-            stroke2 = lines[mappings[letter][0]];
+            stroke1 = lines[mappings[letter][1]].map((e, i) => -e);
+            stroke2 = lines[mappings[letter][0]].map((e, i) => -e);
         }
         this.reanchored = reanchor;
 
