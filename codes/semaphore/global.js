@@ -51,7 +51,7 @@ mappings[6] = mappings["f"];
 mappings[7] = mappings["g"];
 mappings[8] = mappings["h"];
 mappings[9] = mappings["i"];
-mappings[NUMBER] = [5, 6];          // number indicator
+mappings[NUMBER] = [0, 5];          // number indicator
 mappings[LETTER] = mappings["j"];   // letter indicator
 
 var plaintextLetters = [];
