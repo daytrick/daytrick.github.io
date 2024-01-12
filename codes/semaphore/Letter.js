@@ -102,13 +102,6 @@ class Letter {
     
                 if (this.#checkStrokeIntersection(stroke1, stroke2, letter1.endpoint)) {
                     console.log("Found intersection: " + letter1.letter + " and " + letter2.letter);
-            return false;
-        }
-    
-        for (const stroke1 of letter1.strokes()) {
-            for (const stroke2 of letter2.strokes()) {
-    
-                if (this.#checkStrokeIntersection(stroke1, stroke2)) {
                     return true;
                 }
     
@@ -273,7 +266,6 @@ class Letter {
             return (intersect && somewhereOtherThanTheJoin);
         }
         // If get to here, they do not cross
-        return false;
     
     }
 
@@ -288,4 +280,5 @@ class UnencodableError extends Error {
         this.message = "Unencodable character found: " + char;
         this.name = "UnencodableError";
     }
+
 }
