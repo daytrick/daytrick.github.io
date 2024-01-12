@@ -182,28 +182,42 @@ class Letter {
         }
         // Consider one vertical stroke
         else if (m1 == Infinity || m2 == Infinity) {
+        
+            let x, m, c, t, b, l, r;
             if (m1 == Infinity) {
-                let y = (m2 * l1) + c2;
-                console.log("One vertical stroke: " + ((t1 < y) && (y < b1)));
-                if ((t1 < y) && (y < b1)) {
-                    console.log("Gradient 1: " + m1);
-                    console.log("Gradient 2: " + m2);
-                    console.log("C1: " + c1);
-                    console.log("C2: " + c2);
-                }
-                return (((t1 < y) && (y < b1)));
+                x = l1;
+                m = m2;
+                c = c2;
+                t = t1;
+                b = b1;
+                l = l2;
+                r = r2;
             }
             else {
-                let y = (m1 * l2) + c1;
-                console.log("One vertical stroke: " + ((t2 < y) && (y < b2)));
-                if ((t2 < y) && (y < b2)) {
-                    console.log("Gradient 1: " + m1);
-                    console.log("Gradient 2: " + m2);
-                    console.log("C1: " + c1);
-                    console.log("C2: " + c2);
-                }
-                return (((t2 < y) && (y < b2)));
+                x = l2;
+                m = m1;
+                c = c1;
+                t = t2;
+                b = b2;
+                l = l1;
+                r = r1;
             }
+
+            let y = (m * x) + c;
+            let vAlign = (t < y) && (y < b);
+            let hAlign = (l < x) && (x < r);
+            let intersect = vAlign && hAlign;
+            console.log("One vertical stroke: " + intersect);
+            if (intersect) {
+                console.log("Gradient 1: " + m1);
+                console.log("Gradient 2: " + m2);
+                console.log("C: " + c);
+                console.log("L: " + l);
+                console.log("R: " + r);
+                console.log("x: " + x);
+                console.log("y: " + y);
+            }
+            return intersect;
         }
         // Consider overlapping strokes (full AND partial)
         if (m1 == m2) {
