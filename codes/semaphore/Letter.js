@@ -120,22 +120,24 @@ class Letter {
         // x = (c1 - c2) / (m2 - m1)
     
         // Find gradients and constants
+        // m = y2 - y1 / x2 - x1
+        // c = y - mx
         let m1, m2, c1, c2;
         if (stroke1.end.x >= stroke1.start.x) {
             m1 = Math.round((stroke1.end.y - stroke1.start.y) / (stroke1.end.x - stroke1.start.x));
-            c1 = stroke1.start.y;
+            c1 = stroke1.start.y - (m1 * stroke1.start.x);
         }
         else {
             m1 = Math.round((stroke1.start.y - stroke1.end.y) / (stroke1.start.x - stroke1.end.x));
-            c1 = stroke1.end.y;
+            c1 = stroke1.end.y - (m1 * stroke1.end.x);
         }
         if (stroke2.end.x >= stroke2.start.x) {
             m2 = Math.round((stroke2.end.y - stroke2.start.y) / (stroke2.end.x - stroke2.start.x));
-            c2 = stroke2.start.y;
+            c2 = stroke2.start.y - (m2 * stroke2.start.x);
         }
         else {
             m2 = Math.round((stroke2.start.y - stroke2.end.y) / (stroke2.start.x - stroke2.end.x));
-            c2 = stroke2.end.y;
+            c2 = stroke2.end.y - (m2 * stroke2.end.x);
         }
 
         // Find bounds
@@ -253,7 +255,6 @@ class Letter {
                 console.log("y: " + y);
                 console.log(join);
             }
-            //return intersect;
             return (intersect && somewhereOtherThanTheJoin);
         }
         // If get to here, they do not cross
