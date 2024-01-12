@@ -3,9 +3,16 @@ var ctx = canvas.getContext("2d");
 const canvasHeight = 300;
 const canvasWidth = 500;
 
+const LETTER = "*";
+const NUMBER = "#";
+
 var r = 25;
 var rAngled = (r / Math.sqrt(2));
 var lines = [[0, r], [-rAngled, rAngled], [-r, 0], [-rAngled, -rAngled], [0, -r], [rAngled, -rAngled], [r, 0], [rAngled, rAngled]];
+
+/**
+ * Mappings for alphanumeric symbols to semaphore.
+ */
 var mappings = {
     "a": [5, 0],
     "b": [6, 0],
@@ -32,10 +39,29 @@ var mappings = {
     "w": [1, 6],
     "x": [1, 7],
     "y": [7, 6],
-    "z": [2, 7]
+    "z": [2, 7],
 };
+mappings[0] = mappings["k"];
+mappings[1] = mappings["a"];
+mappings[2] = mappings["b"];
+mappings[3] = mappings["c"];
+mappings[4] = mappings["d"];
+mappings[5] = mappings["e"];
+mappings[6] = mappings["f"];
+mappings[7] = mappings["g"];
+mappings[8] = mappings["h"];
+mappings[9] = mappings["i"];
+mappings[NUMBER] = [5, 6];          // number indicator
+mappings[LETTER] = mappings["j"];   // letter indicator
 
 var plaintextLetters = [];
+
+/**
+ * Regex for single alphanumeric characters.
+ */
+const ancr = new RegExp("^[a-zA-Z0-9]$");
+const notAlphaNumR = new RegExp("[^a-zA-Z0-9]", "g");
+const numSeqR = /([0-9]+)/;
 
 
 

@@ -1,9 +1,10 @@
 class Letter {
 
     /**
+     * Make a Letter.
      * 
-     * @param {String} letter 
-     * @param {Boolean} reanchor 
+     * @param {String} letter       the letter
+     * @param {Boolean} reanchor    whether it's been reanchored or not
      */
     constructor(letter, startPoint) {
 
@@ -15,15 +16,16 @@ class Letter {
     }
 
     /**
+     * Set the points of a Letter.
      * 
-     * @param {String} letter 
-     * @param {Boolean} reanchor 
-     * @param {Point} startPoint 
+     * @param {String} letter       the letter being represented
+     * @param {Boolean} reanchor    whether it should be reanchored
+     * @param {Point} startPoint    where it starts
      */
     #setPoints(letter, reanchor, startPoint) {
 
         if (mappings[letter] == undefined) {
-            console.log("Undefined key");
+            console.log("Undefined key: " + letter);
             throw new UnencodableError(letter);
         }
 
@@ -45,6 +47,10 @@ class Letter {
 
     }
 
+    /**
+     * Get the strokes that make up the letter.
+     * @returns the strokes
+     */
     strokes() {
         return [this.stroke1, this.stroke2];
     }
@@ -108,9 +114,11 @@ class Letter {
 
 
     /**
+     * Check if two strokes cross each other.
      * 
      * @param {Stroke} stroke1 
      * @param {Stroke} stroke2 
+     * @returns whether they cross
      */
     static #checkStrokeIntersection(stroke1, stroke2, join) {
 

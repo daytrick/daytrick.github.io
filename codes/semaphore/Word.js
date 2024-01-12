@@ -1,8 +1,9 @@
 class Word {
 
     /**
+     * Make a Word.
      * 
-     * @param {String} word 
+     * @param {String} word the word
      * @returns a Word
      */
     constructor(word) {
@@ -15,11 +16,37 @@ class Word {
         // Create and join all the letters in the word
         try {
 
-            word = word.toLowerCase();
-            this.letters = [];
+            // Make all lower case and strip punc
+            word = word.toLowerCase().replaceAll(notAlphaNumR, "");
+            console.log("Word: " + word);
 
+            // Add number/letter indicators
             let tba = word.split("");
+            let temp;
+            let numSeqR = /[0-9]+/g;
+            let offset = 0;
+            while ((temp = numSeqR.exec(word)) !== null) {
+
+                // Insert number indicator
+                let seqLen = temp[0].length;
+                tba.splice(numSeqR.lastIndex - seqLen + offset, 0, NUMBER); // can't use numSeqR.index bc that will give index of start of first ever match
+                offset++;
+                // Insert letter indicator
+                tba.splice(numSeqR.lastIndex + offset, 0, LETTER);
+                offset++;
+                
+            }
+
+            // Remove trailing indicators
+            let last = tba.pop();
+            if (last != NUMBER && last != LETTER) {
+                tba.push(last);
+            }
+
             console.log(tba);
+
+            // Start building the word
+            this.letters = [];
             let firstLetter = new Letter(tba[0], startPoint);
             tba.shift();
             this.#addLetters(firstLetter, tba);
@@ -30,6 +57,7 @@ class Word {
         }
         catch (e) {
 
+            console.log(e);
             throw new EmptyWordError();
 
         }
@@ -38,9 +66,12 @@ class Word {
 
 
     /**
+     * Add one letter to a word,
+     * so that the letter (and any previous letters)
+     * are oriented to minimize overlapping lines.
      * 
-     * @param {Letter} currLetter
-     * @param {String[]} tba 
+     * @param {Letter} currLetter   letter being added
+     * @param {String[]} tba        letters that still need to be added
      */
     #addLetters(currLetter, tba) {
 
@@ -137,6 +168,9 @@ class Word {
     }
 
 
+    /**
+     * Calculate the dimensions of a word.
+     */
     #calcDimensions() {
 
         let xs = this.letters.flatMap((l) => [l.stroke1.start.x, l.stroke1.end.x, l.stroke2.end.x]);
