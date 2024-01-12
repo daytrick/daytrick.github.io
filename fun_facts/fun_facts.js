@@ -26,7 +26,7 @@ const app = initializeApp(config);
 const db = getFirestore(app);
 const facts = collection(db, "funfacts");
 
-//////////////////// OTHER CONSTS ////////////////////
+//////////////////// FACT DISPLAY CONSTS ////////////////////
 
 const factID = document.getElementById("factID");
 const factDiv = document.getElementById("factDiv");
@@ -38,6 +38,24 @@ const SPW = 60 / WPM;
 const S_TO_MS = 1000;
 const LENGTH_TAX = 1.1;
 
+//////////////////// PLAYBACK VARIABLES ////////////////////
+
+const backButton = document.getElementById("back");
+const playButton = document.getElementById("play");
+const skipButton = document.getElementById("skip");
+
+const BACK_SYM = "⏮";
+const PLAY_SYM = "⏵";
+const PAUSE_SYM = "⏸";
+const SKIP_SYM = "⏭";
+
+var timeout;
+var currDoc;
+const histMax = 5; // only allow 5 go-backs
+var history = Array(histMax);
+var histHead = 0;
+var histLen = 0;
+
 //////////////////// FUNCTIONS ////////////////////
 
 /**
@@ -45,19 +63,88 @@ const LENGTH_TAX = 1.1;
  */
 function keepShowingFacts() {
 
+    clearTimeout(timeout);
+
     getRandomFact().then(
         (data) => {
             console.log(data);
-            let timeout = data;
+            let time = data;
 
-            setTimeout(() => {
+            timeout = setTimeout(() => {
                 keepShowingFacts();
-            }, timeout);
+            }, time);
+
         }
     );
 
 }
 window.onload = keepShowingFacts;
+
+
+// // // // PLAYBACK // // // //
+
+/**
+ * Pause the fact slideshow.
+ */
+function pause() {
+
+    // Actually pause
+    clearTimeout(timeout);
+    // Change the button display
+    playButton.innerHTML = PLAY_SYM;
+    // Change the button behaviour
+    playButton.onclick = play;
+
+}
+
+/**
+ * Resume the fact slideshow.
+ */
+function play() {
+
+    // Get a new fact
+    keepShowingFacts();
+    // Change the button display
+    playButton.innerHTML = PAUSE_SYM;
+    // Change the button behaviour
+    playButton.onclick = pause;
+
+}
+
+playButton.onclick = pause;
+
+/**
+ * Display the previous fact again.
+ */
+function goBack() {
+
+    // Clear the timeout
+    clearTimeout(timeout);
+
+    // Check that there's been a previous fact
+    if (histLen > 0) {
+
+        // Query for the previous fact
+        getFact(popHist(), true).then(
+            (data) => {
+                console.log(data);
+                let time = data;
+    
+                timeout = setTimeout(() => {
+                    keepShowingFacts();
+                }, time);
+    
+            }
+        );
+
+    }
+
+}
+
+backButton.onclick = goBack;
+skipButton.onclick = keepShowingFacts;
+
+// // // // QUERYING + DISPLAY // // // //
 
 
 /**
@@ -71,31 +158,54 @@ async function getRandomFact() {
     let randID = doc(collection(db, "funfacts")).id;
     console.log(randID);
 
-    // Get a random fact
+    // Query for a fact with the closest ID
+    return getFact(randID, false);
+
+}
+// Make it callable in the console
+// How to do so from: https://stackoverflow.com/a/50216696
+window.getRandomFact = getRandomFact;
+
+
+
+/**
+ * Get the fact with the closest ID larger than the provided document ID, and show it.
+ * 
+ * @param {String} id a Firebase document ID (20 chars)
+ * @returns time it should be displayed for
+ */
+async function getFact(id, justPopped) {
+
+    // Get the fact
     // How to query from: https://firebase.google.com/docs/firestore/query-data/get-data
     // How to use where from: https://firebase.google.com/docs/firestore/query-data/queries?hl=en&authuser=0
     // How to order and limit from: https://firebase.google.com/docs/firestore/query-data/order-limit-data?authuser=0&hl=en
-    let q = query(facts, where("__name__", ">=", randID), limit(1));
+    let q = query(facts, where("__name__", ">=", id), limit(1));
 
     let querySnapshot = await getDocs(q);
 
     // Make sure there's a fact
     if (querySnapshot.empty) {
-        q = query(facts, where("__name__", "<", randID), limit(1));
+        q = query(facts, where("__name__", "<", id), limit(1));
         querySnapshot = await getDocs(q);
     }
 
     // Get the document out
     let timeout;
     querySnapshot.forEach((doc) => {
+
+        // Update the history
+        if (!justPopped){
+            pushHist(currDoc);
+        }
+
+        // Actually show the fact
         timeout = showFact(doc);
+
     });
     return timeout;
 
 }
-// Make it callable in the console
-// How to do so from: https://stackoverflow.com/a/50216696
-window.getRandomFact = getRandomFact;
 
 
 
@@ -108,7 +218,8 @@ function showFact(doc) {
     let fact = doc.data();
 
     // Display the fact ID
-    factID.innerHTML = doc.id;
+    currDoc = doc.id;
+    factID.innerHTML = currDoc;
 
     // Display the fact text
     factDiv.innerHTML = "";
@@ -153,6 +264,50 @@ function showFact(doc) {
     return calcDisplayTime(fact.length);
 
 }
+
+
+
+/**
+ * Record a visited document in history.
+ * 
+ * @param {String} docID ID of the doc to push onto the history
+ */
+function pushHist(docID) {
+
+    // Check if need to overwrite a doc
+    if (histLen == histMax) {
+        histHead = (histHead + 1) % histMax;
+    }
+
+    // Then move the tail
+    let i = (histHead + histLen) % 5;
+    history[i] = docID;
+    histLen = Math.min(histLen + 1, 5);
+
+}
+
+
+
+/**
+ * Get the ID of the previous doc.
+ * 
+ * @returns the previous doc ID, or false if there is none
+ */
+function popHist() {
+
+    // Check that there's sth to pop
+    if (histLen == 0) {
+        return false;
+    }
+    // Otherwise, return doc at tail
+    else {
+        histLen--;
+        let i = (histHead + histLen) % histMax;
+        return history[i];
+    }
+
+}
+
 
 
 

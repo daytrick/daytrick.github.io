@@ -15,7 +15,6 @@ class Word {
 
         // Create and join all the letters in the word
         try {
-
             // Make all lower case and strip punc
             word = word.toLowerCase().replaceAll(notAlphaNumR, "");
             console.log("Word: " + word);
@@ -56,10 +55,7 @@ class Word {
 
         }
         catch (e) {
-
-            console.log(e);
             throw new EmptyWordError();
-
         }
 
     }
