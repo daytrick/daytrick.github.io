@@ -1,7 +1,5 @@
 var canvas = document.getElementById("ciphertext");
 var ctx = canvas.getContext("2d");
-const canvasHeight = 300;
-const canvasWidth = 500;
 
 const LETTER = "*";
 const NUMBER = "#";
