@@ -85,12 +85,16 @@ class Letter {
             console.log("Found null letter");
             return false;
         }
+
+        console.log("Checking intersection!");
+        console.log(letter1.stroke1.start);
+        console.log(letter2.stroke1.start);
     
         let intersect = false;
         for (const stroke1 of letter1.strokes()) {
             for (const stroke2 of letter2.strokes()) {
     
-                if (this.#checkStrokeIntersection(stroke1, stroke2)) {
+                if (this.#checkStrokeIntersection(stroke1, stroke2, letter1.endpoint)) {
                     console.log("Found intersection: " + letter1.letter + " and " + letter2.letter);
                     return true;
                 }
@@ -108,29 +112,29 @@ class Letter {
      * @param {Stroke} stroke1 
      * @param {Stroke} stroke2 
      */
-    static #checkStrokeIntersection(stroke1, stroke2) {
+    static #checkStrokeIntersection(stroke1, stroke2, join) {
 
         // y = mx + c
-        // If intersect, ys are equal
+        // If intersect, xs and ys are equal
         // m1x + c1 = m2x + c2
         // x = (c1 - c2) / (m2 - m1)
     
         // Find gradients and constants
         let m1, m2, c1, c2;
         if (stroke1.end.x >= stroke1.start.x) {
-            m1 = (stroke1.end.y - stroke1.start.y) / (stroke1.end.x - stroke1.start.x);
+            m1 = Math.round((stroke1.end.y - stroke1.start.y) / (stroke1.end.x - stroke1.start.x));
             c1 = stroke1.start.y;
         }
         else {
-            m1 = (stroke1.start.y - stroke1.end.y) / (stroke1.start.x - stroke1.end.x);
+            m1 = Math.round((stroke1.start.y - stroke1.end.y) / (stroke1.start.x - stroke1.end.x));
             c1 = stroke1.end.y;
         }
         if (stroke2.end.x >= stroke2.start.x) {
-            m2 = (stroke2.end.y - stroke2.start.y) / (stroke2.end.x - stroke2.start.x);
+            m2 = Math.round((stroke2.end.y - stroke2.start.y) / (stroke2.end.x - stroke2.start.x));
             c2 = stroke2.start.y;
         }
         else {
-            m2 = (stroke2.start.y - stroke2.end.y) / (stroke2.start.x - stroke2.end.x);
+            m2 = Math.round((stroke2.start.y - stroke2.end.y) / (stroke2.start.x - stroke2.end.x));
             c2 = stroke2.end.y;
         }
 
@@ -144,43 +148,99 @@ class Letter {
         let t2 = Math.min(stroke2.start.y, stroke2.end.y);
         let b2 = Math.max(stroke2.start.y, stroke2.end.y);
 
-        console.log("Gradient 1: " + m1);
-        console.log("Gradient 2: " + m2);
-        console.log("C1: " + c1);
-        console.log("C2: " + c2);
-        console.log("T2: " + t2);
-        console.log("B2: " + b2);
-
+        // Consider two horizontal strokes
+        if (m1 === 0 && m2 === 0) {
+            let vAlign = (c1 == c2);
+            let hAlign = (((l1 < l2) && (l2 < r1)) || ((l2 < l1) && (l1 < r2)));
+            let intersect = vAlign && hAlign;
+            console.log("Two horizontal strokes: " + intersect);
+            if (intersect) {
+                console.log("Gradient 1: " + m1);
+                console.log("Gradient 2: " + m2);
+                console.log("L1: " + l1);
+                console.log("R1: " + r1);
+                console.log("L2: " + l2);
+                console.log("R2: " + r2);
+                console.log("C1: " + c1);
+                console.log("C2: " + c2);
+                console.log(stroke1);
+                console.log(stroke2);
+            }
+            return intersect;
+        }
         // Consider two vertical strokes
         if (m1 == Infinity && m2 == Infinity) {
             // Check if the strokes touch anywhere that isn't the letter's end
-            console.log("Two vertical strokes: " + ((((t1 < c2) && (c2 < b1))) || ((t2 < c1) && (c1 < b2))));
-            return ((((t1 < c2) && (c2 < b1))) || ((t2 < c1) && (c1 < b2)));
+            console.log("Two vertical strokes: " + (((t1 < c2) && (c2 < b1)) || ((t2 < c1) && (c1 < b2))));
+            if (((t1 < c2) && (c2 < b1)) || ((t2 < c1) && (c1 < b2))) {
+                console.log("Gradient 1: " + m1);
+                console.log("Gradient 2: " + m2);
+                console.log("C1: " + c1);
+                console.log("C2: " + c2);
+            }
+            return (((t1 < c2) && (c2 < b1)) || ((t2 < c1) && (c1 < b2)));
         }
         // Consider one vertical stroke
         else if (m1 == Infinity || m2 == Infinity) {
             if (m1 == Infinity) {
                 let y = (m2 * l1) + c2;
                 console.log("One vertical stroke: " + ((t1 < y) && (y < b1)));
+                if ((t1 < y) && (y < b1)) {
+                    console.log("Gradient 1: " + m1);
+                    console.log("Gradient 2: " + m2);
+                    console.log("C1: " + c1);
+                    console.log("C2: " + c2);
+                }
                 return (((t1 < y) && (y < b1)));
             }
             else {
                 let y = (m1 * l2) + c1;
                 console.log("One vertical stroke: " + ((t2 < y) && (y < b2)));
+                if ((t2 < y) && (y < b2)) {
+                    console.log("Gradient 1: " + m1);
+                    console.log("Gradient 2: " + m2);
+                    console.log("C1: " + c1);
+                    console.log("C2: " + c2);
+                }
                 return (((t2 < y) && (y < b2)));
             }
         }
         // Consider overlapping strokes (full AND partial)
         if (m1 == m2) {
             let x = (c1 - c2) / (m2 - m1);
-            console.log("Overlapping strokes: " + (((l1 < x) && (x < r1))) || ((l2 < x) && (x < r2)))
-            return ((((l1 < x) && (x < r1))) || ((l2 < x) && (x < r2)))
+            console.log("Overlapping strokes: " + (((l1 < x) && (x < r1)) || ((l2 < x) && (x < r2))))
+            if ((((l1 < x) && (x < r1)) || ((l2 < x) && (x < r2)))) {
+                console.log("Gradient 1: " + m1);
+                console.log("Gradient 2: " + m2);
+                console.log("C1: " + c1);
+                console.log("C2: " + c2);
+            }
+            return (((l1 < x) && (x < r1)) || ((l2 < x) && (x < r2)))
         }
         // Consider intersecting strokes
         if (m1 != m2) {
             let x = (c1 - c2) / (m2 - m1);
-            console.log("Intersecting strokes: " + (((l1 < x) && (x < r1))) || ((l2 < x) && (x < r2)));
-            return ((((l1 < x) && (x < r1))) || ((l2 < x) && (x < r2)))
+            let y = (m1 * x) + c1;
+
+            let intersect = (((l1 < x) && (x < r1)) && ((l2 < x) && (x < r2)));
+            console.log("Intersecting strokes: " + intersect);
+            //let somewhereOtherThanTheJoin = (x != join.x) || (y != join.y);
+            let somewhereOtherThanTheJoin = (round(x) != round(join.x)) || (round(y) != round(join.y));
+            console.log("At somewhere other than the join: " + somewhereOtherThanTheJoin);
+            
+            if (intersect) {
+                console.log(stroke1);
+                console.log(stroke2);
+                console.log("Gradient 1: " + m1);
+                console.log("Gradient 2: " + m2);
+                console.log("C1: " + c1);
+                console.log("C2: " + c2);
+                console.log("x: " + x);
+                console.log("y: " + y);
+                console.log(join);
+            }
+            //return intersect;
+            return (intersect && somewhereOtherThanTheJoin);
         }
         // If get to here, they do not cross
     

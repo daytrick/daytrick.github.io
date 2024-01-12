@@ -131,6 +131,7 @@ class Word {
 
 
         // 6. Fail
+        console.log("FAILING");
         return false;
 
     }
@@ -179,11 +180,9 @@ class Word {
 
             nextPoint = Point.add(nextPoint, Point.subtract(letter.stroke1.end, letter.stroke1.start));
             ctx.lineTo(nextPoint.x, nextPoint.y);
-            console.log(letter.letter + "2: " + nextPoint);
 
             nextPoint = Point.add(nextPoint, Point.subtract(letter.stroke2.end, letter.stroke2.start));
             ctx.lineTo(nextPoint.x, nextPoint.y);
-            console.log(letter.letter + "3: " + nextPoint);
 
             ctx.stroke();
 
