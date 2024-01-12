@@ -270,3 +270,15 @@ class Letter {
     }
 
 }
+
+
+
+class UnencodableError extends Error {
+
+    constructor(char) {
+        super();
+        this.message = "Unencodable character found: " + char;
+        this.name = "UnencodableError";
+    }
+
+}
