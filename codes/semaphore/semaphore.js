@@ -16,8 +16,10 @@ onkeyup = function(event) {
         plaintext = document.getElementById("plaintext").value;
 
         try {
-            let text = new Text(plaintext);
-            text.draw();
+            if (plaintext !== "") {
+               let text = new Text(plaintext);
+                text.draw(); 
+            }
         }
         catch (e) {
             this.alert(e);

@@ -2,6 +2,7 @@
 <head>
     <title>Semaphore</title>
     <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="./semaphore.css">
     <!-- Favicons generated using: https://realfavicongenerator.net/ -->
     <link rel="apple-touch-icon" sizes="180x180" href="../../icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../../icons/favicon-32x32.png">
@@ -18,16 +19,42 @@
         <a href="../index.html">Home</a>
     </div>
     <div class="content">
-        <h2>Semaphore</h2>
-        <div class="left" width="50%">
-            <textarea id="plaintext" class="scrollableTextbox" placeholder="Plaintext" ></textarea>
+        <h2>Semaphore <span id="info">ⓘ</span></h2>
+        <div class="flex-container">
+            <div class="left">
+                <textarea id="plaintext" class="scrollableTextbox" placeholder="Plaintext" ></textarea>
+            </div>
+            <div class="right">
+                <canvas id="ciphertext" width="600px" height="400px" style="border:1px solid #000000; border-radius: 10px;"></canvas>
+                <br>
+                <button id="save">Save</button>
+            </div>
         </div>
-        <div class="right" width="50%">
-            <canvas id="ciphertext" width="500px" height="300px" style="border:1px solid #000000; border-radius: 10px;"></canvas>
-            <button id="save">Save</button>
+    </div>
+    <!-- Modal code from: https://www.w3schools.com/howto/howto_css_modals.asp -->
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>About Semaphore</h3>
+            <p>Semaphores were used for long distance communication before phones, radios, and computers were invented. Someone would hold a big red and yellow flag in each hand and wave their arms to send their message - someone else would have to be watching, and copy their movements to relay the message. Digits were represented with specific letters, and there were positions to indicate switching between letters and numbers.</p>
+            <p>Baden-Powell (the guy who founded scouting) made up a <a href="https://www.gutenberg.org/files/15715/15715-h/15715-h.htm#page37">code based on semaphores</a>, which he used while spying in the Boer Wars. Each letter's arm position is indicated by lines, and the letters in a word are joined up with dots. The message is written downwards, so it can be easily written on a thin strip, rolled up, and hidden away.</p>
+            <p>However, he didn't come up with extensive formatting guidelines. (Which is justified, as he was only using it for note-taking, and not long texts.) Here are the assumptions I'm working with:
+                <ol>
+                    <li>Once you run out of downwards space, start a new column to the right.</li>
+                    <li>You identify the start of a word by finding the uppermost end of the line. It doesn't matter if other parts of the word jut up above that end, or if the other end of the word curls up in the middle, or is more to the right or left.</li>
+                    <li>You can start joining up a letter from either end.</li>
+                    <li>It is preferable to avoid having overlapping/intersecting letters, so the flow of the word's line is clear.</li>
+                    <li>However, this isn't always possible while still following Guideline 2 (ex. "own", "tow"), so minimal overlaps/intersections are acceptable.</li>
+                    <li>When overlapping, it is preferable for the overlapping strokes to be directly "between" the other two strokes of the overlapping letters. This makes it easy to see that there is only one stroke going into the joining dot, and so the stroke must be followed back out into the next stroke in the line.</li>
+                    <li>A word starts with letters. You switch to numbers using the NUMBER symbol, and everything after that is interpreted as a number until the LETTER symbol is used. This resets at the start of every word - if you had a sequence of numbers, you would have to indicate NUMBER for each of them.</li>
+                </ol>
+            </p>
+            <p>Finally, this page is still under construction! Some of my assumptions have not been implemented yet.</p>
         </div>
     </div>
     <script src="global.js"></script>
+    <script src="modal.js"></script>
     <script src="Point.js"></script>
     <script src="Stroke.js"></script>
     <script src="Letter.js"></script>

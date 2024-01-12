@@ -1,8 +1,9 @@
 class Word {
 
     /**
+     * Make a Word.
      * 
-     * @param {String} word 
+     * @param {String} word the word
      * @returns a Word
      */
     constructor(word) {
@@ -10,17 +11,42 @@ class Word {
         this.word = word;
 
         // Initialise starting point + bounds
-        let nextPoint = new Point(0, 0);
+        let startPoint = new Point(0, 0);
 
         // Create and join all the letters in the word
         try {
+            // Make all lower case and strip punc
+            word = word.toLowerCase().replaceAll(notAlphaNumR, "");
+            console.log("Word: " + word);
 
-            word = word.toLowerCase();
-            this.letters = [];
-
+            // Add number/letter indicators
             let tba = word.split("");
+            let temp;
+            let numSeqR = /[0-9]+/g;
+            let offset = 0;
+            while ((temp = numSeqR.exec(word)) !== null) {
+
+                // Insert number indicator
+                let seqLen = temp[0].length;
+                tba.splice(numSeqR.lastIndex - seqLen + offset, 0, NUMBER); // can't use numSeqR.index bc that will give index of start of first ever match
+                offset++;
+                // Insert letter indicator
+                tba.splice(numSeqR.lastIndex + offset, 0, LETTER);
+                offset++;
+                
+            }
+
+            // Remove trailing indicators
+            let last = tba.pop();
+            if (last != NUMBER && last != LETTER) {
+                tba.push(last);
+            }
+
             console.log(tba);
-            let firstLetter = new Letter(tba[0], new Point(0, 0));
+
+            // Start building the word
+            this.letters = [];
+            let firstLetter = new Letter(tba[0], startPoint);
             tba.shift();
             this.#addLetters(firstLetter, tba);
 
@@ -29,18 +55,19 @@ class Word {
 
         }
         catch (e) {
-
             throw new EmptyWordError();
-
         }
 
     }
 
 
     /**
+     * Add one letter to a word,
+     * so that the letter (and any previous letters)
+     * are oriented to minimize overlapping lines.
      * 
-     * @param {Letter} currLetter
-     * @param {String[]} tba 
+     * @param {Letter} currLetter   letter being added
+     * @param {String[]} tba        letters that still need to be added
      */
     #addLetters(currLetter, tba) {
 
@@ -61,6 +88,8 @@ class Word {
             this.letters.push(currLetter);
             if (tba.length > 0) {
                 let nextLetter = new Letter(tba[0], currLetter.endpoint);
+                console.log("Adding next letter from case 2:");
+                console.log(nextLetter);
                 tba.shift();
                 return this.#addLetters(nextLetter, tba);
             }
@@ -78,6 +107,8 @@ class Word {
         if (!Letter.checkIntersection(prevLetter, currLetter)) {
 
             // Success! Update the letters array
+            console.log("Pushing letter from case 3:");
+            console.log(currLetter);
             this.letters.push(currLetter);
             if (tba.length > 0) {
                 let nextLetter = new Letter(tba[0], currLetter.endpoint);
@@ -89,9 +120,8 @@ class Word {
             }
 
         }
-
         // 4. Reanchor the letter and try again
-        if (!currLetter.reanchored) {
+        else if (!currLetter.reanchored) {
 
             console.log(`Reanchoring: ${currLetter.letter}`);
             currLetter.reanchor();
@@ -114,26 +144,33 @@ class Word {
         }
 
         // 5. Reanchor the prev letter and check the intersection
-        console.log(`Reanchoring prev: ${prevLetter.letter}`);
-        this.letters.pop();
-        prevLetter.reanchor();
-        tba.unshift(currLetter.letter);
-        return this.#addLetters(prevLetter, tba);
+        console.log("Prev letter: " + prevLetter);
+        console.log(prevLetter != null);
+        console.log(prevLetter.reanchored);
+        if (prevLetter != null && !prevLetter.reanchored) {
+            console.log(`Reanchoring prev: ${prevLetter.letter}`);
+            this.letters.pop();
+            prevLetter.reanchor();
+            tba.unshift(currLetter.letter);
+            console.log("TBA: " + tba);
+            return this.#addLetters(prevLetter, tba);
+        }
+
+
+        // 6. Fail
+        console.log("FAILING");
+        return false;
 
     }
 
 
+    /**
+     * Calculate the dimensions of a word.
+     */
     #calcDimensions() {
-
-        console.log("letters: " + this.letters.map((l) => l.letter));
-
-        console.log(this.letters);
 
         let xs = this.letters.flatMap((l) => [l.stroke1.start.x, l.stroke1.end.x, l.stroke2.end.x]);
         let ys = this.letters.flatMap((l) => [l.stroke1.start.y, l.stroke1.end.y, l.stroke2.end.y]);
-
-        console.log(`xs: ${xs}`);
-        console.log(`ys: ${ys}`);
 
         this.bounds = {
             top: Math.min(...ys),
@@ -145,10 +182,6 @@ class Word {
         this.height = this.bounds.bottom - this.bounds.top;
         this.width = this.bounds.right - this.bounds.left;
 
-        console.log(`bounds: ${this.bounds}`);
-        console.log(`height: ${this.height}`);
-        console.log(`width: ${this.width}`);
-
     }
     
 
@@ -159,15 +192,12 @@ class Word {
      */
     draw(startPoint) {
 
-        console.log(`Drawing word: ${this.word}`);
-        console.log(`Start point: ${startPoint}`);
-
         let nextPoint = startPoint;
+        console.log(nextPoint);
 
         for (let i = 0; i < this.letters.length; i++) {
 
             let letter = this.letters[i];
-            console.log(`letter: ${this.word[i]}`);
 
             // Draw a join if necessary
             if (i > 0) {
