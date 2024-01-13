@@ -102,6 +102,10 @@ div.bottom {
 
 /********* INTERACTION *********/
 
+.content {
+    padding-top: 20px;
+}
+
 input {
     font-family: inherit;
     border-radius: 4px;
