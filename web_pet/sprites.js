@@ -8,7 +8,8 @@ const PROPS = "props";
 // Sprite names
 const BLINK = "blink";
 const CROUCH = "crouch";
-const EAT = "eat";
+// const EAT = "eat";
+const EAT = "graze";
 const GRAZE = "graze";
 const MOO = "moo";
 const SLEEP = "sleep";
@@ -22,7 +23,7 @@ const NIGHT = "night";
 const MIDNIGHT = "midnight";
 const TIME_NAMES = [SUNRISE, DAY, SUNSET, NIGHT];
 
-const FOOD = "food";
+const FOOD = "haybale";
 const HAND = "hand";
 
 // Moo audio from: https://freesound.org/people/Bird_man/sounds/275154/
@@ -379,6 +380,7 @@ function generateID(folder, fileName) {
  */
 function showSprite(id) {
 
+    // console.log(id);
     let sprite = document.getElementById(id);
     let entity = sprite.parentElement;
 

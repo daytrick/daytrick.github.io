@@ -26,7 +26,7 @@ let timeouts = [];
 function onload() {
     loadBgs();
     loadCowSprites();
-    //loadProps(FOOD, food, 3, 1);
+    loadProps(FOOD, food, 6, 1);
     loadProps(HAND, hand, 4, 2);
     checkStreak();
     idle();
@@ -74,7 +74,7 @@ cow.addEventListener(
 
         eating = true;
 
-        // Locowe food
+        // Load food
         let bodyWidth = document.body.clientWidth;
         let parentWidth = food.parentElement.clientWidth;
         let leftPadding = (bodyWidth - parentWidth) / 2;
@@ -109,34 +109,27 @@ function eat() {
     (function loop() {
         timeouts.push(setTimeout(() => {
 
-            if (counter > 15) {
+            // Check if cow is done eating
+            if (counter >= 42) {
 
-                // Reset food bowl
+                // Reset hay bale
                 resetfood();
 
                 // Idle cow
-                showSprite(generateID(cowFacing, CROUCH));
+                showSprite(generateID(cowFacing, WALK + "1"));
                 eating = false;
                 idle();
 
             }
-            else if ((counter % 2) == 0) {
-
-                showSprite(generateID(cowFacing, CROUCH));
-
-                if (counter == 10) {
-                    showSprite(generateID(PROPS, FOOD + "3"));
-                }
-
-                loop();
-
-            }
+            // Otherwise, show cow eating
             else {
 
-                showSprite(generateID(cowFacing, EAT));
+                // Change cow sprite
+                showSprite(generateID(cowFacing, EAT + ((counter % 7) + 1)));
 
-                if (counter == 5) {
-                    showSprite(generateID(PROPS, FOOD + "2"));
+                // Change hay bale sprite
+                if ((counter > 0) && (counter % 7 == 0)) {
+                    showSprite(generateID(PROPS, FOOD + (Math.floor(counter / 7) + 1)));
                 }
 
                 loop();
@@ -145,7 +138,7 @@ function eat() {
 
             counter++;
 
-        }, 100));
+        }, 150));
     })();
 
 }
