@@ -8,8 +8,7 @@ const PROPS = "props";
 // Sprite names
 const BLINK = "blink";
 const CROUCH = "crouch";
-// const EAT = "eat";
-const EAT = "graze";
+const EAT = "eat";
 const GRAZE = "graze";
 const MOO = "moo";
 const SLEEP = "sleep";
@@ -52,6 +51,7 @@ class Sprite {
 const SPRITES = [
     new Sprite(BLINK, 1),
     new Sprite(CROUCH, 2),
+    new Sprite(EAT, 7),
     new Sprite(GRAZE, 7),
     new Sprite(MOO, 1),
     new Sprite(SLEEP, 2),
@@ -380,7 +380,6 @@ function generateID(folder, fileName) {
  */
 function showSprite(id) {
 
-    // console.log(id);
     let sprite = document.getElementById(id);
     let entity = sprite.parentElement;
 
