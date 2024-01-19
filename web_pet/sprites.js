@@ -22,7 +22,7 @@ const NIGHT = "night";
 const MIDNIGHT = "midnight";
 const TIME_NAMES = [SUNRISE, DAY, SUNSET, NIGHT];
 
-const FOOD = "food";
+const FOOD = "haybale";
 const HAND = "hand";
 
 // Moo audio from: https://freesound.org/people/Bird_man/sounds/275154/
@@ -51,6 +51,7 @@ class Sprite {
 const SPRITES = [
     new Sprite(BLINK, 1),
     new Sprite(CROUCH, 2),
+    new Sprite(EAT, 7),
     new Sprite(GRAZE, 7),
     new Sprite(MOO, 1),
     new Sprite(SLEEP, 2),
