@@ -37,9 +37,6 @@ class Text {
      */
     draw() {
 
-        // Clear the canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
         // Start drawing
         let margin = 10;
         let startPoint = new Point(margin, margin);

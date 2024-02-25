@@ -24,9 +24,12 @@ textarea {
     flex-shrink: 0;
 }
 
+
 canvas {
     border:1px solid #000000; 
     border-radius: 10px;
+    /* How to change bg colour from: https://stackoverflow.com/a/50052052 */
+    background-color: white;
 }
 
 
