@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<head>
+    <title>Morse-ception</title>
+    <link rel="stylesheet" href="../../style.css">
+    <!-- Favicons generated using: https://realfavicongenerator.net/ -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../icons/favicon-16x16.png">
+    <link rel="manifest" href="../icons/site.webmanifest">
+    <link rel="mask-icon" href="icons/safari-pinned-tab.svg" color="#57ad98">
+    <meta name="msapplication-TileColor" content="#00aba9">
+    <meta name="theme-color" content="#ff0000">
+    <!-- For diff phone/computer displays, from: https://stackoverflow.com/a/41535518 -->
+    <meta content="width=device-width" name="viewport"/>
+</head>
+<body>
+    <div class="topnav">
+        <a href="/index.html">Home</a>
+    </div>
+    <div class="content">
+        <h2>Morse-ception</h2>
+        <div>
+            <h3>Plaintext</h3>
+            <input type="number" id="recursionLevel" placeholder="Recursion level" min="1" onchange=onChangeEncode()>
+            <br>
+            <textarea id="plaintext" class="scrollableTextbox" placeholder="Plaintext" onchange=onChangeEncode()></textarea>
+            <br>
+            <button id="encode" class="notOK" onclick=writeMorse()>Encode!</button>
+        </div>
+        <br>
+        <div>
+            <h3>Ciphertext</h3>
+            <textarea id="ciphertext" class="scrollableTextbox" placeholder="Ciphertext" onchange=onChangeDecrypt()></textarea>
+            <br>
+            <button id="play" class="notOK" onclick=writePlaintext()>Play!</button>
+        </div>
+    </div>
+    <script src="dict.js"></script>
+    <script src="morse-ception.js"></script>
+</body>
