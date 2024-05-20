@@ -3,6 +3,11 @@ const plaintext = document.getElementById("plaintext");
 const encodeButton = document.getElementById("encode");
 const ciphertext = document.getElementById("ciphertext");
 
+const FREQ = 550;
+const WAVE = "square";
+const UNIT_MS = 100;
+const UNIT_S = UNIT_MS / 1000;
+
 function onChangeEncode() {
 
     if (!level.value.match(/[0-9]+/)) {
@@ -53,5 +58,48 @@ function encode(text) {
     }
 
     return newText.trim();
+
+}
+
+
+
+function play() {
+
+    let text = ciphertext.value;
+    console.log("Playing!");
+    playNext(text, 0);
+    console.log("Text length: " + text.length);
+
+}
+
+function playNext(text, i) {
+
+    if (i >= text.length) {
+        return;
+    }
+
+    
+    let char = text[i];
+
+    if (char === ".") {
+        playTone(FREQ, WAVE, UNIT_S);
+        console.log(".");
+        setTimeout(() => {
+            playNext(text, i+1);
+        }, UNIT_MS * 2);
+    }
+    else if (char === "-") {
+        playTone(FREQ, WAVE, UNIT_S * 3);
+        console.log("-");
+        setTimeout(() => {
+            playNext(text, i+1);
+        }, UNIT_MS * 4);
+    }
+    else {
+        console.log(" ");
+        setTimeout(() => {
+            playNext(text, i+1);
+        }, UNIT_MS * 6);
+    }
 
 }

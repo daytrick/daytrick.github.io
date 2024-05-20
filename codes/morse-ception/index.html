@@ -12,6 +12,8 @@
     <meta name="theme-color" content="#ff0000">
     <!-- For diff phone/computer displays, from: https://stackoverflow.com/a/41535518 -->
     <meta content="width=device-width" name="viewport"/>
+    <!-- Importing sound library -->
+    <script src="simpleTones.js"></script>
 </head>
 <body>
     <div class="topnav">
@@ -30,9 +32,12 @@
         <br>
         <div>
             <h3>Ciphertext</h3>
-            <textarea id="ciphertext" class="scrollableTextbox" placeholder="Ciphertext" onchange=onChangeDecrypt()></textarea>
+            <textarea id="ciphertext" class="scrollableTextbox" placeholder="Ciphertext" readonly></textarea>
             <br>
-            <button id="play" class="notOK" onclick=writePlaintext()>Play!</button>
+            <button id="play" class="notOK" onclick=play()>Play!</button>
+            <p>Morse code referenced from S.C. Phillips: <a href="https://morsecode.world/international/morse.html">https://morsecode.world/international/morse.html</a>.</p>
+            <p>Made using the <a href="https://github.com/escottalexander/simpleTones.js">simpleTones library by escottalexander</a>.</p>
+            <p>Warning: this is really loud, especially if you're wearing headphones. Start on 10% volume and work your way up.</p>
         </div>
     </div>
     <script src="dict.js"></script>
