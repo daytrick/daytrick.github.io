@@ -329,25 +329,39 @@ function calcDisplayTime(wordCount) {
 
 const TOPIC_KEY = "topics";
 
+/**
+ * Crawl the DB for all the unique topics and their counts.
+ * @returns dictionary of topic:count pairs
+ */
 async function getTopics() {
 
     // Req the topics for all docs in collection
     let q = query(facts, where(TOPIC_KEY, "!=", null));
     let querySnapshot = await getDocs(q);
 
-    // Loop through to add each topic to set
-    let topics = new Set();
+    // Loop through to add each topic to dict
+    let topics = {};
     querySnapshot.forEach((doc) => {
         
         let fact = doc.data();
         for (const topic of fact.topics) {
-            topics.add(topic);
+
+            // Count how many occurences of the topic
+            if (topic in topics) {
+                topics[topic]++;
+            }
+            else {
+                topics[topic] = 1;
+            }
+
         }
 
     })
 
     console.log("Topics: ");
     console.log(topics);
+
+    return topics;
 
 }
 getTopics();
