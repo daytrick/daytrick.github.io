@@ -322,3 +322,32 @@ function calcDisplayTime(wordCount) {
     return wordCount * SPW * S_TO_MS * LENGTH_TAX;
 
 }
+
+
+
+// // // // FILTERING // // // //
+
+const TOPIC_KEY = "topics";
+
+async function getTopics() {
+
+    // Req the topics for all docs in collection
+    let q = query(facts, where(TOPIC_KEY, "!=", null));
+    let querySnapshot = await getDocs(q);
+
+    // Loop through to add each topic to set
+    let topics = new Set();
+    querySnapshot.forEach((doc) => {
+        
+        let fact = doc.data();
+        for (const topic of fact.topics) {
+            topics.add(topic);
+        }
+
+    })
+
+    console.log("Topics: ");
+    console.log(topics);
+
+}
+getTopics();
