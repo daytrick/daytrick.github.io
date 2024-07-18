@@ -58,6 +58,10 @@ p {
     cursor: pointer;
 }
 
+input[type=checkbox]:hover {
+    cursor: pointer;
+}
+
 /********* MOBILE DISPLAY *********/
 /* Dimensions from: https://css-tricks.com/snippets/css/media-queries-for-standard-devices/ */
 

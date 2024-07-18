@@ -56,7 +56,20 @@ var history = Array(histMax);
 var histHead = 0;
 var histLen = 0;
 
+//////////////////// FILTER CONSTS ////////////////////
+
+const TOPIC_KEY = "topics";
+const filterForm = document.getElementById("filterForm");
+
 //////////////////// FUNCTIONS ////////////////////
+
+// // // // // // // LOADING // // // // // // //
+
+function load() {
+    keepShowingFacts();
+    loadTopics();
+}
+window.onload = load();
 
 /**
  * Keep getting and showing facts forever.
@@ -78,7 +91,7 @@ function keepShowingFacts() {
     );
 
 }
-window.onload = keepShowingFacts;
+// window.onload = keepShowingFacts;
 
 
 // // // // PLAYBACK // // // //
@@ -327,8 +340,6 @@ function calcDisplayTime(wordCount) {
 
 // // // // FILTERING // // // //
 
-const TOPIC_KEY = "topics";
-
 /**
  * Crawl the DB for all the unique topics and their counts.
  * @returns dictionary of topic:count pairs
@@ -340,6 +351,7 @@ async function getTopics() {
     let querySnapshot = await getDocs(q);
 
     // Loop through to add each topic to dict
+    // note: there's really no better way to do this??/ (https://stackoverflow.com/a/48025263)
     let topics = {};
     querySnapshot.forEach((doc) => {
         
@@ -358,10 +370,43 @@ async function getTopics() {
 
     })
 
-    console.log("Topics: ");
-    console.log(topics);
-
     return topics;
 
 }
-getTopics();
+
+
+
+async function loadTopics() {
+
+    let topics = await getTopics();
+    let topicNames = Object.keys(topics).sort();
+
+    for (const topic of topicNames) {
+
+        let count = topics[topic];
+        if (count >= 3) {
+            addFilterableTopic(topic, count);
+        }
+
+    }
+
+}
+
+function addFilterableTopic(topic, count) {
+
+    let checkbox = document.createElement("input");
+    checkbox.type = "checkbox"
+    checkbox.value = topic;
+    checkbox.checked = false;
+
+    let label = document.createElement("label");
+    label.for = topic;
+    label.innerText = `${topic} (${count})`;
+
+    let newLine = document.createElement("br");
+
+    filterForm.appendChild(checkbox);
+    filterForm.appendChild(label);
+    filterForm.appendChild(newLine);
+
+}
