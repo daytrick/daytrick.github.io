@@ -59,7 +59,6 @@ var histLen = 0;
 //////////////////// FILTER CONSTS ////////////////////
 
 const TOPIC_KEY = "topics";
-const filterForm = document.getElementById("filterForm");
 const topicOptions = document.getElementById("topicOptions");
 const allTopicsOption = document.getElementById("allOption");
 const saveFilterButton = document.getElementById("saveChoices");
@@ -418,16 +417,14 @@ function addFilterableTopic(topic, count) {
     checkbox.name = topic + "_topic";
     checkbox.value = topic;
     checkbox.checked = false;
+    topicOptions.appendChild(checkbox);
 
     let label = document.createElement("label");
-    label.for = topic + "_topic";
+    label.htmlFor = topic + "_topic";
     label.innerText = `${topic} (${count})`;
-    // label.onclick = checkbox.onclick;
+    topicOptions.appendChild(label);
 
     let newLine = document.createElement("br");
-
-    topicOptions.appendChild(checkbox);
-    topicOptions.appendChild(label);
     topicOptions.appendChild(newLine);
 
 }
