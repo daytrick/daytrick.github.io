@@ -56,7 +56,25 @@ var history = Array(histMax);
 var histHead = 0;
 var histLen = 0;
 
+//////////////////// FILTER CONSTS ////////////////////
+
+const TOPIC_KEY = "topics";
+const topicOptions = document.getElementById("topicOptions");
+const allTopicsOption = document.getElementById("allOption");
+const saveFilterButton = document.getElementById("saveChoices");
+
+var filterTopics = false;
+var activeTopics = [];
+
 //////////////////// FUNCTIONS ////////////////////
+
+// // // // // // // LOADING // // // // // // //
+
+function load() {
+    keepShowingFacts();
+    loadTopics();
+}
+window.onload = load();
 
 /**
  * Keep getting and showing facts forever.
@@ -78,7 +96,7 @@ function keepShowingFacts() {
     );
 
 }
-window.onload = keepShowingFacts;
+// window.onload = keepShowingFacts;
 
 
 // // // // PLAYBACK // // // //
@@ -180,7 +198,19 @@ async function getFact(id, justPopped) {
     // How to query from: https://firebase.google.com/docs/firestore/query-data/get-data
     // How to use where from: https://firebase.google.com/docs/firestore/query-data/queries?hl=en&authuser=0
     // How to order and limit from: https://firebase.google.com/docs/firestore/query-data/order-limit-data?authuser=0&hl=en
-    let q = query(facts, where("__name__", ">=", id), limit(1));
+    // let q = query(facts, where("__name__", ">=", id), limit(1));
+
+    let q;
+    if (!filterTopics) {
+        q = query(facts, where("__name__", ">=", id), limit(1));
+    }
+    else {
+        q = query(facts, 
+            where("topics", "array-contains-any", activeTopics), 
+            where("__name__", ">=", id),
+            limit(1)
+        );
+    }
 
     let querySnapshot = await getDocs(q);
 
@@ -322,3 +352,109 @@ function calcDisplayTime(wordCount) {
     return wordCount * SPW * S_TO_MS * LENGTH_TAX;
 
 }
+
+
+
+// // // // FILTERING // // // //
+
+/**
+ * Crawl the DB for all the unique topics and their counts.
+ * @returns dictionary of topic:count pairs
+ */
+async function getTopics() {
+
+    // Req the topics for all docs in collection
+    let q = query(facts, where(TOPIC_KEY, "!=", null));
+    let querySnapshot = await getDocs(q);
+
+    // Loop through to add each topic to dict
+    // note: there's really no better way to do this??/ (https://stackoverflow.com/a/48025263)
+    let topics = {};
+    querySnapshot.forEach((doc) => {
+        
+        let fact = doc.data();
+        for (const topic of fact.topics) {
+
+            // Count how many occurences of the topic
+            if (topic in topics) {
+                topics[topic]++;
+            }
+            else {
+                topics[topic] = 1;
+            }
+
+        }
+
+    })
+
+    return topics;
+
+}
+
+
+
+async function loadTopics() {
+
+    let topics = await getTopics();
+    let topicNames = Object.keys(topics).sort();
+
+    for (const topic of topicNames) {
+
+        let count = topics[topic];
+        if (count >= 3) {
+            addFilterableTopic(topic, count);
+        }
+
+    }
+
+}
+
+function addFilterableTopic(topic, count) {
+
+    let checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = topic + "_topic";
+    checkbox.name = topic + "_topic";
+    checkbox.value = topic;
+    checkbox.checked = false;
+    topicOptions.appendChild(checkbox);
+
+    let label = document.createElement("label");
+    label.htmlFor = topic + "_topic";
+    label.innerText = `${topic} (${count})`;
+    topicOptions.appendChild(label);
+
+    let newLine = document.createElement("br");
+    topicOptions.appendChild(newLine);
+
+}
+
+
+
+function saveFilterSettings() {
+
+    // Check whether should consider all topics
+    if (allTopicsOption.checked) {
+        filterTopics = false;
+    }
+    else {
+        filterTopics = true;
+        activeTopics = [];
+        let options = topicOptions.getElementsByTagName("input");
+        for (const option of options) {
+            console.log(option);
+            if (option.checked && option.value != "all") {
+                activeTopics.push(option.value);
+                console.log(`Pushed! ${option.name}`);
+            }
+        }
+
+        console.log("activeTopics:");
+        console.log(activeTopics)
+    }
+
+    // Close modal
+    modal.style.display = "none";
+
+}
+saveFilterButton.onclick = saveFilterSettings

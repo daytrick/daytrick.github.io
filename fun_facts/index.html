@@ -3,6 +3,7 @@
     <title>Fun Facts</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="./fun_facts.css">
+    <link rel="stylesheet" href="./modal.css">
     <!-- Favicons generated using: https://realfavicongenerator.net/ -->
     <link rel="apple-touch-icon" sizes="180x180" href="../icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32x32.png">
@@ -19,22 +20,46 @@
         <a href="/index.html">Home</a>
     </div>
     <div class="all">
+
         <div class="factContent">
             <h1 class="factID">fact #<span id="factID"></span></h1>
             <div id="factDiv"></div>
             <div id="sourcesDiv"></div>
         </div>
-        <div class="controls">
-            <span>
+
+        <div class="toolbar">
+            <span class="search">
+                <span id="filterButton"><img src="./toolbar_icons/options.svg" height="24px"></span>
+            </span>
+            <span class="controls">
                 <span id="back">⏮</span>
                 <span id="play">⏸</span>
                 <span id="skip">⏭</span>
             </span>
         </div>
+
+        <!-- Modal code from: https://www.w3schools.com/howto/howto_css_modals.asp -->
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>Topics</h3>
+                <div id="topicOptions">
+                    <input type="checkbox" id="allOption" name="all" value="all" checked>
+                    <label for="allOption"><strong>all</strong></label>
+                    <br>    
+                </div>
+                <br>
+                <button id="saveChoices">Save choices</button>
+            </div>
+        </div>
+    
     </div>
 
+    <script src="./modal.js"></script>
     <!-- Adding Firebase -->
     <!--<script src="https://www.gstatic.com/firebasejs/5.9.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase-database.js"></script>-->
     <script type="module" src="./fun_facts.js"></script>
+
 </body>

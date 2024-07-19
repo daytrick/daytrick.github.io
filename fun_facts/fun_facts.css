@@ -29,22 +29,46 @@ p {
 }
 
 /* CONTROLS */
-.controls {
+.toolbar {
     position: fixed; /* Stay in place */
     z-index: 10; /* Sit on top */
     top: 1.2em;
-    right: 0;
     padding: 10px;
     color: rgba(128, 128, 128, 0.5);
 }
 
-.controls span {
+/* .toolbar span {
+    padding: 10px;
+} */
+
+.toolbar .search {
+    position:fixed;
+    left: 0;
+    padding: 10px;
+}
+
+.toolbar .controls {
+    position: fixed;
+    right: 0;
     font-size: 24px;
 }
 
-.controls span:hover {
+.toolbar span:hover {
     color: white;
     cursor: pointer;
+}
+
+input[type=checkbox]:hover {
+    cursor: pointer;
+}
+
+input[type=checkbox] label:hover {
+    cursor: pointer;
+}
+
+input[type=button]:hover {
+    cursor: pointer;
+    background-color: white;
 }
 
 /********* MOBILE DISPLAY *********/
