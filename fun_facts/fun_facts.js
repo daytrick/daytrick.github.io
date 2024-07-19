@@ -60,6 +60,12 @@ var histLen = 0;
 
 const TOPIC_KEY = "topics";
 const filterForm = document.getElementById("filterForm");
+const topicOptions = document.getElementById("topicOptions");
+const allTopicsOption = document.getElementById("allOption");
+const saveFilterButton = document.getElementById("saveChoices");
+
+var filterTopics = false;
+var activeTopics = [];
 
 //////////////////// FUNCTIONS ////////////////////
 
@@ -193,7 +199,19 @@ async function getFact(id, justPopped) {
     // How to query from: https://firebase.google.com/docs/firestore/query-data/get-data
     // How to use where from: https://firebase.google.com/docs/firestore/query-data/queries?hl=en&authuser=0
     // How to order and limit from: https://firebase.google.com/docs/firestore/query-data/order-limit-data?authuser=0&hl=en
-    let q = query(facts, where("__name__", ">=", id), limit(1));
+    // let q = query(facts, where("__name__", ">=", id), limit(1));
+
+    let q;
+    if (!filterTopics) {
+        q = query(facts, where("__name__", ">=", id), limit(1));
+    }
+    else {
+        q = query(facts, 
+            where("topics", "array-contains-any", activeTopics), 
+            where("__name__", ">=", id),
+            limit(1)
+        );
+    }
 
     let querySnapshot = await getDocs(q);
 
@@ -395,18 +413,51 @@ async function loadTopics() {
 function addFilterableTopic(topic, count) {
 
     let checkbox = document.createElement("input");
-    checkbox.type = "checkbox"
+    checkbox.type = "checkbox";
+    checkbox.id = topic + "_topic";
+    checkbox.name = topic + "_topic";
     checkbox.value = topic;
     checkbox.checked = false;
 
     let label = document.createElement("label");
-    label.for = topic;
+    label.for = topic + "_topic";
     label.innerText = `${topic} (${count})`;
+    // label.onclick = checkbox.onclick;
 
     let newLine = document.createElement("br");
 
-    filterForm.appendChild(checkbox);
-    filterForm.appendChild(label);
-    filterForm.appendChild(newLine);
+    topicOptions.appendChild(checkbox);
+    topicOptions.appendChild(label);
+    topicOptions.appendChild(newLine);
 
 }
+
+
+
+function saveFilterSettings() {
+
+    // Check whether should consider all topics
+    if (allTopicsOption.checked) {
+        filterTopics = false;
+    }
+    else {
+        filterTopics = true;
+        activeTopics = [];
+        let options = topicOptions.getElementsByTagName("input");
+        for (const option of options) {
+            console.log(option);
+            if (option.checked && option.value != "all") {
+                activeTopics.push(option.value);
+                console.log(`Pushed! ${option.name}`);
+            }
+        }
+
+        console.log("activeTopics:");
+        console.log(activeTopics)
+    }
+
+    // Close modal
+    modal.style.display = "none";
+
+}
+saveFilterButton.onclick = saveFilterSettings
