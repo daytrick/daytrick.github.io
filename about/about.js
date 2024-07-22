@@ -4,6 +4,9 @@ const imgDiv = document.getElementById("aboutImage");
 var pfpOpen = null;
 var pfpBlink = null;
 
+/**
+ * Load the profile pics.
+ */
 function load() {
 
     pfpOpen = loadImage("./pfps/pfp_open.png", true);
@@ -12,6 +15,13 @@ function load() {
 
 }
 
+/**
+ * Load an image file into an image element.
+ * 
+ * @param {String} path     path to image file from this JS file
+ * @param {Boolean} visible whether img element should be visible
+ * @returns 
+ */
 function loadImage(path, visible) {
 
     let img = document.createElement("img");
@@ -26,6 +36,11 @@ function loadImage(path, visible) {
 
 }
 
+
+
+/**
+ * Animate the profile pics to blink at random intervals.
+ */
 function blink() {
 
     let timeout = Math.random() * MAX_BLINK_INTERVAL;
