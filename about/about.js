@@ -17,9 +17,6 @@ function loadImage(path, visible) {
     let img = document.createElement("img");
     img.src = path;
     img.classList.add("pfp");
-    // img.style.setProperty("object-fit", "contain");
-    // img.style.setProperty("max-width", "100%");
-    // img.style.setProperty("max-height", "100%");
     if (!visible) {
         img.hidden = true;
     }
