@@ -9,8 +9,8 @@ var pfpBlink = null;
  */
 function load() {
 
-    pfpOpen = loadImage("./pfps/pfp_open.png", true);
-    pfpBlink = loadImage("./pfps/pfp_blink.png", false);
+    pfpOpen = loadImage("./pfps/pfp_open.png", "Drawing of a person inscribed in a circle, looking at the viewer, with fingers making a V.", true);
+    pfpBlink = loadImage("./pfps/pfp_blink.png", "The person blinking.", false);
     blink();
 
 }
@@ -22,7 +22,7 @@ function load() {
  * @param {Boolean} visible whether img element should be visible
  * @returns 
  */
-function loadImage(path, visible) {
+function loadImage(path, desc, visible) {
 
     let img = document.createElement("img");
     img.src = path;
@@ -30,6 +30,7 @@ function loadImage(path, visible) {
     if (!visible) {
         img.hidden = true;
     }
+    img.alt = desc;
     imgDiv.appendChild(img);
 
     return img;

@@ -41,21 +41,32 @@ let hand = document.getElementById("hand");
 
 //////////////////// SPRITES ////////////////////
 
+/**
+ * Class representing a set of sprites for an entity.
+ */
 class Sprite {
-    constructor(pose, frames) {
+    /**
+     * Create a Sprite.
+     * 
+     * @param {String} pose     name of pose
+     * @param {Number} frames   number of frames in one animation cycle
+     * @param {String} alt      description of entity and pose
+     */
+    constructor(pose, frames, alt) {
         this.pose = pose;
         this.frames = frames;
+        this.alt = alt;
     }
 }
 
 const SPRITES = [
-    new Sprite(BLINK, 1),
-    new Sprite(CROUCH, 2),
-    new Sprite(EAT, 7),
-    new Sprite(GRAZE, 7),
-    new Sprite(MOO, 1),
-    new Sprite(SLEEP, 2),
-    new Sprite(WALK, 8)
+    new Sprite(BLINK, 1, "The cow, blinking."),
+    new Sprite(CROUCH, 2, "The cow, crouching."),
+    new Sprite(EAT, 7, "The cow, eating."),
+    new Sprite(GRAZE, 7, "The cow, grazing."),
+    new Sprite(MOO, 1, "The cow, mooing."),
+    new Sprite(SLEEP, 2, "The cow, sleeping."),
+    new Sprite(WALK, 8, "The cow, trotting.")
 ];
 
 //////////////////// LOADING ////////////////////
@@ -73,7 +84,7 @@ function loadCowSprites() {
 
             if (sprite.frames == 1) {
 
-                let frame = createImage(direction, sprite.pose);
+                let frame = createImage(direction, sprite.pose, sprite.alt);
                 frame.hidden = true;
                 cow.appendChild(frame);
             
@@ -82,7 +93,7 @@ function loadCowSprites() {
 
                 for (let i = 1; i <= sprite.frames; i++) {
 
-                    let frame = createImage(direction, sprite.pose + i);
+                    let frame = createImage(direction, sprite.pose + i, sprite.alt);
                     frame.hidden = true;
                     cow.appendChild(frame);
 
@@ -107,11 +118,12 @@ function loadCowSprites() {
  * @param {food | hand} parent      the div the sprites go in
  * @param {Number} limit            number of sprites the prop has
  * @param {Number} defaultSprite    number of the default sprite
+ * @param {String} alt              description of sprite
  */
-function loadProps(type, parent, limit, defaultSprite) {
+function loadProps(type, parent, limit, defaultSprite, alt) {
 
     for (let i = 1; i <= limit; i++) {
-        let sprite = createImage(PROPS, type + i);
+        let sprite = createImage(PROPS, type + i, alt);
         sprite.hidden = true;
         parent.appendChild(sprite);
     }
@@ -129,7 +141,7 @@ function loadProps(type, parent, limit, defaultSprite) {
 function loadBgs() {
 
     for (const bg of TIME_NAMES) {
-        let frame = createImage(PROPS, bg);
+        let frame = createImage(PROPS, bg, `The pasture during ${bg}.`);
         frame.hidden = (bg != DAY);
         background.appendChild(frame);
     }
@@ -344,13 +356,15 @@ function addMinutes(date, mins) {
  * 
  * @param {String} folder 
  * @param {String} fileName 
+ * @param {String} alt          description of the image
  * @returns HTMLImageElement
  */
-function createImage(folder, fileName) {
+function createImage(folder, fileName, alt) {
 
     let img = document.createElement("img");
     img.src = getFilePath(folder, fileName);
     img.id = generateID(folder, fileName);
+    img.alt = alt;
     return img;
 
 }
