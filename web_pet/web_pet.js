@@ -26,8 +26,8 @@ let timeouts = [];
 function onload() {
     loadBgs();
     loadCowSprites();
-    loadProps(FOOD, food, 6, 1);
-    loadProps(HAND, hand, 4, 2);
+    loadProps(FOOD, food, 6, 1, "A haybale.");
+    loadProps(HAND, hand, 4, 2, "Your hand.");
     checkStreak();
     idle();
 }
