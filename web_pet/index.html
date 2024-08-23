@@ -14,6 +14,23 @@
     <meta name="theme-color" content="#ff0000">
     <!-- For diff phone/computer displays, from: https://stackoverflow.com/a/41535518 -->
     <meta content="width=device-width" name="viewport"/>
+
+    <!-- JSON-LD -->
+    <!-- Video game: https://schema.org/VideoGame -->
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "VideoGame",
+          "name": "A Little Cow",
+          "url": "https://daytrick.github.io/web_pet",
+          "image": "./preview.jpg",
+          "description": "Become friends with a little pixel cow.",
+          "inLanguage":["English"],
+          "genre":["web pet"],
+          "gamePlatform":["browser game"]
+        }
+    </script>
+
 </head>
 <body onload="onload()">
     <div class="topnav">
