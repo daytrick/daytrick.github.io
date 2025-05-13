@@ -23,6 +23,13 @@ h1 {
     overflow-wrap: break-word;
 }
 
+.factTitle {
+    text-align: center;
+    font-style: italic;
+    overflow-wrap: break-word;
+    color: slategray;
+}
+
 p {
     overflow-wrap: break-word;
     overflow-y: auto;
