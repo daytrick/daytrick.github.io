@@ -29,6 +29,7 @@ const facts = collection(db, "funfacts");
 //////////////////// FACT DISPLAY CONSTS ////////////////////
 
 const factID = document.getElementById("factID");
+const factTitle = document.getElementById("factTitle");
 const factDiv = document.getElementById("factDiv");
 const sourcesDiv = document.getElementById("sourcesDiv");
 
@@ -247,9 +248,10 @@ function showFact(doc) {
 
     let fact = doc.data();
 
-    // Display the fact ID
+    // Display the fact ID and title
     currDoc = doc.id;
     factID.innerHTML = currDoc;
+    factTitle.innerHTML = fact.name.toLowerCase();
 
     // Display the fact text
     factDiv.innerHTML = "";
